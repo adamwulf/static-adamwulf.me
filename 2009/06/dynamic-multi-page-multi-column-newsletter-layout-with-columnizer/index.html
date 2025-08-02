@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dynamic Multi-Page Multi-Column Newsletter Layout with Columnizer &ndash; Adam Wulf</title>
+<meta name="robots" content="max-image-preview:large">
+	<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
+	<link rel="alternate" type="application/rss+xml" title="Adam Wulf &raquo; Feed" href="/feed/">
+<link rel="alternate" type="application/rss+xml" title="Adam Wulf &raquo; Comments Feed" href="/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Adam Wulf &raquo; Dynamic Multi-Page Multi-Column Newsletter Layout with Columnizer Comments Feed" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/feed/">
+<link rel="stylesheet" id="wp-block-library-css" href="/wp-includes/css/dist/block-library/style.min.css?ver=6.8.1" type="text/css" media="all">
+<style id="classic-theme-styles-inline-css" type="text/css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+</style>
+<style id="global-styles-inline-css" type="text/css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+</style>
+<link rel="stylesheet" id="add-anchor-links-style-css" href="/wp-content/plugins/add-anchor-links/assets/css/add-anchor-links.css?ver=1.0.2" type="text/css" media="all">
+<link rel="stylesheet" id="slightly-flexboxgrid-css" href="/wp-content/themes/slightly/css/flexboxgrid.min.css?ver=6.8.1" type="text/css" media="all">
+<link rel="stylesheet" id="slightly-style-css" href="/wp-content/themes/slightly/style.css?ver=6.8.1" type="text/css" media="all">
+<style id="akismet-widget-style-inline-css" type="text/css">
+
+			.a-stats {
+				--akismet-color-mid-green: #357b49;
+				--akismet-color-white: #fff;
+				--akismet-color-light-grey: #f6f7f7;
+
+				max-width: 350px;
+				width: auto;
+			}
+
+			.a-stats * {
+				all: unset;
+				box-sizing: border-box;
+			}
+
+			.a-stats strong {
+				font-weight: 600;
+			}
+
+			.a-stats a.a-stats__link,
+			.a-stats a.a-stats__link:visited,
+			.a-stats a.a-stats__link:active {
+				background: var(--akismet-color-mid-green);
+				border: none;
+				box-shadow: none;
+				border-radius: 8px;
+				color: var(--akismet-color-white);
+				cursor: pointer;
+				display: block;
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen-Sans', 'Ubuntu', 'Cantarell', 'Helvetica Neue', sans-serif;
+				font-weight: 500;
+				padding: 12px;
+				text-align: center;
+				text-decoration: none;
+				transition: all 0.2s ease;
+			}
+
+			/* Extra specificity to deal with TwentyTwentyOne focus style */
+			.widget .a-stats a.a-stats__link:focus {
+				background: var(--akismet-color-mid-green);
+				color: var(--akismet-color-white);
+				text-decoration: none;
+			}
+
+			.a-stats a.a-stats__link:hover {
+				filter: brightness(110%);
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 0 2px rgba(0, 0, 0, 0.16);
+			}
+
+			.a-stats .count {
+				color: var(--akismet-color-white);
+				display: block;
+				font-size: 1.5em;
+				line-height: 1.4;
+				padding: 0 13px;
+				white-space: nowrap;
+			}
+		
+</style>
+<link rel="https://api.w.org/" href="/wp-json/"><link rel="alternate" title="JSON" type="application/json" href="/wp-json/wp/v2/posts/1794"><link rel="EditURI" type="application/rsd+xml" title="RSD" href="/xmlrpc.php?rsd">
+<meta name="generator" content="WordPress 6.8.1">
+<link rel="canonical" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/">
+<link rel="shortlink" href="/?p=1794">
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="/wp-json/oembed/1.0/embed?url=https%3A%2F%2F%2F2009%2F06%2Fdynamic-multi-page-multi-column-newsletter-layout-with-columnizer%2F">
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="/wp-json/oembed/1.0/embed?url=https%3A%2F%2F%2F2009%2F06%2Fdynamic-multi-page-multi-column-newsletter-layout-with-columnizer%2F&amp;format=xml">
+
+		<!-- GA Google Analytics @ https://m0n.co/ga -->
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+			ga('create', 'UA-180672-7', 'auto');
+			ga('set', 'anonymizeIp', true);
+			ga('set', 'forceSSL', true);
+			ga('send', 'pageview');
+		</script>
+
+	<link rel="pingback" href="/xmlrpc.php">    <style>
+        body, button, input, select, textarea, a { 
+            color: ;
+        }
+      
+        .menu-toggle {
+          color: ;
+          background-color: #;
+        }
+      
+        #primary-menu {
+          color: ;
+          background-color: #;
+        }
+    </style>
+
+    </head>
+
+<body class="wp-singular post-template-default single single-post postid-1794 single-format-standard wp-theme-slightly">
+
+<div id="page" class="site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+
+	<header id="masthead" class="site-header" role="banner">
+  <div class="row">
+    <div class="col-xs-12 site-header-col">
+		<div class="site-branding">
+			                    <p class="site-title"><a href="/" rel="home">Adam Wulf</a></p>
+                		</div><!-- .site-branding -->
+		<nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">Menu</button>
+			<div class="menu-navigation-container"><ul id="primary-menu" class="menu"><li id="menu-item-5164" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-5164"><a href="/">Home</a></li>
+<li id="menu-item-5167" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5167"><a href="/about/">About</a></li>
+<li id="menu-item-5166" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5166"><a href="/projects/">Projects</a></li>
+<li id="menu-item-5165" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5165"><a href="/open-source/">Open Source</a></li>
+</ul></div>		</nav><!-- #site-navigation -->
+      </div>
+    </div>
+	</header><!-- #masthead -->
+
+
+	<div id="content" class="site-content">
+
+  <div class="row row--index">
+    <div class="col-xs-12">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+<article id="post-1794" class="post-1794 post type-post status-publish format-standard hentry category-uncategorized">
+    <div class="row no-pad">
+      
+                    <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 no-pad">
+                <header class="entry-header">
+                    <h1 class="entry-title">Dynamic Multi-Page Multi-Column Newsletter Layout with Columnizer</h1>                    <div class="entry-meta">
+                        <span class="posted-on"><time class="entry-date published" datetime="2009-06-18T16:19:06+00:00">June 18, 2009</time><time class="updated" datetime="2023-01-29T16:31:30+00:00">January 29, 2023</time> </span>                    </div><!-- .entry-meta -->
+                                    </header><!-- .entry-header -->
+                <div class="entry-content">
+
+                    
+                    
+<h3 class="wp-block-heading"><a href="#a-columnizer-case-study" aria-hidden="true" class="aal_anchor" id="a-columnizer-case-study"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>A Columnizer Case Study</h3>
+
+
+<div class="wp-block-image">
+<figure class="alignright"><img fetchpriority="high" decoding="async" width="218" height="281" src="/files/2009/06/pagelayout.png" alt="Sample Page Layout" class="wp-image-1798" title="Sample Page Layout"></figure></div>
+
+
+<p>I got an interesting email this week, asking about how to use <a href="/columnizer-jquery-plugin/">Columnizer</a> to help layout a multipage and multicolumn newsletter. The length of the content would vary from week to week, so the newsletter needed to be grow/shrink to as many pages as necessary. It also needed a custom header and footer for each page.</p>
+
+
+
+<p><a href="/autocolumn/sample10.html" target="_new" rel="noopener">Here&rsquo;s the sample page</a> showing the solution in action.</p>
+
+
+
+<h3 class="wp-block-heading"><a href="#the-html" aria-hidden="true" class="aal_anchor" id="the-html"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The HTML</h3>
+
+
+
+<p>How does it work? Let&rsquo;s take a look at the source, beginning with the HTML:</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="html" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">&lt;div id="page_template"&gt;
+    &lt;div class="header"&gt;
+        This is a header
+        &lt;hr&gt;
+    &lt;/div&gt;
+    &lt;div class="content"&gt;&lt;/div&gt;
+    &lt;div class="footer"&gt;
+        &lt;hr&gt;
+        Page: This is the footer.
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="newsletterContent"&gt;Newsletter Content Goes Here&lt;/div&gt;
+</pre>
+
+
+
+<p>We define the template for what we want each page to look like. For our case, every page will have the exact same header and footer (with the page number shown in the footer), and page content should be split into 2 columns. Beneath our template, we just print out the entire contents of the newsletter that we want columnized.</p>
+
+
+
+<h3 class="wp-block-heading"><a href="#columnizing-the-content" aria-hidden="true" class="aal_anchor" id="columnizing-the-content"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Columnizing the Content</h3>
+
+
+
+<p>Our basic algorithm will be:</p>
+
+
+
+<ol class="wp-block-list">
+<li>Copy the page template and append it to the bottom of the &lt;body&gt;</li>
+
+
+
+<li>Columnize what&rsquo;s in #newsletterContent into that last page until it&rsquo;s full</li>
+
+
+
+<li>Put whatever doesn&rsquo;t fit back into #newsletterContent</li>
+
+
+
+<li>Repeat until #newsletterContent is empty</li>
+</ol>
+
+
+
+<p>Awesome, so lets see that in real life code:</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="js" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">$(function() {
+  // the height of the content, discluding the header/footer
+  var content_height = 652;
+  // the beginning page number to show in the footer
+  var page = 1;
+  function buildNewsletter() {
+    if ($('#newsletterContent').contents().length &amp; gt; 0) {
+      // when we need to add a new page, use a jq object for a template
+      // or use a long HTML string, whatever your preference
+      $page = $("#page_template").clone().addClass("page").css("display", "block");
+      // append the page number to the footer
+      $page.find(".footer span").append(page);
+      $("body").append($page);
+      page++;
+      // here is the columnizer magic
+      $('#newsletterContent').columnize({
+        columns: 2,
+        target: ".page:last .content",
+        overflow: {
+          height: content_height,
+          id: "#newsletterContent",
+          doneFunc: function() {
+            console.log("done with page");
+            buildNewsletter();
+          }
+        }
+      });
+    }
+  }
+  buildNewsletter();
+});</pre>
+
+
+
+<h3 class="wp-block-heading"><a href="#the-result" aria-hidden="true" class="aal_anchor" id="the-result"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The Result</h3>
+
+
+
+<p>Check out the fully columnized and multi-paged <a href="/autocolumn/sample10.html">newsletter sample</a>, and be sure to check out the <a href="/columnizer-jquery-plugin/">Columnizer project page</a> for more samples, documentation, and of course, to download Columnizer!</p>
+
+
+
+<p>It&rsquo;s been really fun over the past few months to see how different people are using Columnizer. If your site uses Columnizer, give me a shout in the comments, I&rsquo;d love to check it out!</p>
+                </div><!-- .entry-content -->
+                <footer class="entry-footer">
+                                    </footer><!-- .entry-footer -->
+            </div>
+                
+        
+    </div><!-- end .row-->
+</article><!-- #post-## -->
+<div class="row no-pad"><div class="col-xs-12 col-md-10 col-md-offset-1 no-pad"><div class="read-next"><span>Read this next</span><h2><a href="/2009/06/better-friendfeed-stats-in-feedburner/" title="Better (?) FriendFeed Stats in Feedburner">Better (?) FriendFeed Stats in Feedburner</a></h2></div></div></div><div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 no-pad">
+<div id="comments" class="comments-area">
+
+			<h2 class="comments-title">
+			31 thoughts on &ldquo;<span>Dynamic Multi-Page Multi-Column Newsletter Layout with Columnizer</span>&rdquo;		</h2><!-- .comments-title -->
+
+		
+		<ol class="comment-list">
+					<li id="comment-4730" class="comment even thread-even depth-1">
+			<article id="div-comment-4730" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/35e6dcd036ed41caab021969077087882c527b767ef1fcd609981e86b97eb384?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/35e6dcd036ed41caab021969077087882c527b767ef1fcd609981e86b97eb384?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" decoding="async">						<b class="fn"><a href="http://stevenblack.com/" class="url" rel="ugc external nofollow">Steven Black</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-4730"><time datetime="2009-06-19T00:05:59+00:00">June 19, 2009 at 12:05 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Now, can we make it look as good when printed as it looks on-screen&hellip;</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=4730#respond" data-commentid="4730" data-postid="1794" data-belowelement="div-comment-4730" data-respondelement="respond" data-replyto="Reply to Steven Black" aria-label="Reply to Steven Black">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5859" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-5859" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/c5bdd09aaf1dc27cff78a4a1f30f77e419d2447a9b4aee8d7a598c0a082cda72?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/c5bdd09aaf1dc27cff78a4a1f30f77e419d2447a9b4aee8d7a598c0a082cda72?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" decoding="async">						<b class="fn">kevin hanshaw</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-5859"><time datetime="2009-09-01T09:40:42+00:00">September 1, 2009 at 9:40 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi, does this support navigation between the pages? How do I call the next page or previous page?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=5859#respond" data-commentid="5859" data-postid="1794" data-belowelement="div-comment-5859" data-respondelement="respond" data-replyto="Reply to kevin hanshaw" aria-label="Reply to kevin hanshaw">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5864" class="comment byuser comment-author-admin bypostauthor even thread-even depth-1">
+			<article id="div-comment-5864" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Adam Wulf</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-5864"><time datetime="2009-09-01T13:16:11+00:00">September 1, 2009 at 1:16 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@kevin, this case study only lays out the text on the page, but it doesn&rsquo;t handle navigation between them.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=5864#respond" data-commentid="5864" data-postid="1794" data-belowelement="div-comment-5864" data-respondelement="respond" data-replyto="Reply to Adam Wulf" aria-label="Reply to Adam Wulf">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-6572" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-6572" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/b13493639c65e25f8481d040f39b1a92b7af0b92e808a8b622292e8827d02638?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/b13493639c65e25f8481d040f39b1a92b7af0b92e808a8b622292e8827d02638?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Shravan M</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-6572"><time datetime="2009-10-29T12:49:20+00:00">October 29, 2009 at 12:49 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi,</p>
+<p>Thanks for the nice plug-in. But it is bothering me it is not resulting in same number of pages in all browsers and splitting at the same place across browsers i.e., a given content does not splits equally in all the browsers eg: <a href="/autocolumn/sample10.html" rel="ugc">/autocolumn/sample10.html</a></p>
+<p>Safari shows 6 pages whereas Firefox shows 5 pages.</p>
+<p>I use lib_columns.js, but it as well has similar issue.</p>
+<p>Do we have a solution for this? Please advise.</p>
+<p>Thanks in advance.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=6572#respond" data-commentid="6572" data-postid="1794" data-belowelement="div-comment-6572" data-respondelement="respond" data-replyto="Reply to Shravan M" aria-label="Reply to Shravan M">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-6582" class="comment byuser comment-author-admin bypostauthor even thread-even depth-1">
+			<article id="div-comment-6582" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Adam Wulf</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-6582"><time datetime="2009-10-30T04:31:26+00:00">October 30, 2009 at 4:31 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@Shravan,<br>
+good catch. most of the reason is that different browsers have different default CSS stylesheets. i just put up a simple css reset and now they both show 5 pages, though still some minor differences.</p>
+<p>i&rsquo;d just recommend that you look very closely at your CSS and make sure you&rsquo;re as specfic as possible. also massage the input as best you can and make use of dontsplit and dontend, and removeiffirst as appropriate.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=6582#respond" data-commentid="6582" data-postid="1794" data-belowelement="div-comment-6582" data-respondelement="respond" data-replyto="Reply to Adam Wulf" aria-label="Reply to Adam Wulf">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-6682" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-6682" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/17e66fb91656929a919423f8d30cd8ea883a2cca182135c418822b1c4370da8e?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/17e66fb91656929a919423f8d30cd8ea883a2cca182135c418822b1c4370da8e?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Scott Stornetta</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-6682"><time datetime="2009-11-08T08:26:36+00:00">November 8, 2009 at 8:26 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>this is wonderful work.  I am a bit confused by some of the comments here, because they seem to indicate that others are seeing multiple pages laid out (hence the safari is 6 pages vs. the ff is 5 pages).  I am only seeing the first page laid out.  Am I missing something?  or has the code changed?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=6682#respond" data-commentid="6682" data-postid="1794" data-belowelement="div-comment-6682" data-respondelement="respond" data-replyto="Reply to Scott Stornetta" aria-label="Reply to Scott Stornetta">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-10638" class="comment even thread-even depth-1">
+			<article id="div-comment-10638" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/3487953f2d825ab1fab206c6efa0a370d35dabecf32d1b956e0bc85bbe1213a1?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/3487953f2d825ab1fab206c6efa0a370d35dabecf32d1b956e0bc85bbe1213a1?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://rapidweaverthemes.com/" class="url" rel="ugc external nofollow">Gary Byrd</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-10638"><time datetime="2010-04-28T16:41:50+00:00">April 28, 2010 at 4:41 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>This is a phenomenal script &hellip; great job!</p>
+<p>Does the script allow for % widths?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=10638#respond" data-commentid="10638" data-postid="1794" data-belowelement="div-comment-10638" data-respondelement="respond" data-replyto="Reply to Gary Byrd" aria-label="Reply to Gary Byrd">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-15346" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-15346" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/4258a68fb8fe3c925e236a5bc5b0558b634dd77158a68d4ed242e2a95410cd56?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/4258a68fb8fe3c925e236a5bc5b0558b634dd77158a68d4ed242e2a95410cd56?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Steven</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-15346"><time datetime="2010-11-05T12:30:06+00:00">November 5, 2010 at 12:30 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi,</p>
+<p>Does anyone know why we see only one page in Internet Explorer 7? (I know it&rsquo;s an old browser, but in companies..)</p>
+<p>It seems to be a really great script!!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=15346#respond" data-commentid="15346" data-postid="1794" data-belowelement="div-comment-15346" data-respondelement="respond" data-replyto="Reply to Steven" aria-label="Reply to Steven">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-16142" class="comment even thread-even depth-1">
+			<article id="div-comment-16142" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/f01c0a9982fb82b508f31e3f75d77ce45cb8a48cd66e5395cc67fe4726fd769e?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/f01c0a9982fb82b508f31e3f75d77ce45cb8a48cd66e5395cc67fe4726fd769e?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://www.leetindell.com/" class="url" rel="ugc external nofollow">Lee Tindell</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-16142"><time datetime="2010-12-03T17:24:06+00:00">December 3, 2010 at 5:24 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>If anyone needs paging, I have posted a solution on stack overflow. Which allows you to hide pages of columns, showing the first and then fade in the next in with a click or go back to the previous by clicking another link. Hope it all makes sense:</p>
+<p><a href="http://stackoverflow.com/questions/4239133/i-want-to-create-paging-between-sets-of-columns-created-via-the-jquery-columnizer/4349746#4349746" rel="nofollow ugc">http://stackoverflow.com/questions/4239133/i-want-to-create-paging-between-sets-of-columns-created-via-the-jquery-columnizer/4349746#4349746</a></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=16142#respond" data-commentid="16142" data-postid="1794" data-belowelement="div-comment-16142" data-respondelement="respond" data-replyto="Reply to Lee Tindell" aria-label="Reply to Lee Tindell">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-48385" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-48385" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/f0644de772c51a92245d9b978263804a9be387408958392f14a14eb4076b0a88?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/f0644de772c51a92245d9b978263804a9be387408958392f14a14eb4076b0a88?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Chris</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-48385"><time datetime="2011-08-02T05:55:36+00:00">August 2, 2011 at 5:55 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Great script.</p>
+<p>I&rsquo;m trying to add a div to the first page that would have a lead image, that would be the width of the entire page.  Do you have any idea how this might be done?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=48385#respond" data-commentid="48385" data-postid="1794" data-belowelement="div-comment-48385" data-respondelement="respond" data-replyto="Reply to Chris" aria-label="Reply to Chris">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-50289" class="comment even thread-even depth-1">
+			<article id="div-comment-50289" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/07c03a4cf6ba5ac1d31d88297a0bd0eeb3e72aac2b21c0accef63eb493730ec4?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/07c03a4cf6ba5ac1d31d88297a0bd0eeb3e72aac2b21c0accef63eb493730ec4?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">David</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-50289"><time datetime="2011-08-10T06:39:11+00:00">August 10, 2011 at 6:39 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Would be wonderfull if printing keeps the same layout. Is it possible?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=50289#respond" data-commentid="50289" data-postid="1794" data-belowelement="div-comment-50289" data-respondelement="respond" data-replyto="Reply to David" aria-label="Reply to David">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-57889" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-57889" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/b677b020139589b78347580eb74d5d1975ca003bbb2a0c97e9da121d663aca8d?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/b677b020139589b78347580eb74d5d1975ca003bbb2a0c97e9da121d663aca8d?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://cms.vykantor.com/" class="url" rel="ugc external nofollow">Vyache</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-57889"><time datetime="2011-09-09T07:05:03+00:00">September 9, 2011 at 7:05 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I have a 3 column layout, header image and a few sub header images that need to be spanned across a 3 column layout without being broken. </p>
+<p>I have a height requirement for the paper, 11&times;17. The template idea is great, but it does not combine the height that is used in the plugin. This messes up my height requirement. </p>
+<p>Is there a way around this issue?</p>
+<p>Thanks,<br>
+~Vyee</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=57889#respond" data-commentid="57889" data-postid="1794" data-belowelement="div-comment-57889" data-respondelement="respond" data-replyto="Reply to Vyache" aria-label="Reply to Vyache">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-57907" class="comment byuser comment-author-admin bypostauthor even thread-even depth-1">
+			<article id="div-comment-57907" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Adam Wulf</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-57907"><time datetime="2011-09-09T08:18:49+00:00">September 9, 2011 at 8:18 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Do you have a URL I can look at to see the problem?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=57907#respond" data-commentid="57907" data-postid="1794" data-belowelement="div-comment-57907" data-respondelement="respond" data-replyto="Reply to Adam Wulf" aria-label="Reply to Adam Wulf">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-58569" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-58569" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/b677b020139589b78347580eb74d5d1975ca003bbb2a0c97e9da121d663aca8d?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/b677b020139589b78347580eb74d5d1975ca003bbb2a0c97e9da121d663aca8d?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://cms.vykantor.com/" class="url" rel="ugc external nofollow">Vyache</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-58569"><time datetime="2011-09-12T05:47:11+00:00">September 12, 2011 at 5:47 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>This is the example:<br>
+<a href="http://jsfiddle.net/HcFc7/" rel="nofollow ugc">http://jsfiddle.net/HcFc7/</a></p>
+<p>Use a real image, I can&rsquo;t the image to show here for some reason. </p>
+<p>I&rsquo;m working locally&hellip;</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=58569#respond" data-commentid="58569" data-postid="1794" data-belowelement="div-comment-58569" data-respondelement="respond" data-replyto="Reply to Vyache" aria-label="Reply to Vyache">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-58571" class="comment even thread-even depth-1">
+			<article id="div-comment-58571" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/b677b020139589b78347580eb74d5d1975ca003bbb2a0c97e9da121d663aca8d?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/b677b020139589b78347580eb74d5d1975ca003bbb2a0c97e9da121d663aca8d?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://cms.vykantor.com/" class="url" rel="ugc external nofollow">Vyache</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-58571"><time datetime="2011-09-12T05:53:53+00:00">September 12, 2011 at 5:53 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Here is one with a image&hellip;<br>
+<a href="http://jsfiddle.net/D9hjv/" rel="nofollow ugc">http://jsfiddle.net/D9hjv/</a></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=58571#respond" data-commentid="58571" data-postid="1794" data-belowelement="div-comment-58571" data-respondelement="respond" data-replyto="Reply to Vyache" aria-label="Reply to Vyache">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-58896" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-58896" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/b677b020139589b78347580eb74d5d1975ca003bbb2a0c97e9da121d663aca8d?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/b677b020139589b78347580eb74d5d1975ca003bbb2a0c97e9da121d663aca8d?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://cms.vykantor.com/" class="url" rel="ugc external nofollow">Vyache</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-58896"><time datetime="2011-09-13T06:26:00+00:00">September 13, 2011 at 6:26 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I have 2 other issues,</p>
+<p>first, I can&rsquo;t get my odd and even facing pages to work right, maybe the recursive nature of the program isn&rsquo;t letting me doing a simple page%2 == 0&hellip;.</p>
+<p>I was able to do it with a hack using the following:</p>
+<p>$(&ldquo;.cr-subhead-page-odd:even&rdquo;).css(&ldquo;display&rdquo;, &ldquo;inline&rdquo;);<br>
+			$(&ldquo;.cr-subhead-page-even:odd&rdquo;).css(&ldquo;display&rdquo;, &ldquo;inline&rdquo;);<br>
+			$(&ldquo;.cr-subhead-page-odd:odd&rdquo;).css(&ldquo;display&rdquo;, &ldquo;none&rdquo;);</p>
+<p>The other issue is, how do I assign a min-height, even if no content is available? I want a almost blank page, even if it has some text in it? I&rsquo;m going to try to do it with css, but maybe its a plugin feature&hellip;</p>
+<p><a href="http://jsfiddle.net/grimreaper01/2DXrw/1/" rel="nofollow ugc">http://jsfiddle.net/grimreaper01/2DXrw/1/</a></p>
+<p>Thanks</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=58896#respond" data-commentid="58896" data-postid="1794" data-belowelement="div-comment-58896" data-respondelement="respond" data-replyto="Reply to Vyache" aria-label="Reply to Vyache">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-58898" class="comment even thread-even depth-1">
+			<article id="div-comment-58898" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/b677b020139589b78347580eb74d5d1975ca003bbb2a0c97e9da121d663aca8d?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/b677b020139589b78347580eb74d5d1975ca003bbb2a0c97e9da121d663aca8d?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://cms.vykantor.com/" class="url" rel="ugc external nofollow">Vyache</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-58898"><time datetime="2011-09-13T06:35:02+00:00">September 13, 2011 at 6:35 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I forgot to point out, why does the template use an ID instead of a class? </p>
+<p>That invalidates the HTML code!</p>
+<p>When I use a class instead of id, I get style errors&hellip;</p>
+<p>Unless I&rsquo;m doing something wrong&hellip;</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=58898#respond" data-commentid="58898" data-postid="1794" data-belowelement="div-comment-58898" data-respondelement="respond" data-replyto="Reply to Vyache" aria-label="Reply to Vyache">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-155915" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-155915" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/e9b3c938cd8644b1f8957664f44b2f18845a6f5744d194afc9b444d88c2a9414?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/e9b3c938cd8644b1f8957664f44b2f18845a6f5744d194afc9b444d88c2a9414?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Omar</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-155915"><time datetime="2012-07-21T13:38:44+00:00">July 21, 2012 at 1:38 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi, I have a site wide header and footer. Is it possibe for the layout to appear between my header and footer?? At the moment, it jumps to the bottom of the screen below the footer.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=155915#respond" data-commentid="155915" data-postid="1794" data-belowelement="div-comment-155915" data-respondelement="respond" data-replyto="Reply to Omar" aria-label="Reply to Omar">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-160365" class="comment even thread-even depth-1">
+			<article id="div-comment-160365" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/aa4b8d7d453352f2195894a8d1d8495c33e6312e6cefd88719f8cf5dc90d611f?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/aa4b8d7d453352f2195894a8d1d8495c33e6312e6cefd88719f8cf5dc90d611f?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Vitor</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-160365"><time datetime="2012-08-27T12:48:27+00:00">August 27, 2012 at 12:48 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Vyache, I&rsquo;m having the same issue, sometimes my first page appears again after the second page, I&rsquo;m guessing this is happening because many of the divs are using the same id.<br>
+Did you fmanage to fix it?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=160365#respond" data-commentid="160365" data-postid="1794" data-belowelement="div-comment-160365" data-respondelement="respond" data-replyto="Reply to Vitor" aria-label="Reply to Vitor">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-160546" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-160546" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Adam Wulf</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-160546"><time datetime="2012-08-29T14:01:30+00:00">August 29, 2012 at 2:01 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>i&rsquo;ve updated this on the github page to use classes instead of ids for the page template. The updated code is at <a href="https://github.com/adamwulf/Columnizer-jQuery-Plugin/blob/master/samples/sample9.html" rel="nofollow ugc">https://github.com/adamwulf/Columnizer-jQuery-Plugin/blob/master/samples/sample9.html</a></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=160546#respond" data-commentid="160546" data-postid="1794" data-belowelement="div-comment-160546" data-respondelement="respond" data-replyto="Reply to Adam Wulf" aria-label="Reply to Adam Wulf">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-160567" class="comment even thread-even depth-1">
+			<article id="div-comment-160567" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/b677b020139589b78347580eb74d5d1975ca003bbb2a0c97e9da121d663aca8d?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/b677b020139589b78347580eb74d5d1975ca003bbb2a0c97e9da121d663aca8d?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://vykantor.com/" class="url" rel="ugc external nofollow">Vyache</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-160567"><time datetime="2012-08-29T19:56:09+00:00">August 29, 2012 at 7:56 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>thanks!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=160567#respond" data-commentid="160567" data-postid="1794" data-belowelement="div-comment-160567" data-respondelement="respond" data-replyto="Reply to Vyache" aria-label="Reply to Vyache">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-198681" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-198681" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/20109e973d541785f59e7ea48e2d6e339a15d81c1b2fe480924023e65796421d?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/20109e973d541785f59e7ea48e2d6e339a15d81c1b2fe480924023e65796421d?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Ray</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-198681"><time datetime="2013-01-16T23:55:42+00:00">January 16, 2013 at 11:55 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Adam, can you post or point me to a script that will reset columnizer back to a single column when the page width is below a certain dimension. (for media queries).</p>
+<p>Thanks</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=198681#respond" data-commentid="198681" data-postid="1794" data-belowelement="div-comment-198681" data-respondelement="respond" data-replyto="Reply to Ray" aria-label="Reply to Ray">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-204273" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://writeaboutwriting.wordpress.com/2013/02/15/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/" class="url" rel="ugc external nofollow">Dynamic Multi-Page Multi-Column Newsletter Layout with Columnizer &laquo; Write about writing</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-298415" class="pingback odd alt thread-odd thread-alt depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://zjquery.com/layout/columnizer" class="url" rel="ugc external nofollow">Columnizer JQuery Plugin - jQuery Plugins</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-303685" class="comment even thread-even depth-1">
+			<article id="div-comment-303685" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/3ca184bd3c9eb8d0598f57a0784240be3f5a4c210ec1a14acd8aa2792fcfdcbc?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/3ca184bd3c9eb8d0598f57a0784240be3f5a4c210ec1a14acd8aa2792fcfdcbc?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Leo</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-303685"><time datetime="2014-04-30T23:54:09+00:00">April 30, 2014 at 11:54 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thank you! This is a great piece of code. </p>
+<p>I have a question: I am using the newsletter layout with two columns. The two columns have the same length in every page except in the last one, where you might get the first column filled up and the second empty, depending on the length of the text. I would like to balance the two columns in every page, including the last one, so that both columns always have the same length. How can this be done?</p>
+<p>TIA</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=303685#respond" data-commentid="303685" data-postid="1794" data-belowelement="div-comment-303685" data-respondelement="respond" data-replyto="Reply to Leo" aria-label="Reply to Leo">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-313725" class="comment odd alt thread-odd thread-alt depth-1 parent">
+			<article id="div-comment-313725" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/a7556750c04e2c8b4c1ae9e0b7d34a195f2ba8d5a522d8da299ad5202f342363?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/a7556750c04e2c8b4c1ae9e0b7d34a195f2ba8d5a522d8da299ad5202f342363?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">HG</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-313725"><time datetime="2014-09-04T02:33:11+00:00">September 4, 2014 at 2:33 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Although it looks great on screen, but it misses its main opportunity, because it is not printable.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=313725#respond" data-commentid="313725" data-postid="1794" data-belowelement="div-comment-313725" data-respondelement="respond" data-replyto="Reply to HG" aria-label="Reply to HG">Reply</a></div>			</article><!-- .comment-body -->
+		<ol class="children">
+		<li id="comment-313865" class="comment byuser comment-author-admin bypostauthor even depth-2">
+			<article id="div-comment-313865" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Adam Wulf</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-313865"><time datetime="2014-09-04T11:34:53+00:00">September 4, 2014 at 11:34 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>yeah, not easily printable anyway. to get it nicely formatted to a page you have to play with the width/height of the &ldquo;pages&rdquo; generated by CSS. possible, not not a tidy solution for sure</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=313865#respond" data-commentid="313865" data-postid="1794" data-belowelement="div-comment-313865" data-respondelement="respond" data-replyto="Reply to Adam Wulf" aria-label="Reply to Adam Wulf">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+		<li id="comment-534853" class="comment odd alt thread-even depth-1 parent">
+			<article id="div-comment-534853" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/dcc0b403dae83dff9fd8f885efd04ff5674c9e1842a3d25fe294dfbbc9d8c47b?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/dcc0b403dae83dff9fd8f885efd04ff5674c9e1842a3d25fe294dfbbc9d8c47b?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Ayshen Akar</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-534853"><time datetime="2019-12-09T10:40:11+00:00">December 9, 2019 at 10:40 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi, thank you for your sharing. Can we draw a vertical line between any two-column?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=534853#respond" data-commentid="534853" data-postid="1794" data-belowelement="div-comment-534853" data-respondelement="respond" data-replyto="Reply to Ayshen Akar" aria-label="Reply to Ayshen Akar">Reply</a></div>			</article><!-- .comment-body -->
+		<ol class="children">
+		<li id="comment-535937" class="comment byuser comment-author-admin bypostauthor even depth-2">
+			<article id="div-comment-535937" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">admin</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-535937"><time datetime="2020-01-22T22:04:02+00:00">January 22, 2020 at 10:04 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>The best way to do that would be using CSS. You can target specific columns using `first`, `last`, and `column` css classes.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=535937#respond" data-commentid="535937" data-postid="1794" data-belowelement="div-comment-535937" data-respondelement="respond" data-replyto="Reply to admin" aria-label="Reply to admin">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+		<li id="comment-579251" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-579251" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/6fe11446dae5787c4ec351397689af4f31d51e4397fbca9be95b05674cd31cb6?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/6fe11446dae5787c4ec351397689af4f31d51e4397fbca9be95b05674cd31cb6?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Tolibjon</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-579251"><time datetime="2023-01-27T12:20:49+00:00">January 27, 2023 at 12:20 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I wanna use both 2 and 1 column. How do i do this? Thank you</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=579251#respond" data-commentid="579251" data-postid="1794" data-belowelement="div-comment-579251" data-respondelement="respond" data-replyto="Reply to Tolibjon" aria-label="Reply to Tolibjon">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-579396" class="comment byuser comment-author-admin bypostauthor even thread-even depth-1">
+			<article id="div-comment-579396" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="/" class="url" rel="ugc">Adam Wulf</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#comment-579396"><time datetime="2023-01-29T16:34:16+00:00">January 29, 2023 at 4:34 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@Tolibjon, this can be done with the `overflow` option, first generating the two column content and overflowing to the 1 column content. There&rsquo;s a few examples in the main Columnizer page (<a href="/columnizer-jquery-plugin/" rel="ugc">/columnizer-jquery-plugin/</a>) that show examples of `overflow`.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/?replytocom=579396#respond" data-commentid="579396" data-postid="1794" data-belowelement="div-comment-579396" data-respondelement="respond" data-replyto="Reply to Adam Wulf" aria-label="Reply to Adam Wulf">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+			<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/2009/06/dynamic-multi-page-multi-column-newsletter-layout-with-columnizer/#respond" style="display:none;">Cancel reply</a></small></h3><form action="/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> <span class="required-field-message">Required fields are marked <span class="required">*</span></span></p><p class="comment-form-comment"><label for="comment">Comment <span class="required">*</span></label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required></textarea></p><p style="clear: both;" class="subscribe-to-comments">
+			<input type="checkbox" name="subscribe" id="subscribe" value="subscribe" style="width: auto;">
+			<label for="subscribe">Notify me of followup comments via e-mail</label>
+			</p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" autocomplete="name" required></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" autocomplete="url"></p>
+<p class="comment-form-cookies-consent"><input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes"> <label for="wp-comment-cookies-consent">Save my name, email, and website in this browser for the next time I comment.</label></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment"> <input type="hidden" name="comment_post_ID" value="1794" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="88eaa70a5b"></p><p style="display: none !important;" class="akismet-fields-container" data-prefix="ak_"><label>&Delta;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="205"><script>document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form>	</div><!-- #respond -->
+	
+</div><!-- #comments --></div>
+		</main><!-- #main -->
+	</div><!-- #primary -->
+    </div>
+
+    </div>
+
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+
+  <div class="row">
+    <div class="col-xs-12">
+        
+		<div class="site-info">
+            &copy; 2025 <a href="/" rel="home">Adam Wulf</a> &bull; <a href="https://slightlytheme.com/?ref=footer">Slightly Theme</a>		</div><!-- .site-info -->
+
+    </div>
+    </div>
+        
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"\/*"},{"not":{"href_matches":["\/wp-*.php","\/wp-admin\/*","\/wp-content\/uploads\/*","\/wp-content\/*","\/wp-content\/plugins\/*","\/wp-content\/themes\/slightly\/*","\/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script type="text/javascript">/* <![CDATA[ */!function(e,n){var r={"selectors":{"block":"pre.EnlighterJSRAW","inline":"code.EnlighterJSRAW"},"options":{"indent":4,"ampersandCleanup":true,"linehover":false,"rawcodeDbclick":false,"textOverflow":"break","linenumbers":true,"theme":"wpcustom","language":"generic","retainCssClasses":false,"collapse":false,"toolbarOuter":"","toolbarTop":"{BTN_RAW}{BTN_COPY}{BTN_WINDOW}{BTN_WEBSITE}","toolbarBottom":""},"resources":["\/wp-content\/plugins\/enlighter\/cache\/enlighterjs.min.css?TMA22bS9bPYA1tn","\/wp-content\/plugins\/enlighter\/resources\/enlighterjs\/enlighterjs.min.js"]},o=document.getElementsByTagName("head")[0],t=n&&(n.error||n.log)||function(){};e.EnlighterJSINIT=function(){!function(e,n){var r=0,l=null;function c(o){l=o,++r==e.length&&(!0,n(l))}e.forEach(function(e){switch(e.match(/\.([a-z]+)(?:[#?].*)?$/)[1]){case"js":var n=document.createElement("script");n.onload=function(){c(null)},n.onerror=c,n.src=e,n.async=!0,o.appendChild(n);break;case"css":var r=document.createElement("link");r.onload=function(){c(null)},r.onerror=c,r.rel="stylesheet",r.type="text/css",r.href=e,r.media="all",o.appendChild(r);break;default:t("Error: invalid file extension",e)}})}(r.resources,function(e){e?t("Error: failed to dynamically load EnlighterJS resources!",e):"undefined"!=typeof EnlighterJS?EnlighterJS.init(r.selectors.block,r.selectors.inline,r.options):t("Error: EnlighterJS resources not loaded yet!")})},(document.querySelector(r.selectors.block)||document.querySelector(r.selectors.inline))&&e.EnlighterJSINIT()}(window,console); /* ]]> */</script><script type="text/javascript" src="/wp-content/themes/slightly/js/navigation.js?ver=20151215" id="slightly-navigation-js"></script>
+<script type="text/javascript" src="/wp-content/themes/slightly/js/skip-link-focus-fix.js?ver=20151215" id="slightly-skip-link-focus-fix-js"></script>
+<script type="text/javascript" src="/wp-includes/js/comment-reply.min.js?ver=6.8.1" id="comment-reply-js" async="async" data-wp-strategy="async"></script>
+<script defer type="text/javascript" src="/wp-content/plugins/akismet/_inc/akismet-frontend.js?ver=1749187471" id="akismet-frontend-js"></script>
+
+</body>
+</html>

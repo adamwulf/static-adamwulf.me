@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+<script src="http://welcome.totheinter.net/autocolumn/jquery.js" ></script>
+<script language='javascript'>
+$(function(){
+	var $dom = $("p");
+	var actualNode = $dom.get(0);
+	actualNode.iAmReal = true;
+	
+	// append the node to a selection
+	// of *one* node
+	$("body div:first").append($dom);
+
+	// now set the text on the original item
+	// this will only show up if it's not
+	// a clone
+	$dom.text("updated text");
+	
+	$appendedDom = $("body div:first p");
+	// get the node that's *really* 
+	// in the <body> tag
+	actualAppendedNode = $appendedDom.get(0);
+	
+	// this will alert "boolean" if it's
+	// the real node, "undefined" otherwise
+	alert(typeof(actualAppendedNode.iAmReal) == "undefined" ? "cloned!" : "moved!");
+	
+});
+</script>
+</head>
+<body>
+	<p>original text</p>
+	<div></div>
+	<div></div>
+</body>
+</html>

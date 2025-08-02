@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Model-View-Controller in jQuery &ndash; Adam Wulf</title>
+<meta name="robots" content="max-image-preview:large">
+	<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
+	<link rel="alternate" type="application/rss+xml" title="Adam Wulf &raquo; Feed" href="/feed/">
+<link rel="alternate" type="application/rss+xml" title="Adam Wulf &raquo; Comments Feed" href="/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Adam Wulf &raquo; Model-View-Controller in jQuery Comments Feed" href="/open-source/model-view-controller-in-jquery/feed/">
+<link rel="stylesheet" id="wp-block-library-css" href="/wp-includes/css/dist/block-library/style.min.css?ver=6.8.1" type="text/css" media="all">
+<style id="classic-theme-styles-inline-css" type="text/css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+</style>
+<style id="global-styles-inline-css" type="text/css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+</style>
+<link rel="stylesheet" id="add-anchor-links-style-css" href="/wp-content/plugins/add-anchor-links/assets/css/add-anchor-links.css?ver=1.0.2" type="text/css" media="all">
+<link rel="stylesheet" id="slightly-flexboxgrid-css" href="/wp-content/themes/slightly/css/flexboxgrid.min.css?ver=6.8.1" type="text/css" media="all">
+<link rel="stylesheet" id="slightly-style-css" href="/wp-content/themes/slightly/style.css?ver=6.8.1" type="text/css" media="all">
+<style id="akismet-widget-style-inline-css" type="text/css">
+
+			.a-stats {
+				--akismet-color-mid-green: #357b49;
+				--akismet-color-white: #fff;
+				--akismet-color-light-grey: #f6f7f7;
+
+				max-width: 350px;
+				width: auto;
+			}
+
+			.a-stats * {
+				all: unset;
+				box-sizing: border-box;
+			}
+
+			.a-stats strong {
+				font-weight: 600;
+			}
+
+			.a-stats a.a-stats__link,
+			.a-stats a.a-stats__link:visited,
+			.a-stats a.a-stats__link:active {
+				background: var(--akismet-color-mid-green);
+				border: none;
+				box-shadow: none;
+				border-radius: 8px;
+				color: var(--akismet-color-white);
+				cursor: pointer;
+				display: block;
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen-Sans', 'Ubuntu', 'Cantarell', 'Helvetica Neue', sans-serif;
+				font-weight: 500;
+				padding: 12px;
+				text-align: center;
+				text-decoration: none;
+				transition: all 0.2s ease;
+			}
+
+			/* Extra specificity to deal with TwentyTwentyOne focus style */
+			.widget .a-stats a.a-stats__link:focus {
+				background: var(--akismet-color-mid-green);
+				color: var(--akismet-color-white);
+				text-decoration: none;
+			}
+
+			.a-stats a.a-stats__link:hover {
+				filter: brightness(110%);
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 0 2px rgba(0, 0, 0, 0.16);
+			}
+
+			.a-stats .count {
+				color: var(--akismet-color-white);
+				display: block;
+				font-size: 1.5em;
+				line-height: 1.4;
+				padding: 0 13px;
+				white-space: nowrap;
+			}
+		
+</style>
+<link rel="https://api.w.org/" href="/wp-json/"><link rel="alternate" title="JSON" type="application/json" href="/wp-json/wp/v2/pages/231"><link rel="EditURI" type="application/rsd+xml" title="RSD" href="/xmlrpc.php?rsd">
+<meta name="generator" content="WordPress 6.8.1">
+<link rel="canonical" href="/open-source/model-view-controller-in-jquery/">
+<link rel="shortlink" href="/?p=231">
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="/wp-json/oembed/1.0/embed?url=https%3A%2F%2F%2Fopen-source%2Fmodel-view-controller-in-jquery%2F">
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="/wp-json/oembed/1.0/embed?url=https%3A%2F%2F%2Fopen-source%2Fmodel-view-controller-in-jquery%2F&amp;format=xml">
+
+		<!-- GA Google Analytics @ https://m0n.co/ga -->
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+			ga('create', 'UA-180672-7', 'auto');
+			ga('set', 'anonymizeIp', true);
+			ga('set', 'forceSSL', true);
+			ga('send', 'pageview');
+		</script>
+
+	<link rel="pingback" href="/xmlrpc.php">    <style>
+        body, button, input, select, textarea, a { 
+            color: ;
+        }
+      
+        .menu-toggle {
+          color: ;
+          background-color: #;
+        }
+      
+        #primary-menu {
+          color: ;
+          background-color: #;
+        }
+    </style>
+
+    </head>
+
+<body class="wp-singular page-template-default page page-id-231 page-parent page-child parent-pageid-238 wp-theme-slightly">
+
+<div id="page" class="site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+
+	<header id="masthead" class="site-header" role="banner">
+  <div class="row">
+    <div class="col-xs-12 site-header-col">
+		<div class="site-branding">
+			                    <p class="site-title"><a href="/" rel="home">Adam Wulf</a></p>
+                		</div><!-- .site-branding -->
+		<nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">Menu</button>
+			<div class="menu-navigation-container"><ul id="primary-menu" class="menu"><li id="menu-item-5164" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-5164"><a href="/">Home</a></li>
+<li id="menu-item-5167" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5167"><a href="/about/">About</a></li>
+<li id="menu-item-5166" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5166"><a href="/projects/">Projects</a></li>
+<li id="menu-item-5165" class="menu-item menu-item-type-post_type menu-item-object-page current-page-ancestor menu-item-5165"><a href="/open-source/">Open Source</a></li>
+</ul></div>		</nav><!-- #site-navigation -->
+      </div>
+    </div>
+	</header><!-- #masthead -->
+
+
+	<div id="content" class="site-content">
+
+
+  <div class="row row--index">
+    <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+			
+<article id="post-231" class="post-231 page type-page status-publish hentry">
+	<header class="entry-header">
+            <h1 class="entry-title">Model-View-Controller in jQuery</h1>	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<h2><a href="#model-view-controller-in-jquery" aria-hidden="true" class="aal_anchor" id="model-view-controller-in-jquery"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Model-View-Controller in jQuery</h2>
+<h3><a href="#overview" aria-hidden="true" class="aal_anchor" id="overview"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Overview</h3>
+<p>If you haven&rsquo;t read it already, be sure to check out <a href="/2008/08/05/mvc-pattern-for-the-web/">this post</a> where I talk more about the motivation for this tutorial.</p>
+<p>This MVC setup is perfect if you want to build an application like <a href="https://www.jotlet.net/">Jotlet.net</a>, <a href="http://280slides.com/">280Slides.com</a>, or even <a href="http://gmail.com/">Gmail</a>. If you&rsquo;re aiming to build a more traditional web app like <a href="http://www.basecamphq.com/">BaseCamp</a>, <a href="http://www.flickr.com/">Flickr</a>, or <a href="http://digg.com/">Digg</a>, then this still might be a good resource. A good rule of thumb: If you web application has 1 page load, then this is a great setup! If your app has more than 1 page load, read on anyways and you still might be able to apply some of these principles.</p>
+<p>The approach I outline below &ndash; as with all my tutorials &ndash; is server agnostic. I&rsquo;ll be using <a href="http://php.net/">PHP</a> to power the demos, but you can easily use <a href="http://www.ruby-lang.org/en/">Ruby</a>, <a href="http://struts.apache.org/">Java</a>, or even <a href="http://www.cl-http.org:8001/cl-http/">Lisp</a>! &#128578;</p>
+<h3><a href="#in-the-wild" aria-hidden="true" class="aal_anchor" id="in-the-wild"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>In the Wild</h3>
+<p>This MVC is being used at&nbsp;<a href="http://jotbook.net/">jotbook.net</a>.&nbsp;Similar in principle to&nbsp;<a href="https://workflowy.com/">Workflowy</a>,&nbsp;Jotbook lets you easily create new bulleted lists, share them, and edit them with anyone in realtime. The MVC is used to keep a full and update model of the list cached in the browser and automatically synchronized with the server using <a href="/tutorials/bundled-synchronous-ajax-with-jquery/">BAJAX</a>. Check out the full source code at&nbsp;<a href="https://github.com/adamwulf/jotbook">https://github.com/adamwulf/jotbook</a>.</p>
+<h3><a href="#goals" aria-hidden="true" class="aal_anchor" id="goals"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Goals</h3>
+<ol>
+<li>Clean simple code</li>
+<li>Separate the logic of the view and the model</li>
+<li>Cache data on the client side &ndash; minimize AJAX calls</li>
+<li>Provide clean interface to data so disparate view objects can work together on same data model</li>
+<li>Maximize both model and view code reuse</li>
+</ol>
+<h3><a href="#the-tutorial" aria-hidden="true" class="aal_anchor" id="the-tutorial"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>The Tutorial</h3>
+<p>I&rsquo;ve split this tutorial into multiple Phases. Each phase builds upon the previous, and each has its own demo and sample code that it walks through (and download!). So be sure to check them all out!</p>
+<p>The first Phase sets up the foundation on which all the other&rsquo;s will rely &ndash; so it&rsquo;s a great place to start. Each next phase will add a bit of functionality onto the code from the previous phase.</p>
+<ol>
+<li><a href="/open-source/model-view-controller-in-jquery/phase-1/">Phase 1: Loading data from the server</a></li>
+<li><a href="/open-source/model-view-controller-in-jquery/phase-2/">Phase 2: Saving data to the server</a></li>
+<li>Phase 3: Managing Multiple and Relational Data Types (coming soon)</li>
+<li>Phase 4: Initializing the model with data (coming soon)</li>
+<li>Phase 5: Offline mode (coming soon)</li>
+</ol>
+	</div><!-- .entry-content -->
+
+	</article><!-- #post-## -->
+
+<div id="comments" class="comments-area">
+
+			<h2 class="comments-title">
+			50 thoughts on &ldquo;<span>Model-View-Controller in jQuery</span>&rdquo;		</h2><!-- .comments-title -->
+
+		
+		<ol class="comment-list">
+					<li id="comment-34" class="comment even thread-even depth-1">
+			<article id="div-comment-34" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/7075bb5b9e663da4ed5d7653fdd24f02da46018c34cb980fbd6297f6cfca02cb?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/7075bb5b9e663da4ed5d7653fdd24f02da46018c34cb980fbd6297f6cfca02cb?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" decoding="async">						<b class="fn"><a href="http://curtishenson.com/" class="url" rel="ugc external nofollow">Curtis</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-34"><time datetime="2008-08-06T20:12:22+00:00">August 6, 2008 at 8:12 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Wow, this is really good stuff already.  Already learned quite a bit, can&rsquo;t wait for the rest.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=34#respond" data-commentid="34" data-postid="231" data-belowelement="div-comment-34" data-respondelement="respond" data-replyto="Reply to Curtis" aria-label="Reply to Curtis">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-35" class="pingback odd alt thread-odd thread-alt depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://www.happytarot.com/blog/2008/08/06/model-view-controller-in-jquery.html" class="url" rel="ugc external nofollow">Happy Tarot &raquo; Code &raquo; Model-View-Controller in JQuery</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-47" class="comment even thread-even depth-1">
+			<article id="div-comment-47" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/f86dfec403a2d8ac6ddd769ca2b55ebdb4b2461ed49c4f4add06d3790a181e19?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/f86dfec403a2d8ac6ddd769ca2b55ebdb4b2461ed49c4f4add06d3790a181e19?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" decoding="async">						<b class="fn"><a href="http://joelg.co.uk/" class="url" rel="ugc external nofollow">Joel Gascoigne</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-47"><time datetime="2008-08-08T04:36:37+00:00">August 8, 2008 at 4:36 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I really like the idea of this concept, I will be keeping an eye on this for your later parts. May I suggest looking at the PHP function json_encode(), though &#128521;</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=47#respond" data-commentid="47" data-postid="231" data-belowelement="div-comment-47" data-respondelement="respond" data-replyto="Reply to Joel Gascoigne" aria-label="Reply to Joel Gascoigne">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-49" class="pingback odd alt thread-odd thread-alt depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://talkabout.wordpress.com/2008/08/09/links-for-2008-08-08-deliciouscom/" class="url" rel="ugc external nofollow">links for 2008-08-08 [delicious.com] &laquo; Talkabout</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-51" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://talkabout.wordpress.com/2008/08/10/links-for-2008-08-09-deliciouscom/" class="url" rel="ugc external nofollow">links for 2008-08-09 [delicious.com] &laquo; Talkabout</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-53" class="pingback odd alt thread-odd thread-alt depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://blog.listotron.com/2008/08/10/jquery-the-official-javascript-library-of-listotron/" class="url" rel="ugc external nofollow">jQuery : the Official JavaScript Library of Listotron | Listotron Blog</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-55" class="comment even thread-even depth-1">
+			<article id="div-comment-55" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/f86dfec403a2d8ac6ddd769ca2b55ebdb4b2461ed49c4f4add06d3790a181e19?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/f86dfec403a2d8ac6ddd769ca2b55ebdb4b2461ed49c4f4add06d3790a181e19?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" decoding="async">						<b class="fn"><a href="http://joelg.co.uk/" class="url" rel="ugc external nofollow">Joel Gascoigne</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-55"><time datetime="2008-08-12T06:35:56+00:00">August 12, 2008 at 6:35 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi Adam,</p>
+<p>I&rsquo;ve actually been putting a heavily modified version of the model-view-controller pattern you describe above into practice in one of my current projects, as it is a rather large project and there is heavy use of AJAX throughout.</p>
+<p>I have actually gone for having a model, view and controller  object extended from jquery, smiliarly to you have it but I then have requirement for separate pages and therefore separate models, views and controllers. For example, I have a page named &ldquo;create&rdquo;, so I have a createModel, a createView and a createController which are extensions of model, view, controller.</p>
+<p>Having been working with the pattern extensively for a couple of days, it seems to make the code very maintainable and clean, but I have come across one problem:</p>
+<p>Have you thought about how to handle sending parameters when requesting items? Some items require different values sent back depending on one or more parameters sent to them.</p>
+<p>I therefore modified the model to optionally accept parameters and go for POST rather than GET if indeed parameters are required. Seems fairly straightforward, right? Then there&rsquo;s the problem of caching the same named item but for different combinations of parameters, and this is where I&rsquo;ve come a little stuck. Caching seems a little redundant once you realise that if parameters are being sent then the response will be different a lot of the time.</p>
+<p>I think this idea needs to be extended a little. There needs to be some way of storing items along with the set of parameters which was sent with the request for the item, very crudely put would be something like cache[item][parameters] &ndash; but parameters can be any number of parameters and possibly arrays to send too, so this quickly falls over.</p>
+<p>This is rather long now! What are your thoughts on the matter?</p>
+<p>Joel</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=55#respond" data-commentid="55" data-postid="231" data-belowelement="div-comment-55" data-respondelement="respond" data-replyto="Reply to Joel Gascoigne" aria-label="Reply to Joel Gascoigne">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-57" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-57" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="/" class="url" rel="ugc">adam</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-57"><time datetime="2008-08-12T08:41:33+00:00">August 12, 2008 at 8:41 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<blockquote><p>Have you thought about how to handle sending parameters when requesting items? Some items require different values sent back depending on one or more parameters sent to them.</p></blockquote>
+<p>Just to be clear &ndash; &ldquo;caching data&rdquo; in this MVC pattern isn&rsquo;t referring to the browser caching AJAX requests automatically, as I think you&rsquo;re describing here.</p>
+<p>To fix that, I always opt for the browser never to cache AJAX requests. This can be done by sending back <a href="http://us.php.net/header" rel="nofollow">no-cache headers</a> from the server. A less graceful solution is to add a random parameter to the end of the query string: ajax.php?rand=[random number].</p>
+<p>The goal of the Model in the the client MVC is to cache data locally, so that we don&rsquo;t have to AJAX as much in the first place. Asking the model for &ldquo;Item number 5&rdquo; shouldn&rsquo;t even fire an AJAX call if that item is already cached in the Model.</p>
+<p>Keep your eyes out for Phase 2 of the tutorial &ndash; I hope to be finishing that up relatively soon. That phase will handle both loading and saving data to the server, and I think that will speak more directly to your app development.</p>
+<p>Cheers</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=57#respond" data-commentid="57" data-postid="231" data-belowelement="div-comment-57" data-respondelement="respond" data-replyto="Reply to adam" aria-label="Reply to adam">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-58" class="comment even thread-even depth-1">
+			<article id="div-comment-58" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/f86dfec403a2d8ac6ddd769ca2b55ebdb4b2461ed49c4f4add06d3790a181e19?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/f86dfec403a2d8ac6ddd769ca2b55ebdb4b2461ed49c4f4add06d3790a181e19?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://joelg.co.uk/" class="url" rel="ugc external nofollow">Joel Gascoigne</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-58"><time datetime="2008-08-12T10:45:29+00:00">August 12, 2008 at 10:45 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I&rsquo;m talking about caching data within the model, in order to avoid multiple AJAX requests for the same item. But the problem arises when you&rsquo;re requesting items where you&rsquo;re sending parameters. </p>
+<p>For example, in most moderately sized web applications, you&rsquo;re going to need more than just GET without any query string or POST parameters. This cropped up for me when using AJAX to retrieve a URL friendly title for a page, the &ldquo;item&rdquo; name may be &ldquo;url_name&rdquo;, but the value of the item will differ depending on the &ldquo;full name&rdquo; of the page for which that short URL is generated. So in this case you would request the &ldquo;url_name&rdquo; with a parameter &ldquo;full_name&rdquo;. So then retrieving &ldquo;url_name&rdquo; in the future returns the cached &ldquo;url_name&rdquo; which would not be the desired result, since the &ldquo;full_name&rdquo; may have changed.</p>
+<p>I hope you understand the problem I&rsquo;m describing now.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=58#respond" data-commentid="58" data-postid="231" data-belowelement="div-comment-58" data-respondelement="respond" data-replyto="Reply to Joel Gascoigne" aria-label="Reply to Joel Gascoigne">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-59" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-59" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="/" class="url" rel="ugc">adam</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-59"><time datetime="2008-08-12T12:52:14+00:00">August 12, 2008 at 12:52 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<blockquote><p>I&rsquo;m talking about caching data within the model, in order to avoid multiple AJAX requests for the same item. But the problem arises when you&rsquo;re requesting items where you&rsquo;re sending parameters.</p></blockquote>
+<p>Ah- I think I understand you now,</p>
+<p>In the tutorial as it&rsquo;s outlined in Phase 1, items are only cached by their unique ID. So if we needed to also be able to ask the Model for items based on something other than their ID (some other parameters in your request), then the cache is no longer very useful. I think this what you&rsquo;re getting at?</p>
+<p>The solution in this case ends up being much more application specific. It often ends up being useful to hash the data on much more than just the ID &ndash; maybe the created on date, maybe a user ID, in your case maybe &ldquo;full name&rdquo;. Then when asking the Model for data related to some other parameter, the Model can look up data in a 2nd or 3rd hashtable.</p>
+<p>Stay tuned for Phase 3 where I&rsquo;ll be solving a similar problem and caching data on more than just an Id.</p>
+<p>Cheers</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=59#respond" data-commentid="59" data-postid="231" data-belowelement="div-comment-59" data-respondelement="respond" data-replyto="Reply to adam" aria-label="Reply to adam">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-62" class="comment even thread-even depth-1">
+			<article id="div-comment-62" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/f86dfec403a2d8ac6ddd769ca2b55ebdb4b2461ed49c4f4add06d3790a181e19?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/f86dfec403a2d8ac6ddd769ca2b55ebdb4b2461ed49c4f4add06d3790a181e19?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://joelg.co.uk/" class="url" rel="ugc external nofollow">Joel Gascoigne</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-62"><time datetime="2008-08-12T13:28:13+00:00">August 12, 2008 at 1:28 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Yep I think you&rsquo;re with me now &ndash; and I had thought about a hashtable approach, I think that&rsquo;s the only real solution to the problem. Whatever the solution, it needs to be as abstracted as possible, and there may be good reason for certain items to never be cached.</p>
+<p>I&rsquo;ll be keeping tuned for the later phases, thanks again for opening my eyes to using the much used model-view-controller pattern client-side!</p>
+<p>I expect I will be developing my own version of this, so I will let you know if I come up with some method for caching items with additional data &ndash; I certainly think it is something which is necessary in order to make this truly usable.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=62#respond" data-commentid="62" data-postid="231" data-belowelement="div-comment-62" data-respondelement="respond" data-replyto="Reply to Joel Gascoigne" aria-label="Reply to Joel Gascoigne">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-79" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-79" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/2dffd843ca1d805b0edcb1f8821816d26f6cf6be6322cdef62bb40d2a9078a79?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/2dffd843ca1d805b0edcb1f8821816d26f6cf6be6322cdef62bb40d2a9078a79?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Peter C</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-79"><time datetime="2008-08-22T23:42:09+00:00">August 22, 2008 at 11:42 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi Adam and Joel,<br>
+Just googled onto this Ajax&rsquo;ed MVC model. I&rsquo;ve been looking at JavascriptMVC.com.<br>
+&deg; I like your model involving Cache-V-C on the browser and MVC on the server. Would like to add that in some complex situations, you may need to synchronize data back to the server.<br>
+&deg; I&rsquo;m looking forward to implement this model and to put more intelligence on the browser to offload the server. There would be lots of security concerns (e.g. session info).</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=79#respond" data-commentid="79" data-postid="231" data-belowelement="div-comment-79" data-respondelement="respond" data-replyto="Reply to Peter C" aria-label="Reply to Peter C">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-99" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://mohangk.org/blog/?p=40" class="url" rel="ugc external nofollow">mohangk.org/blog &raquo; links for 2008-09-03</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-146" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-146" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/707125a64a9324fc70241bd724d3193c55a5bbcfebeed3dbbd7998566def162c?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/707125a64a9324fc70241bd724d3193c55a5bbcfebeed3dbbd7998566def162c?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://sprynthesis.com/" class="url" rel="ugc external nofollow">Bob</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-146"><time datetime="2008-10-03T14:47:23+00:00">October 3, 2008 at 2:47 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Your demo seems to be failing 100% of the time, not 10%. &#128578;</p>
+<p>INteresting stuff though</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=146#respond" data-commentid="146" data-postid="231" data-belowelement="div-comment-146" data-respondelement="respond" data-replyto="Reply to Bob" aria-label="Reply to Bob">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-147" class="comment byuser comment-author-admin bypostauthor even thread-even depth-1">
+			<article id="div-comment-147" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">admin</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-147"><time datetime="2008-10-03T15:24:47+00:00">October 3, 2008 at 3:24 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@Bob</p>
+<p>thanks for the heads up, everything should be working now  &#128578;</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=147#respond" data-commentid="147" data-postid="231" data-belowelement="div-comment-147" data-respondelement="respond" data-replyto="Reply to admin" aria-label="Reply to admin">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-203" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-203" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/e7f247fd23cc183468b9863c9cbc540edffb15e45d2027af52c3e6b3f3925664?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/e7f247fd23cc183468b9863c9cbc540edffb15e45d2027af52c3e6b3f3925664?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">lambert</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-203"><time datetime="2008-10-30T10:58:17+00:00">October 30, 2008 at 10:58 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>when&rsquo;s part 3 coming out? =)</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=203#respond" data-commentid="203" data-postid="231" data-belowelement="div-comment-203" data-respondelement="respond" data-replyto="Reply to lambert" aria-label="Reply to lambert">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-215" class="comment byuser comment-author-admin bypostauthor even thread-even depth-1">
+			<article id="div-comment-215" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Adam Wulf</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-215"><time datetime="2008-10-31T13:13:44+00:00">October 31, 2008 at 1:13 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@lambert,</p>
+<p>soon? i hope? i&rsquo;ve been swamped at work lately, but I&rsquo;ll try and get it out asap &#128578;</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=215#respond" data-commentid="215" data-postid="231" data-belowelement="div-comment-215" data-respondelement="respond" data-replyto="Reply to Adam Wulf" aria-label="Reply to Adam Wulf">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-503" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-503" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/557422a9b333db41d67cc030c750925d18461fad6523c51b4f1f72eaf9f59ae3?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/557422a9b333db41d67cc030c750925d18461fad6523c51b4f1f72eaf9f59ae3?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">noor</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-503"><time datetime="2008-12-21T15:42:13+00:00">December 21, 2008 at 3:42 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>good evening,<br>
+my name is noor, i would like to inform that i have a project related to MVC and i need  a help. so, can you help me in answering these two questions:<br>
+1- Examples of MVC?<br>
+2- What is a pattern within the context of software development?<br>
+thank you alot and best regards,<br>
+noor:)</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=503#respond" data-commentid="503" data-postid="231" data-belowelement="div-comment-503" data-respondelement="respond" data-replyto="Reply to noor" aria-label="Reply to noor">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-541" class="comment even thread-even depth-1">
+			<article id="div-comment-541" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/41a0dbb12f65b524c94dbf6edd3e740bfdf5b0d793b041e48f9005a21b66c05f?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/41a0dbb12f65b524c94dbf6edd3e740bfdf5b0d793b041e48f9005a21b66c05f?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">ajlozier</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-541"><time datetime="2008-12-28T13:22:33+00:00">December 28, 2008 at 1:22 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>joel, i would love to see some code samples of how you extended the base model view and controller classes into more specific instances.  thanks!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=541#respond" data-commentid="541" data-postid="231" data-belowelement="div-comment-541" data-respondelement="respond" data-replyto="Reply to ajlozier" aria-label="Reply to ajlozier">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-592" class="pingback odd alt thread-odd thread-alt depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://www.drweb.de/magazin/50-jquery-tutorials-und-mehr-fur-einsteiger-und-fortgeschrittene/" class="url" rel="ugc external nofollow">50+ jQuery Tutorials und mehr f&uuml;r Einsteiger und Fortgeschrittene</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-607" class="comment even thread-even depth-1">
+			<article id="div-comment-607" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/89dc9df38eb208726a40059cdffff8cf5d90412c0db10cf11f9619ebc7675001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/89dc9df38eb208726a40059cdffff8cf5d90412c0db10cf11f9619ebc7675001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">george</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-607"><time datetime="2009-01-09T02:10:52+00:00">January 9, 2009 at 2:10 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>hi there,</p>
+<p>I&rsquo;m eager to read the phase3 and other upcoming sections&hellip;will they be posted soon?</p>
+<p>currently I&rsquo;m working on a project using asp.net mvc with nHibernate spring and jQuery</p>
+<p>thx a lot</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=607#respond" data-commentid="607" data-postid="231" data-belowelement="div-comment-607" data-respondelement="respond" data-replyto="Reply to george" aria-label="Reply to george">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-609" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-609" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Adam Wulf</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-609"><time datetime="2009-01-09T03:22:03+00:00">January 9, 2009 at 3:22 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@george</p>
+<p>I wish I could say that stage 3 was coming out soon, but i&rsquo;m swamped with work &#128539;  It&rsquo;s still on my radar for sure, but don&rsquo;t hold your breath, heh</p>
+<p>glad you liked the read!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=609#respond" data-commentid="609" data-postid="231" data-belowelement="div-comment-609" data-respondelement="respond" data-replyto="Reply to Adam Wulf" aria-label="Reply to Adam Wulf">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-716" class="comment even thread-even depth-1">
+			<article id="div-comment-716" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/4a4536b00dc8f5702573e286b4aeaf35fce9b4c068018ff2432926495e9b173e?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/4a4536b00dc8f5702573e286b4aeaf35fce9b4c068018ff2432926495e9b173e?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Guilherme</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-716"><time datetime="2009-01-28T09:07:22+00:00">January 28, 2009 at 9:07 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>This is great stuff! I feel the same need as you, I&rsquo;m currently developping a new web 2.0 application and wanted to do things in the right away this time, to avoid the javascript messy management. </p>
+<p>You mentioned that the code is most suitable for those applications with only one page load, and I believe you&rsquo;re saying that because of the client-side cache, right? (reloading would loose the cache and defeats the purpose). Have you ever considered to have an invisible frame (height=0) from where AJAX calls would be made and where the cache would be kept?</p>
+<p>This way your main screen could be reloaded and cache would be preserved. I have this arcthitecture implemented here where I work at, but we are still in the rock age (that is, not using jquery :-). </p>
+<p>For my personal project I&rsquo;ll see if I can mix the two things: client-side jquery/json mvc and invisible frame caching.</p>
+<p>Good work!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=716#respond" data-commentid="716" data-postid="231" data-belowelement="div-comment-716" data-respondelement="respond" data-replyto="Reply to Guilherme" aria-label="Reply to Guilherme">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-1287" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-1287" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/35e6dcd036ed41caab021969077087882c527b767ef1fcd609981e86b97eb384?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/35e6dcd036ed41caab021969077087882c527b767ef1fcd609981e86b97eb384?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://stevenblack.com/" class="url" rel="ugc external nofollow">Steven Black</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-1287"><time datetime="2009-03-10T01:54:10+00:00">March 10, 2009 at 1:54 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>This has been inspiring, Adam.</p>
+<p>After playing and building upon this for a few days, I&rsquo;ve taken this in an interesting direction.</p>
+<p>Are you aware that there&rsquo;s nothing in these articles, and nothing I&rsquo;ve built-upon the articles, that is inherently jQuery&rsquo;ish at core?</p>
+<p>In other words, the jQuery.extend({}} method for creating Models, Views, and Controllers, isn&rsquo;t required.</p>
+<p>I&rsquo;ve now mapped the basic ideas onto an alternative base, described by our good friend here: <a href="http://is.gd/mED0" rel="nofollow ugc">http://is.gd/mED0</a></p>
+<p>This removes the tricky inheritance difficulties (and failings) inherent in jQuery.extend({}} and, as a result, I have Models, Views, and Controllers as subtypes of an MVCBase class and nicely partitioned lower subtypes for different types of Controllers and Views reflecting the different types interaction panes in this application.</p>
+<p>jQuery is still used throughout, and the MVC elements themselves use jQuery functionality extensively, just that they aren&rsquo;t themselves jQuery objects.</p>
+<p>Stepping outside the jQuery paradigm for the MVC pieces is a nice breakthrough.  Nothing is lost, and the ability to properly classify subtypes is much easier and more straightforward.</p>
+<p>A cool variant I&rsquo;ve implemented is, using jQuery, a Controller can manage many Views, as you might see in a tabbed interface where each tab is driven by a separate business object but centrally managed by a Controller in a generic way.  </p>
+<p>Another View, a basic one, serves to enable and disable tabs as a particular page goes in and out of edit mode.  Similarly another simple View serves as an interface to enable and disable other navigation menus as the page goes into edit mode.</p>
+<p>Thanks for the inspiration.  Those listeners are killer!</p>
+<p>**&ndash;**  Steve</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=1287#respond" data-commentid="1287" data-postid="231" data-belowelement="div-comment-1287" data-respondelement="respond" data-replyto="Reply to Steven Black" aria-label="Reply to Steven Black">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-1317" class="comment byuser comment-author-admin bypostauthor even thread-even depth-1">
+			<article id="div-comment-1317" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Adam Wulf</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-1317"><time datetime="2009-03-11T16:21:00+00:00">March 11, 2009 at 4:21 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@Steven</p>
+<p>really glad you liked all the walkthroughs!</p>
+<p>completely agree on the failings of $.extend and general inheritence problems in JavaScript, and the link you point to is a great resource for a competing way to define classes.</p>
+<p>I opted to define classes in one giant function() call, instead of using the Class.prototype method you linked to for basically one reason: private members. The link you gave supports much better inheritance, but at the cost of not allowing private functions or properties.</p>
+<p>Lacking rich inheretance means I end up keeping my class definitions pretty flat. If i do need to extend a class, I usually end up using more of a <a href="http://en.wikipedia.org/wiki/Proxy_pattern" rel="nofollow">Proxy pattern</a> as a substitute for proper inheretance.</p>
+<p>the two class definitions each have their pros and cons, and i think it comes down to personal preference + requirements to decide which way you want to go with this one.</p>
+<blockquote><p>
+A cool variant I&rsquo;ve implemented is, using jQuery, a Controller can manage many Views, as you might see in a tabbed interface where each tab is driven by a separate business object but centrally managed by a Controller in a generic way.
+</p></blockquote>
+<p>Very cool! that&rsquo;s absolutely the way to go. having multiple views feed off data from the same model just makes everything cleaner and more efficient.</p>
+<p>any urls you&rsquo;d like to show off that feature your variant of the MVC?</p>
+<p>Cheers!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=1317#respond" data-commentid="1317" data-postid="231" data-belowelement="div-comment-1317" data-respondelement="respond" data-replyto="Reply to Adam Wulf" aria-label="Reply to Adam Wulf">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-1821" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-1821" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/d93664ef5862918bd0dd6bbf5e65fd2ad84e9683a93fb99492f58f1ed94a1412?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/d93664ef5862918bd0dd6bbf5e65fd2ad84e9683a93fb99492f58f1ed94a1412?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://www.digitalmateria.com/" class="url" rel="ugc external nofollow">Chris</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-1821"><time datetime="2009-03-26T11:05:02+00:00">March 26, 2009 at 11:05 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I&rsquo;m actualy quite interested in how Steven implemented this, and your take on handling multiple views. For example. If you had a wizard that required multiple &ldquo;screens&rdquo; of collecting data, and then on the last screen the data was sent to the server, where would the data object before it&rsquo;s sent off? In the Controller? or in the Model? My first guess would be the object hosting the data being collected would be stored in the model and updated throughout the screen transitions, but I have a feeling it&rsquo;s not so simple.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=1821#respond" data-commentid="1821" data-postid="231" data-belowelement="div-comment-1821" data-respondelement="respond" data-replyto="Reply to Chris" aria-label="Reply to Chris">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-1823" class="comment even thread-even depth-1">
+			<article id="div-comment-1823" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/35e6dcd036ed41caab021969077087882c527b767ef1fcd609981e86b97eb384?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/35e6dcd036ed41caab021969077087882c527b767ef1fcd609981e86b97eb384?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://stevenblack.com/" class="url" rel="ugc external nofollow">Steven Black</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-1823"><time datetime="2009-03-26T11:50:44+00:00">March 26, 2009 at 11:50 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>(Email notifications of comments is great!)</p>
+<p>@Chris, I think the key abstraction bridging views and data is the form elements themselves.</p>
+<p>Using jQuery this is easy.</p>
+<p>For example, when creating the view you can pass-in any container selector and, in the view::init(), snurf-out all the forms therein.  </p>
+<p>Remember it&rsquo;s the forms that contain the fields (both visible and hidden), and the very handy jQuery Deserialize plugin (<a href="http://www.reach1to1.com/sandbox/jquery/testform.html" rel="nofollow ugc">http://www.reach1to1.com/sandbox/jquery/testform.html</a>) works on a form-basis.</p>
+<p>So creating a view is a matter of passing-in a comma-delimited list of form selectors, or comma-delimeted list of containers that may (or may not) contain the forms.  Even pass-in the body selector if you want to snag all the forms.  It just works.</p>
+<p>So the forms are a natural basis for transient data storage prior to submitting.</p>
+<p>Implementation details can vary but, in Adam&rsquo;s model, the submit action triggers a notification to listeners and, at that point, a specialized listener can iterate through one or more views managed by the controller and, within each view, iterate the forms and marshall the data from each one prior to an ::ajaxSubmit()</p>
+<p>Note too that you could hook-in the most excellent Form Validation plugin and trigger the marshalling after successful client-side validation, which is a bonus.</p>
+<p>I&rsquo;m at that stage now, and running into the usual Javascript problems of properly referencing objects called from delegated functions called from other delegated functions without resorting to global-scope, or equivalent-to-global-scope kluges.</p>
+<p>At the moment my design has a variable addressed as $.MVC  where, regardless of the depth of delegation, I can always find the (so far singleton) controller and its (so far singleton) model.</p>
+<p>I&rsquo;m not comfy with the notion of the model object as a singleton.  What I have now works but I can foresee the day when this simplification will be onerous.  The underlying question to resolve is, assuming no spaghetti, which model is immutably tied to which view?  </p>
+<p>That&rsquo;s not a trivial problem, and I sense that I&rsquo;m one use-case away from having to address it.  I might resort to a collection of model-view pairs maintained by the (so far singleton) controller where the views remain a wrapper for  one or more forms.  That part is working great.</p>
+<p>All that said, I&rsquo;m pretty happy with subtyping models and controllers so far.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=1823#respond" data-commentid="1823" data-postid="231" data-belowelement="div-comment-1823" data-respondelement="respond" data-replyto="Reply to Steven Black" aria-label="Reply to Steven Black">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-1826" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-1826" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/d93664ef5862918bd0dd6bbf5e65fd2ad84e9683a93fb99492f58f1ed94a1412?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/d93664ef5862918bd0dd6bbf5e65fd2ad84e9683a93fb99492f58f1ed94a1412?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://www.digitalmateria.com/" class="url" rel="ugc external nofollow">Chris</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-1826"><time datetime="2009-03-26T12:39:38+00:00">March 26, 2009 at 12:39 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>@Stephen </p>
+<p>Thanks for your insight. I can see how forms are good for holding data prior to transmission, but I think my particular case may need a different architecture. </p>
+<p>I&rsquo;m contemplating rewriting an old order entry system for a local bakery. Previously I wrote it in ASP.NET and it had multiple pages, with no AJAX. There are at least 15 different screens/subscreens allowing for customizing of hundreds of goods, and throughout each page, I accumulated all of the data in a session object (which I regret, b/c session is a pain), and that session object would transcend from page to page. I&rsquo;d like to rewrite it to use the single-page MVC model. But the catch is, after each item was selected/modified, the total price in the top right would have to update, meaning the order would have to be processed on each user action. To have to comb through the DOM, retrieve each item&rsquo;s price on every user action seems like too much</p>
+<p>That being said, my first thought would to be make a js object that keeps a running tally of what was selected/modified throughout the order process, much like a bar tab. Every time the user clicks something, the listeners would alert the controller, and the controller would update the variable with the changes. After a few screens the order would look something like this: </p>
+<p>var order = {<br>
+    name: &lsquo;Joe Smith&rsquo;,<br>
+    location: &lsquo;Southwest&rsquo;,<br>
+    orderdate: &rsquo;07/17/2009&prime;,<br>
+	delivery: &lsquo;pickup&rsquo;,<br>
+	payment: {<br>
+		type: Visa,<br>
+		card:  5555555555555555,<br>
+		expMonth: 9,<br>
+		expYear: 8<br>
+	},<br>
+    items: {<br>
+		desserts: [<br>
+			  { name: &lsquo;Chocolate Cake&rsquo;, quantity: 1, price: 9.99, message: &lsquo;Happy Birthday Jim!!!&rsquo; },<br>
+			  { name: &lsquo;Pudding Cake&rsquo;, quantity: 2, price: 13.99, message: &lsquo;Another message&rsquo; },<br>
+			  { name: &lsquo;Carrot Cake&rsquo;, quantity: 4, price: 8.99, message: &lsquo;None&rsquo; },<br>
+		],<br>
+		drinks: [<br>
+			{ name: &lsquo;Sweet Tea&rsquo;, quantity: 1, size: &lsquo;128oz&rsquo;, price: 2.99 },<br>
+			{ name: &lsquo;Orange Soda&rsquo;, quantity: 2, size: &lsquo;128oz&rsquo;, price: 1.99 },<br>
+			{ name: &lsquo;Fruit Punch&rsquo;, quantity: 4, size: &lsquo;128oz&rsquo;, price: 2.99 },<br>
+		]<br>
+	}<br>
+};</p>
+<p>When the user submits the order, then the controller would instruct the model to pass the order as json to the server and the server would then save it. </p>
+<p>Loading an existing order would work in the reverse fashion. A controller would take the existing order, loop through each type of item, pass each portion of the order to the appropriate view, and each view would update its DOM elements accordingly.</p>
+<p>Another option would be to send an AJAX call to the server, and the server temporarily store it either in a session object or a temp db table, and return the updated price, but this would require an AJAX call every time the user clicks an element, which isn&rsquo;t very practical.</p>
+<p>Anyway, please let me know if I&rsquo;m on the right track here. Thanks again.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=1826#respond" data-commentid="1826" data-postid="231" data-belowelement="div-comment-1826" data-respondelement="respond" data-replyto="Reply to Chris" aria-label="Reply to Chris">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-1828" class="comment even thread-even depth-1">
+			<article id="div-comment-1828" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/35e6dcd036ed41caab021969077087882c527b767ef1fcd609981e86b97eb384?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/35e6dcd036ed41caab021969077087882c527b767ef1fcd609981e86b97eb384?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://stevenblack.com/" class="url" rel="ugc external nofollow">Steven Black</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-1828"><time datetime="2009-03-26T13:15:01+00:00">March 26, 2009 at 1:15 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>A couple of ideas, bearing in mind that I&rsquo;m looking at a vast simplification of your structures.</p>
+<p>1) No need to repeatedly comb through the DOM.  You could, for example, assign a common class to all the &ldquo;total&rdquo; fields on the various pages, cache them as a single jQuery object and, at event junctures, spin through them summing the values then displaying the sum.</p>
+<p>Even if the number of these &lsquo;total&rsquo; fields is dynamic, you can always get to them pretty efficiently by addressing their parent containers, which greatly cuts down on the DOM iteration costs.</p>
+<p>So once you&rsquo;ve combed the DOM once, you cache the references (or parent container references) for quick and speedy subsequent access to particular values.</p>
+<p>2) You may have an opportunity to normaliza and flatten your json structire.  Rather than</p>
+<p>items{deserts: [], drinks: []&hellip;}</p>
+<p>You could make &lsquo;deserts&rsquo; and &lsquo;drinks&rsquo; an attribute of each item.  This looks doable because, regardless of the structure of item, &ldquo;quantity&rdquo; and &ldquo;price&rdquo; look consistent and, by my eye, that&rsquo;s all you need for the dynamic total calculations.</p>
+<p>Point being: if you can normalize the item structure then that makes dynamic access more straightforward, especially if the semantic differences between item types aren&rsquo;t really relevant to the display dynamics.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=1828#respond" data-commentid="1828" data-postid="231" data-belowelement="div-comment-1828" data-respondelement="respond" data-replyto="Reply to Steven Black" aria-label="Reply to Steven Black">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-4586" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-4586" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/72205866225fe0886c231541eb6f39bf2d4b59318b5096200c853b4e2d21875e?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/72205866225fe0886c231541eb6f39bf2d4b59318b5096200c853b4e2d21875e?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://www.digitalmateria.com/" class="url" rel="ugc external nofollow">Chris</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-4586"><time datetime="2009-06-05T12:14:47+00:00">June 5, 2009 at 12:14 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I know you&rsquo;ve been busy, but any luck on a part 3 for this tutorial? </p>
+<p>Thanks</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=4586#respond" data-commentid="4586" data-postid="231" data-belowelement="div-comment-4586" data-respondelement="respond" data-replyto="Reply to Chris" aria-label="Reply to Chris">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-4587" class="comment byuser comment-author-admin bypostauthor even thread-even depth-1">
+			<article id="div-comment-4587" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Adam Wulf</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-4587"><time datetime="2009-06-05T13:37:26+00:00">June 5, 2009 at 1:37 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Unfortunately I haven&rsquo;t had any time to devote to this lately. That said, I have some plane flights coming up this month, so I&rsquo;ll dedicate that time to working on the next phase of the tutorial.</p>
+<p>Apologies for the delay!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=4587#respond" data-commentid="4587" data-postid="231" data-belowelement="div-comment-4587" data-respondelement="respond" data-replyto="Reply to Adam Wulf" aria-label="Reply to Adam Wulf">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-9945" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-9945" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/34ed48810d3283c6956c4b14e4a1d0d69a50770cb915293c3922d193e577a633?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/34ed48810d3283c6956c4b14e4a1d0d69a50770cb915293c3922d193e577a633?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">greg</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-9945"><time datetime="2010-03-24T20:44:18+00:00">March 24, 2010 at 8:44 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>hey, i think the jquery mvc idea is great. i wonder y the tutorial has seized?</p>
+<p>jquery is now at 1.4.2&hellip; any of you guys know a good jquery mvc tutorial?</p>
+<p>thanks</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=9945#respond" data-commentid="9945" data-postid="231" data-belowelement="div-comment-9945" data-respondelement="respond" data-replyto="Reply to greg" aria-label="Reply to greg">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-10873" class="comment even thread-even depth-1">
+			<article id="div-comment-10873" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/0bffa83003baa5a6bc327be3273bde33e2b5a0240412b5163b7d650828589cd2?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/0bffa83003baa5a6bc327be3273bde33e2b5a0240412b5163b7d650828589cd2?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://www.notgotoneyet.com/" class="url" rel="ugc external nofollow">Weise</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-10873"><time datetime="2010-05-10T21:19:41+00:00">May 10, 2010 at 9:19 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi there , very interested to know if you will be completing this excellent tutorial?&hellip; Best Regards</p>
+<p>weise</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=10873#respond" data-commentid="10873" data-postid="231" data-belowelement="div-comment-10873" data-respondelement="respond" data-replyto="Reply to Weise" aria-label="Reply to Weise">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-11736" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-11736" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/0c63f3dfc4df87764f14a9c04ab0faaadce7bb569dce4b31d5e1c3cb5f15c804?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/0c63f3dfc4df87764f14a9c04ab0faaadce7bb569dce4b31d5e1c3cb5f15c804?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://stsdb.com/" class="url" rel="ugc external nofollow">storm</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-11736"><time datetime="2010-06-29T11:28:53+00:00">June 29, 2010 at 11:28 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Like anything else in development, you&rsquo;ll have to decide if the trade-off of this kind of separation is worth it. For small applications where you only have a few functions, this type of separation is surely overkill. The larger your application gets, though, the more it benefits from the separating code into Model, View, and Controller.<br>
+<a href="http://javascriptmvc.com/" rel="nofollow">JavaScriptMVC</a><br>
+<a href="http://www.alistapart.com/articles/javascript-mvc/" rel="nofollow">JavaScript MVC conception</a></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=11736#respond" data-commentid="11736" data-postid="231" data-belowelement="div-comment-11736" data-respondelement="respond" data-replyto="Reply to storm" aria-label="Reply to storm">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-11874" class="comment even thread-even depth-1">
+			<article id="div-comment-11874" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/72205866225fe0886c231541eb6f39bf2d4b59318b5096200c853b4e2d21875e?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/72205866225fe0886c231541eb6f39bf2d4b59318b5096200c853b4e2d21875e?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Chris</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-11874"><time datetime="2010-07-08T09:04:02+00:00">July 8, 2010 at 9:04 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>For any type of javascript work that&rsquo;s bigger than an example or a function or two, I&rsquo;ve used this setup. It&rsquo;s served me well over the past year or so. The only thing I&rsquo;m curious about is how to get inheritance to work with this model. I know I can use .extend, but that doesn&rsquo;t allow overriding methods.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=11874#respond" data-commentid="11874" data-postid="231" data-belowelement="div-comment-11874" data-respondelement="respond" data-replyto="Reply to Chris" aria-label="Reply to Chris">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-20379" class="pingback odd alt thread-odd thread-alt depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://randommisspellings.wordpress.com/2011/02/10/model-view-controller-in-jquery-wulf/" class="url" rel="ugc external nofollow">Model-View-Controller in jQuery | Wulf &laquo; random misspellings</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-48644" class="comment even thread-even depth-1">
+			<article id="div-comment-48644" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/3c70b7d2702822723ca5b4e440f51f42364bb1fa084cf60be30f34c3e96c5acb?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/3c70b7d2702822723ca5b4e440f51f42364bb1fa084cf60be30f34c3e96c5acb?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://www.gnatoo.com/" class="url" rel="ugc external nofollow">John</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-48644"><time datetime="2011-08-03T07:26:36+00:00">August 3, 2011 at 7:26 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Nice, clean approach, simple.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=48644#respond" data-commentid="48644" data-postid="231" data-belowelement="div-comment-48644" data-respondelement="respond" data-replyto="Reply to John" aria-label="Reply to John">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-91912" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-91912" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/43f41bf8dfa911aa273772a013fd649c4425ecb3d84b4045526de6c095401564?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/43f41bf8dfa911aa273772a013fd649c4425ecb3d84b4045526de6c095401564?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://madhukaudantha.blogspot.com/" class="url" rel="ugc external nofollow">madhuka</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-91912"><time datetime="2012-01-09T20:36:25+00:00">January 9, 2012 at 8:36 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>grate one!!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=91912#respond" data-commentid="91912" data-postid="231" data-belowelement="div-comment-91912" data-respondelement="respond" data-replyto="Reply to madhuka" aria-label="Reply to madhuka">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-94703" class="comment even thread-even depth-1">
+			<article id="div-comment-94703" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/81d46a50d70ec15c9d07226b57ad22d8897e2bdc865954b9d0221bd8a28188a9?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/81d46a50d70ec15c9d07226b57ad22d8897e2bdc865954b9d0221bd8a28188a9?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://www.oxininfotech.com/" class="url" rel="ugc external nofollow">Piyush</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-94703"><time datetime="2012-01-20T05:30:12+00:00">January 20, 2012 at 5:30 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi there , very interested to know if you will be completing this excellent tutorial?&hellip; Best Regards</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=94703#respond" data-commentid="94703" data-postid="231" data-belowelement="div-comment-94703" data-respondelement="respond" data-replyto="Reply to Piyush" aria-label="Reply to Piyush">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-130554" class="pingback odd alt thread-odd thread-alt depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://www.easyjquery.com/mvc-in-jquery-multiple-data-requests-from-model-but-single-callback-needed/" class="url" rel="ugc external nofollow">MVC in jquery, Multiple data requests from model but single callback needed | Easy jQuery | Free Popular Tips Tricks Plugins API Javascript and Themes</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-142006" class="comment even thread-even depth-1">
+			<article id="div-comment-142006" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/04618c6da34eb0124b2c4adc0b32088e2a3a2f9e561302cfc31e64f8fdb7323f?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/04618c6da34eb0124b2c4adc0b32088e2a3a2f9e561302cfc31e64f8fdb7323f?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Greg</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-142006"><time datetime="2012-06-20T06:21:31+00:00">June 20, 2012 at 6:21 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>did Adam die or did this get dropped after part 2?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=142006#respond" data-commentid="142006" data-postid="231" data-belowelement="div-comment-142006" data-respondelement="respond" data-replyto="Reply to Greg" aria-label="Reply to Greg">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-142393" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-142393" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Adam Wulf</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-142393"><time datetime="2012-06-20T23:23:01+00:00">June 20, 2012 at 11:23 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hey all, thanks for the continued interest in the tutorial! I finally have time back on my hands, and am rounding up projects that I&rsquo;d never completed.</p>
+<p>Expect to see some new tutorials for this in the coming weeks &#128578;</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=142393#respond" data-commentid="142393" data-postid="231" data-belowelement="div-comment-142393" data-respondelement="respond" data-replyto="Reply to Adam Wulf" aria-label="Reply to Adam Wulf">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-155332" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://fatal-errors.com/modular-jquery-spa-mvc/165236" class="url" rel="ugc external nofollow">Modular Jquery SPA (MVC)</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-188302" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-188302" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/d8a3028c5a72c24dccdbce96e3fb116398f8e089241cd831dbf5896caee6fa95?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/d8a3028c5a72c24dccdbce96e3fb116398f8e089241cd831dbf5896caee6fa95?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://xaviesteve.com/" class="url" rel="ugc external nofollow">Xavi</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-188302"><time datetime="2012-10-29T09:34:53+00:00">October 29, 2012 at 9:34 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>That&rsquo;ll be great Adam! This tutorial is very promissing</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=188302#respond" data-commentid="188302" data-postid="231" data-belowelement="div-comment-188302" data-respondelement="respond" data-replyto="Reply to Xavi" aria-label="Reply to Xavi">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-219980" class="comment even thread-even depth-1">
+			<article id="div-comment-219980" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/e1c3403a72c8f3b491c90259958e591faba440d79ffae71f0be622f3667f48ed?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/e1c3403a72c8f3b491c90259958e591faba440d79ffae71f0be622f3667f48ed?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">vatsal</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-219980"><time datetime="2013-04-21T22:21:12+00:00">April 21, 2013 at 10:21 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thanks a lot Adam &hellip; It&rsquo;s very well explained &hellip;exactly what I was looking for&hellip;. &#128512;</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=219980#respond" data-commentid="219980" data-postid="231" data-belowelement="div-comment-219980" data-respondelement="respond" data-replyto="Reply to vatsal" aria-label="Reply to vatsal">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-258259" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-258259" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/f22d539e82a6e0a687beb5668b105574d5cb6b6888dd4e09dfcd98a9296af245?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/f22d539e82a6e0a687beb5668b105574d5cb6b6888dd4e09dfcd98a9296af245?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">rahul</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-258259"><time datetime="2013-08-09T01:08:41+00:00">August 9, 2013 at 1:08 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>it&rsquo;s amazing tutorial </p>
+<p>thanks</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=258259#respond" data-commentid="258259" data-postid="231" data-belowelement="div-comment-258259" data-respondelement="respond" data-replyto="Reply to rahul" aria-label="Reply to rahul">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-292826" class="comment even thread-even depth-1">
+			<article id="div-comment-292826" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/5275f9cedf18947f1567e330369ff29b720de22750eb4f2f91a69bf89025164c?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/5275f9cedf18947f1567e330369ff29b720de22750eb4f2f91a69bf89025164c?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">SAM BI</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-292826"><time datetime="2013-12-14T14:06:20+00:00">December 14, 2013 at 2:06 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>thank you for the tutorial!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=292826#respond" data-commentid="292826" data-postid="231" data-belowelement="div-comment-292826" data-respondelement="respond" data-replyto="Reply to SAM BI" aria-label="Reply to SAM BI">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-470299" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-470299" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/e7540e4ac3120393b914aed72ea160565f6875f5779bacba17ca3401055bb99d?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/e7540e4ac3120393b914aed72ea160565f6875f5779bacba17ca3401055bb99d?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Martin Doire</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-470299"><time datetime="2015-04-07T09:29:49+00:00">April 7, 2015 at 9:29 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Awesome tutorial! </p>
+<p>Was familiar with Javascript/JQuery but never got down to patterns. I find the Observer pattern pretty interesting for UIs. Has a server side(PHP) developer I never really got to the single page application. Now I only want to do SPA and get more involve with frontend.</p>
+<p>Thanks for taking the time!</p>
+<p>Namast&eacute;!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=470299#respond" data-commentid="470299" data-postid="231" data-belowelement="div-comment-470299" data-respondelement="respond" data-replyto="Reply to Martin Doire" aria-label="Reply to Martin Doire">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-516701" class="comment even thread-even depth-1 parent">
+			<article id="div-comment-516701" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/5300f8d4abb59cef6ed6ebfc04002825d4ef53ac502ab5ce05ec428ded81f6e0?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/5300f8d4abb59cef6ed6ebfc04002825d4ef53ac502ab5ce05ec428ded81f6e0?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">zohar</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-516701"><time datetime="2017-01-15T01:51:37+00:00">January 15, 2017 at 1:51 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi Adam,</p>
+<p>I really like your tutorial, look very easy and right way to manage the spaghetti code. </p>
+<p>How do you think will be the right way to mange a very big website,  that have many of views and controllers on the server side.</p>
+<p>Would you create separate view/controller files for each view/controller server files ?</p>
+<p>Thanks,<br>
+Zohar</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=516701#respond" data-commentid="516701" data-postid="231" data-belowelement="div-comment-516701" data-respondelement="respond" data-replyto="Reply to zohar" aria-label="Reply to zohar">Reply</a></div>			</article><!-- .comment-body -->
+		<ol class="children">
+		<li id="comment-521617" class="comment byuser comment-author-admin bypostauthor odd alt depth-2">
+			<article id="div-comment-521617" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Adam Wulf</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/open-source/model-view-controller-in-jquery/#comment-521617"><time datetime="2017-11-09T13:56:49+00:00">November 9, 2017 at 1:56 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Only a _few_ months late on the reply here&hellip; &#128578;</p>
+<p>I think the answer is an unfortunate &ldquo;it depends.&rdquo; Sometimes the JS view controllers will be responsible for the same piece of UI that the server&rsquo;s view controllers are responsible for, but there will be many cases where they&rsquo;d need to be different. I wouldn&rsquo;t think about &ldquo;should I mirror my view controllers?&rdquo;, I would think about &ldquo;What should this JS view controller actually control?&rdquo; and modularize from there.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/open-source/model-view-controller-in-jquery/?replytocom=521617#respond" data-commentid="521617" data-postid="231" data-belowelement="div-comment-521617" data-respondelement="respond" data-replyto="Reply to Adam Wulf" aria-label="Reply to Adam Wulf">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+			<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/open-source/model-view-controller-in-jquery/#respond" style="display:none;">Cancel reply</a></small></h3><form action="/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> <span class="required-field-message">Required fields are marked <span class="required">*</span></span></p><p class="comment-form-comment"><label for="comment">Comment <span class="required">*</span></label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required></textarea></p><p style="clear: both;" class="subscribe-to-comments">
+			<input type="checkbox" name="subscribe" id="subscribe" value="subscribe" style="width: auto;">
+			<label for="subscribe">Notify me of followup comments via e-mail</label>
+			</p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" autocomplete="name" required></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" autocomplete="url"></p>
+<p class="comment-form-cookies-consent"><input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes"> <label for="wp-comment-cookies-consent">Save my name, email, and website in this browser for the next time I comment.</label></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment"> <input type="hidden" name="comment_post_ID" value="231" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="4f8e63ae8e"></p><p style="display: none !important;" class="akismet-fields-container" data-prefix="ak_"><label>&Delta;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="12"><script>document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form>	</div><!-- #respond -->
+	
+</div><!-- #comments -->
+		</main><!-- #main -->
+	</div><!-- #primary -->
+    </div>
+    </div>      
+  </div>
+
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+
+  <div class="row">
+    <div class="col-xs-12">
+        
+		<div class="site-info">
+            &copy; 2025 <a href="/" rel="home">Adam Wulf</a> &bull; <a href="https://slightlytheme.com/?ref=footer">Slightly Theme</a>		</div><!-- .site-info -->
+
+    </div>
+    </div>
+        
+	</footer><!-- #colophon -->
+<!-- #page -->
+
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"\/*"},{"not":{"href_matches":["\/wp-*.php","\/wp-admin\/*","\/wp-content\/uploads\/*","\/wp-content\/*","\/wp-content\/plugins\/*","\/wp-content\/themes\/slightly\/*","\/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script type="text/javascript">/* <![CDATA[ */!function(e,n){var r={"selectors":{"block":"pre.EnlighterJSRAW","inline":"code.EnlighterJSRAW"},"options":{"indent":4,"ampersandCleanup":true,"linehover":false,"rawcodeDbclick":false,"textOverflow":"break","linenumbers":true,"theme":"wpcustom","language":"generic","retainCssClasses":false,"collapse":false,"toolbarOuter":"","toolbarTop":"{BTN_RAW}{BTN_COPY}{BTN_WINDOW}{BTN_WEBSITE}","toolbarBottom":""},"resources":["\/wp-content\/plugins\/enlighter\/cache\/enlighterjs.min.css?TMA22bS9bPYA1tn","\/wp-content\/plugins\/enlighter\/resources\/enlighterjs\/enlighterjs.min.js"]},o=document.getElementsByTagName("head")[0],t=n&&(n.error||n.log)||function(){};e.EnlighterJSINIT=function(){!function(e,n){var r=0,l=null;function c(o){l=o,++r==e.length&&(!0,n(l))}e.forEach(function(e){switch(e.match(/\.([a-z]+)(?:[#?].*)?$/)[1]){case"js":var n=document.createElement("script");n.onload=function(){c(null)},n.onerror=c,n.src=e,n.async=!0,o.appendChild(n);break;case"css":var r=document.createElement("link");r.onload=function(){c(null)},r.onerror=c,r.rel="stylesheet",r.type="text/css",r.href=e,r.media="all",o.appendChild(r);break;default:t("Error: invalid file extension",e)}})}(r.resources,function(e){e?t("Error: failed to dynamically load EnlighterJS resources!",e):"undefined"!=typeof EnlighterJS?EnlighterJS.init(r.selectors.block,r.selectors.inline,r.options):t("Error: EnlighterJS resources not loaded yet!")})},(document.querySelector(r.selectors.block)||document.querySelector(r.selectors.inline))&&e.EnlighterJSINIT()}(window,console); /* ]]> */</script><script type="text/javascript" src="/wp-content/themes/slightly/js/navigation.js?ver=20151215" id="slightly-navigation-js"></script>
+<script type="text/javascript" src="/wp-content/themes/slightly/js/skip-link-focus-fix.js?ver=20151215" id="slightly-skip-link-focus-fix-js"></script>
+<script type="text/javascript" src="/wp-includes/js/comment-reply.min.js?ver=6.8.1" id="comment-reply-js" async="async" data-wp-strategy="async"></script>
+<script defer type="text/javascript" src="/wp-content/plugins/akismet/_inc/akismet-frontend.js?ver=1749187471" id="akismet-frontend-js"></script>
+
+</body>
+</html>

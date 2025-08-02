@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The undocumented life of JavaScript&rsquo;s parentNode property &ndash; Internet Explorer edition! &ndash; Adam Wulf</title>
+<meta name="robots" content="max-image-preview:large">
+	<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
+	<link rel="alternate" type="application/rss+xml" title="Adam Wulf &raquo; Feed" href="/feed/">
+<link rel="alternate" type="application/rss+xml" title="Adam Wulf &raquo; Comments Feed" href="/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Adam Wulf &raquo; The undocumented life of JavaScript&rsquo;s parentNode property &ndash; Internet Explorer edition! Comments Feed" href="/2009/07/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/feed/">
+<link rel="stylesheet" id="wp-block-library-css" href="/wp-includes/css/dist/block-library/style.min.css?ver=6.8.1" type="text/css" media="all">
+<style id="classic-theme-styles-inline-css" type="text/css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+</style>
+<style id="global-styles-inline-css" type="text/css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+</style>
+<link rel="stylesheet" id="add-anchor-links-style-css" href="/wp-content/plugins/add-anchor-links/assets/css/add-anchor-links.css?ver=1.0.2" type="text/css" media="all">
+<link rel="stylesheet" id="slightly-flexboxgrid-css" href="/wp-content/themes/slightly/css/flexboxgrid.min.css?ver=6.8.1" type="text/css" media="all">
+<link rel="stylesheet" id="slightly-style-css" href="/wp-content/themes/slightly/style.css?ver=6.8.1" type="text/css" media="all">
+<style id="akismet-widget-style-inline-css" type="text/css">
+
+			.a-stats {
+				--akismet-color-mid-green: #357b49;
+				--akismet-color-white: #fff;
+				--akismet-color-light-grey: #f6f7f7;
+
+				max-width: 350px;
+				width: auto;
+			}
+
+			.a-stats * {
+				all: unset;
+				box-sizing: border-box;
+			}
+
+			.a-stats strong {
+				font-weight: 600;
+			}
+
+			.a-stats a.a-stats__link,
+			.a-stats a.a-stats__link:visited,
+			.a-stats a.a-stats__link:active {
+				background: var(--akismet-color-mid-green);
+				border: none;
+				box-shadow: none;
+				border-radius: 8px;
+				color: var(--akismet-color-white);
+				cursor: pointer;
+				display: block;
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen-Sans', 'Ubuntu', 'Cantarell', 'Helvetica Neue', sans-serif;
+				font-weight: 500;
+				padding: 12px;
+				text-align: center;
+				text-decoration: none;
+				transition: all 0.2s ease;
+			}
+
+			/* Extra specificity to deal with TwentyTwentyOne focus style */
+			.widget .a-stats a.a-stats__link:focus {
+				background: var(--akismet-color-mid-green);
+				color: var(--akismet-color-white);
+				text-decoration: none;
+			}
+
+			.a-stats a.a-stats__link:hover {
+				filter: brightness(110%);
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 0 2px rgba(0, 0, 0, 0.16);
+			}
+
+			.a-stats .count {
+				color: var(--akismet-color-white);
+				display: block;
+				font-size: 1.5em;
+				line-height: 1.4;
+				padding: 0 13px;
+				white-space: nowrap;
+			}
+		
+</style>
+<link rel="https://api.w.org/" href="/wp-json/"><link rel="alternate" title="JSON" type="application/json" href="/wp-json/wp/v2/posts/1845"><link rel="EditURI" type="application/rsd+xml" title="RSD" href="/xmlrpc.php?rsd">
+<meta name="generator" content="WordPress 6.8.1">
+<link rel="canonical" href="/2009/07/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/">
+<link rel="shortlink" href="/?p=1845">
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="/wp-json/oembed/1.0/embed?url=https%3A%2F%2F%2F2009%2F07%2Fthe-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition%2F">
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="/wp-json/oembed/1.0/embed?url=https%3A%2F%2F%2F2009%2F07%2Fthe-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition%2F&amp;format=xml">
+
+		<!-- GA Google Analytics @ https://m0n.co/ga -->
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+			ga('create', 'UA-180672-7', 'auto');
+			ga('set', 'anonymizeIp', true);
+			ga('set', 'forceSSL', true);
+			ga('send', 'pageview');
+		</script>
+
+	<link rel="pingback" href="/xmlrpc.php">    <style>
+        body, button, input, select, textarea, a { 
+            color: ;
+        }
+      
+        .menu-toggle {
+          color: ;
+          background-color: #;
+        }
+      
+        #primary-menu {
+          color: ;
+          background-color: #;
+        }
+    </style>
+
+    </head>
+
+<body class="wp-singular post-template-default single single-post postid-1845 single-format-standard wp-theme-slightly">
+
+<div id="page" class="site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+
+	<header id="masthead" class="site-header" role="banner">
+  <div class="row">
+    <div class="col-xs-12 site-header-col">
+		<div class="site-branding">
+			                    <p class="site-title"><a href="/" rel="home">Adam Wulf</a></p>
+                		</div><!-- .site-branding -->
+		<nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">Menu</button>
+			<div class="menu-navigation-container"><ul id="primary-menu" class="menu"><li id="menu-item-5164" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-5164"><a href="/">Home</a></li>
+<li id="menu-item-5167" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5167"><a href="/about/">About</a></li>
+<li id="menu-item-5166" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5166"><a href="/projects/">Projects</a></li>
+<li id="menu-item-5165" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5165"><a href="/open-source/">Open Source</a></li>
+</ul></div>		</nav><!-- #site-navigation -->
+      </div>
+    </div>
+	</header><!-- #masthead -->
+
+
+	<div id="content" class="site-content">
+
+  <div class="row row--index">
+    <div class="col-xs-12">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+<article id="post-1845" class="post-1845 post type-post status-publish format-standard hentry category-uncategorized">
+    <div class="row no-pad">
+      
+                    <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 no-pad">
+                <header class="entry-header">
+                    <h1 class="entry-title">The undocumented life of JavaScript&rsquo;s parentNode property &ndash; Internet Explorer edition!</h1>                    <div class="entry-meta">
+                        <span class="posted-on"><time class="entry-date published" datetime="2009-07-21T02:22:21+00:00">July 21, 2009</time><time class="updated" datetime="2025-01-08T08:34:41+00:00">January 8, 2025</time> </span>                    </div><!-- .entry-meta -->
+                                    </header><!-- .entry-header -->
+                <div class="entry-content">
+
+                    
+                    
+<div class="related">Related: <a href="/2009/03/19/the-undocumented-life-of-jquerys-append/">The undocumented life of jQuery&rsquo;s .append()</a></div>
+
+
+
+<p>Did you know that the parentNode property in JavaScript <em>doesn&rsquo;t always point to the element&rsquo;s parent??!</em> And not only that, but that very same node that&rsquo;s lying to you <em>also appears multiple times in the DOM.</em></p>
+
+
+
+<p>I didn&rsquo;t want to have to tell you this way, but there&rsquo;s just no way around it: in Internet Explorer 7 (I&rsquo;ve left testing 6 and 8 as an exercise for the reader &#128578; ) the parentNode property can flat out <em>lie</em> to you &ndash; specifically &ndash; with pasted content in a rich text editor like <a href="http://tinymce.moxiecode.com/">TinyMCE</a>. That&rsquo;s right, a bold-faced chain-yanking tall-tale&rsquo;d lie, and I&rsquo;ll prove it to you.</p>
+
+
+
+<h3 class="wp-block-heading"><a href="#documented-behavior" aria-hidden="true" class="aal_anchor" id="documented-behavior"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Documented Behavior</h3>
+
+
+
+<p>According to the <a href="http://www.w3schools.com/dom/prop_node_parentnode.asp">W3C documentation</a>, &ldquo;the parentNode property returns the parent node of a node.&rdquo; And based on that, you would expect the following code to alert &ldquo;true!&rdquo; for as many times as the node has children:</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="js" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">var node = document.getElementById('someElement');
+for(var i=0;i&amp;lt;node.childNodes.length;i++){ alert(node == node.childNodes[i].parentNode); }</pre>
+
+
+
+<p> This is true for the vast majority of cases, but is not always the case. I&rsquo;ve found an exception in how Internet Explorer 7 handles pasted content inside rich text areas like <a href="http://tinymce.moxiecode.com/index.php">TinyMCE</a>. Even <a href="http://jquery.com/">jQuery</a> will select children who&rsquo;s parentNode is incorrect!</p>
+
+
+
+<h3 class="wp-block-heading"><a href="#just-get-to-the-demo" aria-hidden="true" class="aal_anchor" id="just-get-to-the-demo"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Just get to the Demo!</h3>
+
+
+
+<p>I&rsquo;ve set up a <a href="/examples/tinymce/simple.html" target="_new">demo page</a> that can consistently repeat the bug. For the demo to work, you&rsquo;ll need to:</p>
+
+
+
+<ul class="wp-block-list">
+<li>use Internet Explorer 7</li>
+
+
+
+<li>open the <a href="/examples/tinymce/sample.rtf">attached rtf</a> in <strong>WordPad</strong></li>
+
+
+
+<li>paste into the TinyMCE content area</li>
+
+
+
+<li>press the &ldquo;validate&rdquo; button on the bottom toolbar</li>
+</ul>
+
+
+
+<p>Besides IE&rsquo;s fearsome use of the <a href="http://www.w3schools.com/tags/tag_dir.asp">DIR tag</a>, you&rsquo;ll notice:</p>
+
+
+
+<ul class="wp-block-list">
+<li>I&rsquo;ve painted duplicate nodes red in TinyMCE</li>
+
+
+
+<li>An brief XML output of the DOM is output into a text area beneath TinyMCE showing the duplicate node</li>
+
+
+
+<li>A count of each node is displayed as an attribute in the text area. Notice the count=2 in the nodes at the bottom of the textarea! Yikes!</li>
+</ul>
+
+
+
+<p>If you&rsquo;re not in the mood to fire up the demo yourself, just click the link below to see what the DOM ends up looking like. Take special notice of the count=2 on the nodes at the bottom:</p>
+
+
+
+<p><a id="dom" class="code-link"></a>View IE7&rsquo;s invalid DOM after a paste</p>
+
+
+
+<h3 class="wp-block-heading"><a href="#try-it-yourself" aria-hidden="true" class="aal_anchor" id="try-it-yourself"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Try It Yourself!</h3>
+
+
+
+<p>For the demo, I created a simple TinyMCE plugin that validates the editor&rsquo;s DOM. Paste the magic text in IE7, and it&rsquo;ll mark any invalid nodes in red and also updates a textarea with a simplified XML representation of the DOM. The plugin uses both native JavaScript functions and jQuery to find nodes with invalid parentNodes.</p>
+
+
+
+<p><a id="plugin" class="code-link"></a>View the plugin code</p>
+
+
+
+<p><a href="/examples/tinymce/duplicate.zip">Download the plugin code</a></p>
+
+
+
+<h3 class="wp-block-heading"><a href="#a-tinymce-bug" aria-hidden="true" class="aal_anchor" id="a-tinymce-bug"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>A TinyMCE Bug?</h3>
+
+
+
+<p>An obvious question is: is this a TinyMCE bug? and the answer is &ldquo;No.&rdquo; There is no way to manually add the exact same node to multiple places in the DOM. Instead, the browser simply moves the node to the new place, and removes it from its original location. Even if <a href="http://www.linkedin.com/pub/johan-%22spocke%22-s%C3%B6rlin/11/444/a04">Spocke</a> tried to create this bug, he couldn&rsquo;t &#128578;</p>
+
+
+
+<p>If you believe me, skip to the conclusion. If you don&rsquo;t believe me, open up <a href="/examples/tinymce/nodups.html" target="_new">this second demo</a> that uses the following code to append a node without calling removeChild() first. Even without specifically removing a node before appending it somewhere else, there still only exists one node in the document:</p>
+
+
+
+<pre class="EnlighterJSRAW" data-enlighter-language="js" data-enlighter-theme="" data-enlighter-highlight="" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-title="" data-enlighter-group="">$(function(){
+var node = document.getElementById("copyMe");
+var target = document.getElementById("target");
+target.appendChild(node);
+});</pre>
+
+
+
+<h3 class="wp-block-heading"><a href="#in-conclusion" aria-hidden="true" class="aal_anchor" id="in-conclusion"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>In Conclusion</h3>
+
+
+
+<p>As far as parentNode is concerned, if:</p>
+
+
+
+<ul class="wp-block-list">
+<li>you&rsquo;re writing a plugin for TinyMCE or similar</li>
+
+
+
+<li>you&rsquo;re dealing with (possibly) pasted content</li>
+
+
+
+<li>relying on parentNode</li>
+</ul>
+
+
+
+<p>then:</p>
+
+
+
+<ul class="wp-block-list">
+<li>validate! If(myNode != myNode.childNodes[i].parentNode) is true then you have a problem!</li>
+</ul>
+
+
+
+<p>I hope you enjoyed the latest the-undocumented-life-of post! Also a fun read: <a href="/2009/03/19/the-undocumented-life-of-jquerys-append/">The undocumented life of jQuery&rsquo;s .append()</a>!</p>
+                </div><!-- .entry-content -->
+                <footer class="entry-footer">
+                                    </footer><!-- .entry-footer -->
+            </div>
+                
+        
+    </div><!-- end .row-->
+</article><!-- #post-## -->
+<div class="row no-pad"><div class="col-xs-12 col-md-10 col-md-offset-1 no-pad"><div class="read-next"><span>Read this next</span><h2><a href="/2009/07/cancer-is-a-blessing-and-a-little-more-about-my-diagnosis/" title="Cancer is a Blessing - (and a little more about my diagnosis)">Cancer is a Blessing - (and a little more about my diagnosis)</a></h2></div></div></div><div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 no-pad">
+<div id="comments" class="comments-area">
+
+			<h2 class="comments-title">
+			6 thoughts on &ldquo;<span>The undocumented life of JavaScript&rsquo;s parentNode property &ndash; Internet Explorer edition!</span>&rdquo;		</h2><!-- .comments-title -->
+
+		
+		<ol class="comment-list">
+					<li id="comment-5341" class="comment even thread-even depth-1">
+			<article id="div-comment-5341" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo avatar-default" height="32" width="32" decoding="async">						<b class="fn"><a href="http://twitter.com/juanmaguerrero" class="url" rel="ugc external nofollow">juanmaguerrero</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/07/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/#comment-5341"><time datetime="2009-07-21T09:13:48+00:00">July 21, 2009 at 9:13 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p><a href="http://is.gd/1GnUj" rel="nofollow">http://is.gd/1GnUj</a> The undocumented life of JavaScript&rsquo;s parentNode property &ndash; Internet Explorer edition!</p>
+<p><i>This comment was originally posted on <a href="http://twitter.com/juanmaguerrero/statuses/2757503296" rel="nofollow">Twitter</a></i></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/07/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/?replytocom=5341#respond" data-commentid="5341" data-postid="1845" data-belowelement="div-comment-5341" data-respondelement="respond" data-replyto="Reply to juanmaguerrero" aria-label="Reply to juanmaguerrero">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5344" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-5344" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo avatar-default" height="32" width="32" decoding="async">						<b class="fn"><a href="http://twitter.com/mlane" class="url" rel="ugc external nofollow">mlane</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/07/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/#comment-5344"><time datetime="2009-07-21T10:54:09+00:00">July 21, 2009 at 10:54 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>The undocumented life of JavaScript&rsquo;s parentNode property &ndash; Internet Explorer edition &ndash; <a href="http://bit.ly/MW0wL" rel="nofollow">http://bit.ly/MW0wL</a></p>
+<p><i>This comment was originally posted on <a href="http://twitter.com/mlane/statuses/2758942327" rel="nofollow">Twitter</a></i></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/07/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/?replytocom=5344#respond" data-commentid="5344" data-postid="1845" data-belowelement="div-comment-5344" data-respondelement="respond" data-replyto="Reply to mlane" aria-label="Reply to mlane">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5370" class="comment even thread-even depth-1">
+			<article id="div-comment-5370" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo avatar-default" height="32" width="32" decoding="async">						<b class="fn"><a href="http://twitter.com/marcotrulla" class="url" rel="ugc external nofollow">marcotrulla</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/07/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/#comment-5370"><time datetime="2009-07-22T10:42:40+00:00">July 22, 2009 at 10:42 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>reading: The undocumented life of JavaScript&rsquo;s parentNode property &ndash; Internet Explorer edition! <a href="http://bit.ly/13Ae5o" rel="nofollow">http://bit.ly/13Ae5o</a></p>
+<p><i>This comment was originally posted on <a href="http://twitter.com/marcotrulla/statuses/2778746531" rel="nofollow">Twitter</a></i></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/07/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/?replytocom=5370#respond" data-commentid="5370" data-postid="1845" data-belowelement="div-comment-5370" data-respondelement="respond" data-replyto="Reply to marcotrulla" aria-label="Reply to marcotrulla">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5377" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-5377" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/bee5e400ab4a57d9169f048cd5939a47198da85599a40354ae22ead824a5244f?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/bee5e400ab4a57d9169f048cd5939a47198da85599a40354ae22ead824a5244f?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Lori</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/07/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/#comment-5377"><time datetime="2009-07-22T15:03:18+00:00">July 22, 2009 at 3:03 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hmm I just tried this and the issue only occurs if you paste from WordPad.  Pasting from notepad or Word returns what you expect.  I think this is just how WordPad internally represents rich text and pasting in IE just faithfully retains that.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/07/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/?replytocom=5377#respond" data-commentid="5377" data-postid="1845" data-belowelement="div-comment-5377" data-respondelement="respond" data-replyto="Reply to Lori" aria-label="Reply to Lori">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-6316" class="comment even thread-even depth-1">
+			<article id="div-comment-6316" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/7364ffcaae72d100a9b6d307b9d20064f17ca174e93a0f175846fc2f6fae1050?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/7364ffcaae72d100a9b6d307b9d20064f17ca174e93a0f175846fc2f6fae1050?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://log4javascript.org/" class="url" rel="ugc external nofollow">Tim Down</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/07/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/#comment-6316"><time datetime="2009-10-15T12:33:30+00:00">October 15, 2009 at 12:33 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>This happens because of the way IE parses empty tags such as &lt;span /&gt;. See this blog posting for more: <a href="http://tmik.co.uk/?p=184" rel="nofollow ugc">http://tmik.co.uk/?p=184</a></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/07/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/?replytocom=6316#respond" data-commentid="6316" data-postid="1845" data-belowelement="div-comment-6316" data-respondelement="respond" data-replyto="Reply to Tim Down" aria-label="Reply to Tim Down">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-7619" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-7619" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/6fde3786176f097c99d3cce98963a883decc91c856b856dbe551225556f74f4d?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/6fde3786176f097c99d3cce98963a883decc91c856b856dbe551225556f74f4d?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Rusty</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/07/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/#comment-7619"><time datetime="2009-12-17T19:33:04+00:00">December 17, 2009 at 7:33 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Using a great tool called clipview, if you copy from Wordpad, then remove the \lang1033, you don&rsquo;t get this problem.  I&rsquo;ve discovered this with other rich text content as well.  The \lang controls seem to be what cause IE problems, though I don&rsquo;t know why.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/07/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/?replytocom=7619#respond" data-commentid="7619" data-postid="1845" data-belowelement="div-comment-7619" data-respondelement="respond" data-replyto="Reply to Rusty" aria-label="Reply to Rusty">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+			<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/2009/07/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/#respond" style="display:none;">Cancel reply</a></small></h3><form action="/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> <span class="required-field-message">Required fields are marked <span class="required">*</span></span></p><p class="comment-form-comment"><label for="comment">Comment <span class="required">*</span></label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required></textarea></p><p style="clear: both;" class="subscribe-to-comments">
+			<input type="checkbox" name="subscribe" id="subscribe" value="subscribe" style="width: auto;">
+			<label for="subscribe">Notify me of followup comments via e-mail</label>
+			</p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" autocomplete="name" required></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" autocomplete="url"></p>
+<p class="comment-form-cookies-consent"><input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes"> <label for="wp-comment-cookies-consent">Save my name, email, and website in this browser for the next time I comment.</label></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment"> <input type="hidden" name="comment_post_ID" value="1845" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="bf925d640d"></p><p style="display: none !important;" class="akismet-fields-container" data-prefix="ak_"><label>&Delta;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="162"><script>document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form>	</div><!-- #respond -->
+	
+</div><!-- #comments --></div>
+		</main><!-- #main -->
+	</div><!-- #primary -->
+    </div>
+
+    </div>
+
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+
+  <div class="row">
+    <div class="col-xs-12">
+        
+		<div class="site-info">
+            &copy; 2025 <a href="/" rel="home">Adam Wulf</a> &bull; <a href="https://slightlytheme.com/?ref=footer">Slightly Theme</a>		</div><!-- .site-info -->
+
+    </div>
+    </div>
+        
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"\/*"},{"not":{"href_matches":["\/wp-*.php","\/wp-admin\/*","\/wp-content\/uploads\/*","\/wp-content\/*","\/wp-content\/plugins\/*","\/wp-content\/themes\/slightly\/*","\/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script type="text/javascript">/* <![CDATA[ */!function(e,n){var r={"selectors":{"block":"pre.EnlighterJSRAW","inline":"code.EnlighterJSRAW"},"options":{"indent":4,"ampersandCleanup":true,"linehover":false,"rawcodeDbclick":false,"textOverflow":"break","linenumbers":true,"theme":"wpcustom","language":"generic","retainCssClasses":false,"collapse":false,"toolbarOuter":"","toolbarTop":"{BTN_RAW}{BTN_COPY}{BTN_WINDOW}{BTN_WEBSITE}","toolbarBottom":""},"resources":["\/wp-content\/plugins\/enlighter\/cache\/enlighterjs.min.css?TMA22bS9bPYA1tn","\/wp-content\/plugins\/enlighter\/resources\/enlighterjs\/enlighterjs.min.js"]},o=document.getElementsByTagName("head")[0],t=n&&(n.error||n.log)||function(){};e.EnlighterJSINIT=function(){!function(e,n){var r=0,l=null;function c(o){l=o,++r==e.length&&(!0,n(l))}e.forEach(function(e){switch(e.match(/\.([a-z]+)(?:[#?].*)?$/)[1]){case"js":var n=document.createElement("script");n.onload=function(){c(null)},n.onerror=c,n.src=e,n.async=!0,o.appendChild(n);break;case"css":var r=document.createElement("link");r.onload=function(){c(null)},r.onerror=c,r.rel="stylesheet",r.type="text/css",r.href=e,r.media="all",o.appendChild(r);break;default:t("Error: invalid file extension",e)}})}(r.resources,function(e){e?t("Error: failed to dynamically load EnlighterJS resources!",e):"undefined"!=typeof EnlighterJS?EnlighterJS.init(r.selectors.block,r.selectors.inline,r.options):t("Error: EnlighterJS resources not loaded yet!")})},(document.querySelector(r.selectors.block)||document.querySelector(r.selectors.inline))&&e.EnlighterJSINIT()}(window,console); /* ]]> */</script><script type="text/javascript" src="/wp-content/themes/slightly/js/navigation.js?ver=20151215" id="slightly-navigation-js"></script>
+<script type="text/javascript" src="/wp-content/themes/slightly/js/skip-link-focus-fix.js?ver=20151215" id="slightly-skip-link-focus-fix-js"></script>
+<script type="text/javascript" src="/wp-includes/js/comment-reply.min.js?ver=6.8.1" id="comment-reply-js" async="async" data-wp-strategy="async"></script>
+<script defer type="text/javascript" src="/wp-content/plugins/akismet/_inc/akismet-frontend.js?ver=1749187471" id="akismet-frontend-js"></script>
+
+</body>
+</html>
