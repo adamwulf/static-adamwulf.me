@@ -1,0 +1,127 @@
++++
+title = "Setting up PhpStorm as a new developer"
+date = "2019-08-11T04:09:19+0000"
+slug = "setting-up-phpstorm-as-a-new-developer"
+type = "post"
++++
+
+<p>Recently I’ve started working on <a href="https://www.funnelanalytics.net/">Funnel Cake</a>, a sort of IFTTT for your marketing data (or any data, really). You can sign up for free and <a href="https://www.funnelanalytics.net/">try it out here</a>, but today I want to document my development workflow.</p>
+<p>It’s been nearly 10 years since I’ve done heavy PHP or Javascript development, so I’m starting in some ways as a beginner again. It might be helpful for others to see how I’ve setup my development environment.</p>
+<p>I’ve been working on iOS and Mac Objective-C development for the past years, and I wanted to bring some of that experience to this project. Namely:</p>
+<ul class="wp-block-list"><li>IDE that understands the class structure of my app</li><li>Code completion</li><li>Single click or keyboard command to get to a symbol definition or superclass</li><li>Static analysis of the codebase</li></ul>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#phpstorm-and-plugins" id="phpstorm-and-plugins"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>PhpStorm and Plugins</h4>
+<p>I settled on <a href="https://www.jetbrains.com/phpstorm/">PhpStorm</a>, a mature IDE from Jetbrians focused specifically to PHP and web development. Out of the box it already does a lot, but it’s static analysis of the code is a bit lacking. No worries, as it’s built with extensibility in mind. I quickly installed <a href="https://github.com/kalessil/phpinspectionsea/blob/master/docs/getting-started.md">Php Extensions (EA Extended)</a> plugin, which solved the majority of my wishes. It adds a number of additional inspections to PhpStorm’s already strong showing.</p>
+<p>After installing, I choose <code>Code -&gt; Inspect Code</code> from the menu, and a report is generated that shows all of the static analysis issues in my codebase, many with single-click automatic fixes.</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#working-with-composer" id="working-with-composer"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Working with Composer</h4>
+<p>Some of the code in my project is obviously mine – this is the code I want to analyze. Some of the code is other frameworks I’m using, and I want the static analyzer to know about this code, but I don’t want it to report any analysis bugs in that code. It took me a bit to figure out how to set that up properly, but I was able to fix all of the issues by:</p>
+<ol class="wp-block-list"><li>Excluding the <code>vendors</code> folder from the <code>Directories</code> preferences area</li><li>Adding back each of the vendors’ <code>src</code> folders in <code>Languages &amp; Frameworks -&gt; PHP</code> Include Paths area</li><li>My project is PHP 7.3+ only, so I also set the <code>PHP Language Level</code> to 7.3</li><li>Configured Composer in <code>Languages &amp; Frameworks -&gt; PHP -&gt; Composer</code> preferences</li></ol>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#scopes" id="scopes"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Scopes</h4>
+<p>By default, the <code>Find</code> command (<code>Cmd+Shift+F</code>) will search the entire project, including composer’s vendors and test files. Similarly, the static analysis in <code>Code -&gt; Inspect Code</code> will show you errors in your code, or test code, the vendor’s test code, etc. To get around this, you can setup a “Scope” for your project, and limit these commands to that scope.</p>
+<p>Setup a new Scope in <code>Appearance &amp; Behavior -&gt; Scopes</code>, add new new scope, and then select any test folders or vendor folders that you don’t want to show up in the static analysis, and choose <code>Exclude Recursively</code>. </p>
+<p>This won’t exclude these classes from analysis, but it will exclude any issues found in them from the report. This way, any code you rely on will type check properly, but you won’t get type-checking errors etc from that 3rd party code. Now you can use <code>Code -&gt; Inspect Code</code> and get a report of only your code’s issues.</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#inspections" id="inspections"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Inspections</h4>
+<p>PhpStorm has tons of static-analysis options built in, and you can opt in or out of each by toggling Inspections in <code>Editor -&gt; Inspections</code> preference. The PhpExtensions (EA Extended) plugin adds inspections to this area as well, beefing up the analysis report.</p>
+<p>Some of these I’ve turned off, most of them I’ve left on, but it depends on you preference and codebase. Another handy feature is the ‘intention bulb’ that let’s you take quick action on any highlighted errors or warnings in your code.</p>
+<div class="wp-block-image"><figure class="aligncenter is-resized"><img alt="" class="wp-image-5234" decoding="async" height="133" sizes="(max-width: 346px) 100vw, 346px" src="/wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-8.12.22-PM-1024x397.png" srcset="/wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-8.12.22-PM-1024x397.png 1024w, /wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-8.12.22-PM-300x116.png 300w, /wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-8.12.22-PM-768x298.png 768w, /wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-8.12.22-PM.png 1032w" width="346"/><figcaption>The ‘intention bulb’ shows quick actions to resolve (or ignore) a problem in your code.</figcaption></figure></div>
+<p>As I’ve been tidying up my codebase, the bulb has been very helpful for applying quick fixes. As I get further along, I suspect I may turn it off, which you can do in <code>Editor -&gt; General -&gt; Appearance</code> and turn of the <code>Show intention bulb</code> setting.</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#phan-integration" id="phan-integration"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Phan Integration</h4>
+<p><a href="https://github.com/phan/phan">Phan</a> is a static analyzer for PHP and can find type-safety issues in your codebase that PhpStorm can’t otherwise find out of the box. It’s great at finding logic errors where you may be returning the wrong type, or expecting a different type from a method than it returns. Is that an array of <code>Animal</code> or array of <code>Dog</code>? Phan knows, and it’ll help catch you when you remember wrong.</p>
+<p>Unfortunately, there’s no Phan Plugin for PhpStorm, so instead it needs to run as an External tool. PhpStorm can run the phan console command and show the output inside a pane – conveniently also linking the src path in the output for easy click-to-find from the output. (I lost the link where I learned this, so thanks to whoever posted about this before!)</p>
+<p>To help format phan’s output, I run the analysis with the following script in my projects root directory:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="shell" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">/location/to/phan &gt; phan.out
+
+cat phan.out | sed G | sed -E 's|([a-zA-Z0-9 _\./\-]+:[[:digit:]]+)|'"$(pwd)"'/\1\
+|g' | fold -sw 150
+
+num_matches=$(cat phan.out | wc -l | xargs);
+
+if [ -s phan.out ]; then
+        echo "There are ${num_matches} errors";
+else
+        echo "No errors";
+fi
+
+rm phan.out</pre>
+<p>Notice at the top of the script, you’ll need to specify where you’ve installed the phan binary. After that, running the script will output all of the errors it found. It will also convert the relative paths of the phan output to be absolute paths so that PhpStorm will auto-link them in the output.</p>
+<p>There are numerous options for Phan, but I’ve kept my config very simple. I’ve included it below for reference:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="php" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">&lt;?php
+
+/**
+ * This configuration will be read and overlaid on top of the
+ * default configuration. Command line arguments will be applied
+ * after this file is read.
+ */
+return [
+    // Supported values: `'5.6'`, `'7.0'`, `'7.1'`, `'7.2'`, `'7.3'`, `null`.
+    // If this is set to `null`,
+    // then Phan assumes the PHP version which is closest to the minor version
+    // of the php executable used to execute Phan.
+    //
+    // Note that the **only** effect of choosing `'5.6'` is to infer
+    // that functions removed in php 7.0 exist.
+    // (See `backward_compatibility_checks` for additional options)
+    // TODO: Set this.
+    'target_php_version' =&gt; '7.3',
+
+    // A list of directories that should be parsed for class and
+    // method information. After excluding the directories
+    // defined in exclude_analysis_directory_list, the remaining
+    // files will be statically analyzed for errors.
+    //
+    // Thus, both first-party and third-party code being used by
+    // your application should be included in this list.
+    'directory_list' =&gt; [
+        'library',
+        'vendor/google',
+        'vendor/tplaner/when',
+        'vendor/monolog/monolog',
+        'vendor/dibi/dibi',
+        'vendor/sendgrid/sendgrid',
+        'vendor/sendgrid/php-http-client',
+        'vendor/nesbot/carbon',
+        'config',
+    ],
+
+    // A regex used to match every file name that you want to
+    // exclude from parsing. Actual value will exclude every
+    // "test", "tests", "Test" and "Tests" folders found in
+    // "vendor/" directory.
+    'exclude_file_regex' =&gt; '@^vendor/.*/(tests?|Tests?)/@',
+
+    // A directory list that defines files that will be excluded
+    // from static analysis, but whose class and method
+    // information should be included.
+    //
+    // Generally, you'll want to include the directories for
+    // third-party code (such as "vendor/") in this list.
+    //
+    // n.b.: If you'd like to parse but not analyze 3rd
+    //       party code, directories containing that code
+    //       should be added to both the `directory_list`
+    //       and `exclude_analysis_directory_list` arrays.
+    'exclude_analysis_directory_list' =&gt; [
+        'vendor/'
+    ],
+];</pre>
+<p>I’ve left the comments of phan’s own sample config file for reference, but a few notes about the config:</p>
+<ul class="wp-block-list"><li>In the <code>directory_list</code>, include any directories of your code or 3rd party code. This is what phan will analyze.</li><li>In the <code>exclude_analysis_directory_list</code>, include all 3rd party code. This will exclude any issues in 3rd party code from showing in phan’s report.</li><li>Set <code>target_php_version</code> to whatever is correct for your project</li></ul>
+<p>Now that phan is configured, you can manually run phan from the command line with the script:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="shell" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">./run_phan.sh</pre>
+<p>Next, let’s integrate this into PhpStorm so that you can run it easily from within the IDE and turn all those file paths into clickable links. In <code>Preferences -&gt; Tools -&gt; External Tools</code>, click to add a new tool. Name it whatever you want, select the <code>run_phan.sh</code> script as the Program, and set your project’s directory as the working directory. Last, set the Output filters to <code>$FILE_PATH$:$LINE$</code>.</p>
+<p>That’s it – now you can run the phan analysis from within PhpStorm from <code>Tools -&gt; External Tools -&gt; Phan</code> menu. It will open up a console tab and show you the output with clickable links to each problem.</p>
+<figure class="wp-block-image"><img alt="" class="wp-image-5242" decoding="async" fetchpriority="high" height="240" sizes="(max-width: 1024px) 100vw, 1024px" src="/wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-8.40.25-PM-1024x240.png" srcset="/wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-8.40.25-PM-1024x240.png 1024w, /wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-8.40.25-PM-300x70.png 300w, /wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-8.40.25-PM-768x180.png 768w, /wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-8.40.25-PM.png 1628w" width="1024"/></figure>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#php-docblocks" id="php-docblocks"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>PHP Docblocks</h4>
+<p>Most of the code I write in PHP is strongly typed, though I do dip into untyped code from time to time, that flexibility is one of the reasons I love PHP. The static analysis that’s available now for the strongly typed code is fantastic, but the language isn’t as descriptive as I’d always like it to be.</p>
+<p>That’s where docblocks come in. The static analysis above also reads the <code>@param</code> and <code>@return</code> types defined in dock blocks, and uses that for its analysis. This is incredibly helpful for defining type expectations that otherwise aren’t possible in code, such as generics in <code>@param array&lt;int,string&gt;</code>.</p>
+<p>Clearly defining types with generics when possible has helped the analysis find bugs that otherwise would’ve taken me an enormous amount of time to  find. It’s also incredibly helpful for documenting variable types, such as:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="php" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">/** @var string $myvar */
+$myvar = 4; // static analysis warning</pre>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#keyboard-and-mouse-shortcuts" id="keyboard-and-mouse-shortcuts"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Keyboard and Mouse Shortcuts</h4>
+<p>There’s a few very handy Find keyboard shortcuts in PhpStorm. The first two are common across many IDEs: Find in Files is <code>Cmd+Shift+F</code>. Find Class is <code>Command+O</code>. Two others that are equally helpful are Find Symbol <code>Command+Option+O</code> and Find File <code>Command+Shift+O</code>. I’ve actually swapped the shortcuts for Find File and Find Class so that Find Class matches Xcode, but I use all of these very frequently.</p>
+<p>I also set <code>Quick Definition</code> to <code>Option+Click</code> to mirror Xcode’s <code>Go to Documentation</code> shortcut. This shows the declaration of whatever symbol is under my mouse cursor, very handy for hard to remember method parameters.</p>
+<div class="wp-block-image"><figure class="aligncenter is-resized"><img alt="" class="wp-image-5216" decoding="async" height="214" sizes="(max-width: 378px) 100vw, 378px" src="/wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-7.49.06-PM-1024x582.png" srcset="/wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-7.49.06-PM-1024x582.png 1024w, /wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-7.49.06-PM-300x171.png 300w, /wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-7.49.06-PM-768x437.png 768w" width="378"/><figcaption>Quick Definition shows a popup of the symbol’s definition. I tied it to Xcode’s documentation mouse shortcut.</figcaption></figure></div>
+<div class="wp-block-image"><figure class="alignright is-resized"><img alt="" class="wp-image-5228" decoding="async" height="113" loading="lazy" sizes="auto, (max-width: 218px) 100vw, 218px" src="/wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-7.53.04-PM-1.png" srcset="/wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-7.53.04-PM-1.png 664w, /wp-content/uploads/2019/08/Screen-Shot-2019-08-10-at-7.53.04-PM-1-300x155.png 300w" width="218"/></figure></div>
+<p>I added <code>Command+S</code> to the <code>Escape</code> command, as by habit I save my files to close any auto-completion popup. Better to save too often than not often enough!</p>
+<p>Adding or editing other shortcuts is easy, as I could either search for the command by name or by its current shortcut.</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#still-more-to-learn" id="still-more-to-learn"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Still More to Learn</h4>
+<p>I’m only a few months back on the saddle with PHP, so I’m sure that there is still more for me to learn about PhpStorm and PHP 7.3, but I’m really happy with where I’ve gotten my setup for development.</p>

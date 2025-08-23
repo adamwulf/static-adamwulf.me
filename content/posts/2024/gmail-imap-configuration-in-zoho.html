@@ -1,0 +1,17 @@
++++
+title = "Gmail IMAP configuration in Zoho"
+date = "2024-10-11T18:22:39+0000"
+slug = "gmail-imap-configuration-in-zoho"
+type = "post"
++++
+
+<p>I’ve been using Zoho for my personal email for years, and I love it. I moved for a few reasons, privacy being a big one. If you’re not paying for the product, you are the product! I had used Gmail since it came out in college, and it was time to take control of my online privacy and data security.</p>
+<p>After moving to Zoho, I found that they also had fantastic customer support! I can file a ticket and get a human response who actually helps to resolve my question. It’s been such a breath of fresh air.</p>
+<p>Recently, I started co-teaching a product management class at Rice. As part of that, I re-activated my rice.edu email address. Rice uses Google for their email handling, so I added that email into my Zoho account as an additional IMAP email connection.</p>
+<p>This lets me check my rice.edu email from the same zoho web app that I use for my personal email, while still keeping the two email inboxes and emails separate. It’s been wonderful, and I do this for a few other email accounts as well.</p>
+<p>What was odd – emails in my Rice account were appearing twice in Zoho (!) while my other IMAP added accounts were behaving just fine. I contacted Zoho support, who suggested this was an issue on the Google side, and recommended I find the message identifiers to confirm if these were “different” emails or not – this could help diagnose the issue.</p>
+<p>I found the exact same message id, and exact same .eml contents for the duplicate emails. I noticed while doing this – one email was in Inbox and the other was in Important.</p>
+<p>I remembered that Gmail uses labels instead of folders, and this can cause strange side effects for IMAP clients. I talked out my problem and evidence so far with Claude, <a href="/wp-content/uploads/2024/10/Gmail-IMAP-in-Zoho-AI-chat-2.pdf">which suggested I change Gmail’s IMAP settings</a>. I found the toggle in Gmail settings → full settings → labels → IMAP access and turned it off for the Important label.</p>
+<figure class="wp-block-image size-large"><img alt="A screenshot showing Gmail's Settings. This shows the Labels section where the &quot;Show in IMAP&quot; toggle is turned off for the &quot;Important&quot; label." class="wp-image-5834" decoding="async" fetchpriority="high" height="432" sizes="(max-width: 1024px) 100vw, 1024px" src="/wp-content/uploads/2024/10/CleanShot-2024-10-11-at-12.52.55@2x-1024x432.png" srcset="/wp-content/uploads/2024/10/CleanShot-2024-10-11-at-12.52.55@2x-1024x432.png 1024w, /wp-content/uploads/2024/10/CleanShot-2024-10-11-at-12.52.55@2x-300x127.png 300w, /wp-content/uploads/2024/10/CleanShot-2024-10-11-at-12.52.55@2x-768x324.png 768w, /wp-content/uploads/2024/10/CleanShot-2024-10-11-at-12.52.55@2x-1536x648.png 1536w, /wp-content/uploads/2024/10/CleanShot-2024-10-11-at-12.52.55@2x-2048x864.png 2048w" width="1024"/></figure>
+<p>Next sync – tada! Zoho removed all the duplicates from that Important flag and is correctly showing only a single email in my Unread filter.</p>
+<p>Wins: Zoho support for helping me find clues, AI for helping me diagnose the issue with those clues, Gmail for having the correct settings to undo their non-standard IMAP implementation, and Zoho for a stellar email product!</p>

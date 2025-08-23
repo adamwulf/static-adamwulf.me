@@ -1,0 +1,9 @@
+name = "adamwulf"
+description = "Minimal theme for adamwulf.me migration from WordPress"
+author = "Adam Wulf"
+homepage = "https://adamwulf.me"
+min_version = "0.118.0"
+
+[features]
+  name = "HTML Content"
+  description = "Preserves WordPress HTML content without Markdown conversion"

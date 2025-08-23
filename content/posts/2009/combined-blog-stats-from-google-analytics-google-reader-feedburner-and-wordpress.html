@@ -1,0 +1,22 @@
++++
+title = "Combined Blog Stats from Google Analytics, Google Reader, Feedburner, and WordPress"
+date = "2009-01-17T23:11:32+0000"
+slug = "combined-blog-stats-from-google-analytics-google-reader-feedburner-and-wordpress"
+type = "post"
++++
+
+<p><a href="http://www.google.com/analytics/">Google Analytics</a> is a fantastic tool for tracking web stats, but this past week, I realized it doesn’t track quite as much as I’d like. A few questions I’d like it to answer but it can’t:</p>
+<ol>
+<li>Do high traffic posts, like <a href="/columnizer-jquery-plugin/">Columnizer</a> updates, generate more subscribers?</li>
+<li>Do the frequency or length of my posts affect how long a visitor stays? or subscriber count?</li>
+<li>Does higher traffic or more frequent posts generate more comments?</li>
+<li>etc</li>
+</ol>
+<p>Basically, I want to know not only if a statistic is up or down, but how it correlates to another statistic. And most importantly, I want to know this not only about statistics tracked by Google Analytics, but by statistics that <em>can’t</em> be tracked by Google Analytics – things like post frequency, Feedburner subscriber count, etc.</p>
+<p>The solution: <a href="http://www.bloggingpro.com/archives/2006/05/23/slimstat-and-wp-slimstat/">merge</a> <a href="http://tantannoodles.com/toolkit/">a number</a> <a href="http://tantannoodles.com/toolkit/wordpress-reports/">of different</a> <a href="http://alexking.org/blog/2007/01/01/sql-for-blog-stats">WordPress plugins</a> into <a href="/welcome-to-your-data/">a single WordPress Mu plugin</a> and then tie the results into a pair of easy to use <a href="http://code.google.com/p/flot/">flot graphs</a>. Pics of the results:</p>
+<p><a href="/files/2009/01/picture-77.png"><img alt="" class="alignnone size-full wp-image-1396" decoding="async" fetchpriority="high" height="225" src="/files/2009/01/picture-77.png" title="line graph" width="500"/></a></p>
+<p><a href="/files/2009/01/picture-76.png"><img alt="" class="alignnone size-full wp-image-1394" decoding="async" height="208" src="/files/2009/01/picture-76.png" title="correlation" width="500"/></a></p>
+<p>The plugin connects to and downloads statistics from <a href="http://www.google.com/analytics/">Google Analytics</a>, <a href="http://www.feedburner.com/">Feedburner</a>, and <a href="http://www.google.com/reader/">Google Reader</a>. Stats from each of those sources is downloaded and cached in the WordPress database, which makes querying, comparing, and joining the data next to trivial. I also have plans to optionally integrate it with <a href="http://www.bloggingpro.com/archives/2006/05/23/slimstat-and-wp-slimstat/">SlimStat</a>, which will provide additional traffic stats that Analytics doesn’t currently provide – such as “what day of the week or time of day is most common?”</p>
+<p>I’ve only been poking at this a bit over the past week, and I’m still working out the last details of the plugin – automating the install sql, etc – so I’m not going to post a download quite yet, but you can <a href="/about/">check out the results</a> at the bottom of my About page.</p>
+<p>If you’re interested in beta testing out the plugin on your own Mu install, or helping port it to standard WordPress, give me a shout in the comments.</p>
+<p>Check out the <a href="/welcome-to-your-data/">project page</a> for code and project info.</p>

@@ -1,0 +1,20 @@
++++
+title = "Automatic PHP API"
+date = "2013-10-16T19:31:53+0000"
+slug = "automatic-php-api"
+type = "post"
++++
+
+<div class="wp-block-image">
+<figure class="alignright"><img alt="Screen Shot 2013-10-16 at 9.48.55 PM" class="wp-image-4432" decoding="async" height="72" src="/files/2013/10/Screen-Shot-2013-10-16-at-9.48.55-PM.png" width="231"/></figure></div>
+<p></p>
+<p>I’m a big fan of <a href="http://www.automatic.com/">Automatic</a>. It’s a very cool widget that plugs into your car’s data port and will monitor your driving habits. It tracks your average MPG, alerts you if you accelerate too fast or brake too hard, and rolls all of its data into a simple weekly score – high your score the better you’re driving! It’s a super simple way to reinforce safe driving habits, and improve your fuel efficiency at the same time, very cool!</p>
+<p>However, since the product is still so young, there’s no official REST API yet to access all of your own data. I tinker with QS and always want to have access to my data for all of the services I use. I’d love to be able to get my data out of the Automatic service, but since they don’t have an official API, I decided to figure out how the iOS app fetches data and see if I can piggy back on that to download and process my own data.</p>
+<p>The result is the Unofficial Automatic PHP API:<br/><a href="https://github.com/adamwulf/automatic-php-api">https://github.com/adamwulf/automatic-php-api</a></p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="php" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">// login to Automatic API
+$automatic = new Automatic($username, $password);
+// fetch trip data between the two input dates
+$trips = $automatic-&amp;gt;getTrips($start, $end);</pre>
+<p>The API so far lets you login and get your account and link information, get trip data, and get your weekly scores, information about your car, and even it’s parked location.</p>
+<p>One thing to note, the username and password to use when logging into the API are not the same as what you use to login to the app. I’ve documented on the wiki <a href="https://github.com/adamwulf/automatic-php-api/wiki">how to find your API username and password</a>.</p>
+<p>Enjoy!</p>

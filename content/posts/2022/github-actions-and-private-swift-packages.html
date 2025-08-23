@@ -1,0 +1,50 @@
++++
+title = "GitHub Actions and Private Swift Packages"
+date = "2022-08-21T05:01:07+0000"
+slug = "github-actions-and-private-swift-packages"
+type = "post"
++++
+
+<p>At <a href="https://museapp.com/">Muse</a>, we have our primary Xcode application, and we also have a number of private Swift packages to help organize our code and control dependencies. Each package has its own unit tests, and then our main project has its unit tests as well. Our app is built on iOS and uses Catalyst for the Mac app. There’s a few places in our codebase where we <code>#if targetEnvironment(macCatalyst)</code>, so it’s important to run the tests compiled for both platforms.</p>
+<p>GitHub provides a <a href="https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift">guide for testing Swift Packages</a>, which started me on the right track.However, since our packages require iOS vs Catalyst, it wasn’t enough to use <code>swift test</code>, I needed to run the tests in Xcode and specify the platform directly.</p>
+<p>I ran into two issues right away:</p>
+<ol class="wp-block-list"><li>We need to test not only on Mac, but also iOS and Catalyst</li><li>Our main project file includes private swift packages, and some of those depend on other private swift packages</li></ol>
+<p>Out of the box, using <code>swift test</code> will only test on a Mac destination, and won’t handle cloning the other private swift packages we depend on. Instead, we need to use <code>xcodebuild</code> and find a way to support cloning those private repos.</p>
+<p>So our <code>swift.yml</code> is setup a little different:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="yaml" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">name: CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.swift'
+jobs:
+  linting:
+    runs-on: macos-12
+    steps:
+    - name: Repository checkout
+      uses: actions/checkout@v2
+    - name: Lint
+      run: swiftlint
+  ios_tests:
+    runs-on: macos-12
+    steps:
+    - name: Repository checkout
+      uses: actions/checkout@v2
+    - name: Fix Up Private GitHub URLs
+      # Add personal access token to all private repo URLs 
+      run: find . -type f \( -name '*.pbxproj' -o -name 'Package.swift' -o -name 'Package.resolved' \) -exec sed -i '' "s/https:\/\/github.com\/${GITHUB_REPOSITORY_OWNER}/https:\/\/adamwulf:${{ secrets.SECRET_TOKEN }}@github.com\/${GITHUB_REPOSITORY_OWNER}/g" {} \;
+    - name: Build for iOS
+      run: set -o pipefail &amp;&amp; env NSUnbufferedIO=YES xcodebuild build-for-testing -scheme Muse -destination "platform=iOS Simulator,OS=latest,name=iPhone 12" | xcpretty
+    - name: Run iOS tests
+      run: set -o pipefail &amp;&amp; env NSUnbufferedIO=YES xcodebuild test-without-building -scheme Muse -destination "platform=iOS Simulator,OS=latest,name=iPhone 12" | xcpretty
+</pre>
+<p>There’s quite a bit going on here, so first things first. This only shows the iOS testing for brevity the Mac and Catalyst are nearly identical, with only the platform value changing. Depending on the platform, we use either one of the destinations below to target iOS, Mac, or Catalyst:</p>
+<ul class="wp-block-list"><li><code>-destination "platform=iOS Simulator,OS=latest,name=iPhone 12"</code></li><li><code>-destination "platform=macOS"</code></li><li><code>-destination "platform=macOS,variant=Mac Catalyst"</code></li></ul>
+<p>Next, how do we handle the private packages? The “Fix Up Private GitHub URLs” step does the work here. Inside our project and <code>package.swift</code> files, we use <code>https://...</code> git urls for each package. But since it’s a private repo, the GitHub Action can’t see it by default – we need the action to authenticate somehow so that it can clone the private packages.</p>
+<p>The <code>find ... sed ... {} \;</code><span class="easy-footnote-margin-adjust" id="easy-footnote-1-5675"></span><span class="easy-footnote"><a href="#easy-footnote-bottom-1-5675" title="I wish I&amp;#8217;d saved the link where I found this, my bash-foo is not this good 😅"><sup>1</sup></a></span> step searches for all repository URLs in the project or package files, and replaces them with URLs that have a <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token">personal access token</a> embedded in them. This way, when xcodebuild attempts to fetch those repositories, it can authenticate just fine.</p>
+<p>I suspect there’s a way to use the <code><a href="https://docs.github.com/en/actions/security-guides/automatic-token-authentication">GITHUB_TOKEN</a></code> in the URL to download the private repos, but I wasn’t able to figure it out. If you know a way to use the <code>GITHUB_TOKEN</code>, please let me know.</p>
+<p>Each of our private packages has a similar <code>swift.yml</code> workflow file. Now all of our packages and our main project file are automatically tested thanks to GitHub actions. 🎉</p>
+<p></p>
+<ol class="easy-footnotes-wrapper"><li class="easy-footnote-single"><span class="easy-footnote-margin-adjust" id="easy-footnote-bottom-1-5675"></span>I wish I’d saved the link where I found this, my bash-foo is not this good 😅<a class="easy-footnote-to-top" href="#easy-footnote-1-5675"></a></li></ol>

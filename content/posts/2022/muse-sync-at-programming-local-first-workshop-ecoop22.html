@@ -1,0 +1,17 @@
++++
+title = "Muse Sync at Programming Local First Workshop – ECOOP’22"
+date = "2022-06-12T13:07:33+0000"
+slug = "muse-sync-at-programming-local-first-workshop-ecoop22"
+type = "post"
++++
+
+<p>The past few weeks I’ve been trying to better document how Muse sync works, with posts describing how our <a href="/2021/05/distributed-clocks-and-crdts/">hybrid logical clock</a> helps us build up objects from <a href="/2022/04/atomic-attributes-in-local-first-sync/">atomic attributes</a>. While I’m sure I’ll continue to write about our strategies and lessons learned, I’ve also done some talking about the topic recently too.</p>
+<p>Just about a month ago, I explained the basics of <a href="https://museapp.com/">Muse</a>‘s sync architecture on the <a href="https://museapp.com/podcast/">Metamuse podcast</a>. We cover durable vs ephemeral changes, our last-write-wins strategy for the CRDT, and overall strategy for sync. Listen below, or <a href="https://museapp.com/podcast/">subscribe to the podcast</a>.</p>
+<figure class="wp-block-audio"><audio controls="" src="/wp-content/uploads/2022/06/metamuse-56-sync.mp3"></audio></figure>
+<p>And this past week, I also gave a talk at the <a href="https://2022.ecoop.org/home/plf-2022">Programming Local First workshop</a> at <a href="https://2022.ecoop.org/">ECOOP’22</a> in Berlin. We stay fairly broad in the podcast, but in this talk I get a bit deeper into the weeds about how our sync works, how our CRDT works, and how we integrate our new sync backend with our Swift codebase.</p>
+<figure class="wp-block-embed is-type-video is-provider-youtube wp-block-embed-youtube wp-embed-aspect-16-9 wp-has-aspect-ratio"><div class="wp-block-embed__wrapper">
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" height="360" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/hJQqjELPcOU?start=9161&amp;feature=oembed" title="Programming Local-First Software Workshop @ ECOOP 22 Berlin" width="640"></iframe>
+</div><figcaption>Programming Local First workshop at ECOOP’22</figcaption></figure>
+<p>I’ve set the embed to start at my talk – but be sure to watch the whole thing too! There were many other speakers that day with fascinating talks about how they’re all using a local-first approach in their research and products. <a href="https://twitter.com/pvh">Peter van Hardenberg</a> of <a href="https://www.inkandswitch.com/">Ink &amp; Switch</a> kicked off the day with motivating talk about local-first’s ideals, a local-first era vs the current cloud era, and a list of challenges at the cutting edge of research.</p>
+<p>I was overwhelmed with the ideas from the week and all of the new wonderful people I met. My mind is filled with ideas and new ways to think of local-first software, and new strategies for building user-centric and privacy-centric software.</p>
+<p>There’s so much I’m excited to write about from our Muse sync implementation. This local-first ideal is a powerful one, and the more detailed implementations that we can document and learn from, the better.</p>

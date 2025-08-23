@@ -1,0 +1,19 @@
+<header id="masthead" class="site-header" role="banner">
+  <div class="row">
+    <div class="col-xs-12 site-header-col">
+		<div class="site-branding">
+            <p class="site-title"><a href="/" rel="home">{{ .Site.Title }}</a></p>
+		</div><!-- .site-branding -->
+		<nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">Menu</button>
+			<div class="menu-navigation-container">
+                <ul id="primary-menu" class="menu">
+                    {{ range .Site.Menus.main }}
+                    <li class="menu-item"><a href="{{ .URL }}">{{ .Name }}</a></li>
+                    {{ end }}
+                </ul>
+            </div>
+		</nav><!-- #site-navigation -->
+      </div>
+    </div>
+</header><!-- #masthead -->

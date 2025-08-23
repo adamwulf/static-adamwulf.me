@@ -1,0 +1,14 @@
++++
+title = "Adding the libXML framework to your iPhone App"
+date = "2008-03-11T01:35:09+0000"
+slug = "adding-the-libxml-framework-to-your-iphone-app"
+type = "post"
++++
+
+<p>When working on my first iPhone app, I needed to import the libXML framework into my project. I took a look at a sample app that used the libXML framework, and made sure that the framework list in my project matched the one in the sample project – but for some reason my project wouldn’t compile. It kept complaining that it couldn’t find a libXML header file or some such, and so finally i turned to The Google, and found <a href="http://www.cocoabuilder.com/archive/message/cocoa/2008/3/11/200980" target="_blank">the answer</a>. I’m sure this stuff is a no-brainer for more experienced Cocoa / iPhone developers, but since I’m neither yet, I thought this was a bit trickier than I expected.</p>
+<p><a href="/wp-content/uploads/2008/08/adding-framework.png"><img align="right" alt="" decoding="async" height="150" src="/wp-content/uploads/2008/08/adding-framework-150x150.png" title="adding-framework" width="150"/></a>For extra clarity, I’m going to do a simple step by step to show how to get everything working in your project, if you’re having a similar problem:</p>
+<p>1. Add the libXML framework to your project in XCode</p>
+<p>The proper framework is located in: /Developer/Platforms/Aspen.platform/Developer/SDKs/Aspen1.2.sdk/usr/lib</p>
+<p>2. Verify the libXML framework is properly added. This is where I got stumped, because my framework <a href="/wp-content/uploads/2008/08/framework-added.png"><img align="right" alt="" decoding="async" height="150" src="/wp-content/uploads/2008/08/framework-added-150x150.png" title="framework-added" width="150"/></a>was added by my project wasn’t compiling! It still couldn’t find the proper header files for libXML, even though it was listed as a framework right here!</p>
+<p>3. The not-so-obvious step is to add the libXML header files to the header search path in the build properties. To do this, expand the Targets node of your project, and right click your project target file and Get Info. <a href="/wp-content/uploads/2008/08/header-search-path.png"><img align="right" alt="" decoding="async" height="150" src="/wp-content/uploads/2008/08/header-search-path-150x150.png" title="header-search-path" width="150"/></a>Then add “/usr/include/libxml2” to the header search path in target build settings.</p>
+<p>Now compile, and everything should be compiling just fine! You can download the final LibXMLSample project <a href="http://www.totheinter.net/files/LibXMLSample.zip" title="LibXMLSample XCode iPhone project">here</a>.</p>

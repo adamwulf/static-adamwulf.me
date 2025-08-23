@@ -1,0 +1,24 @@
++++
+title = "A Refocus of Efforts… and a Listotron Update"
+date = "2008-11-02T17:13:20+0000"
+slug = "a-refocus-of-efforts-and-a-listotron-update"
+type = "post"
++++
+
+<p>I’m in the middle of a few different projects right now, and, as inevitably happens when attempting to focus on more than one thing, I’m just a <span style="font-size: 8pt;">tiny</span> bit distracted. Currently, I am:</p>
+<ol>
+<li>Trying to get Phase 3 of the <a href="/tutorials/model-view-controller-in-jquery/">MVC in JavaScript Tutorial</a> written</li>
+<li>Updating the jQuery <a href="/columnizer-jquery-plugin/">Columnizer</a> plugin to include the latest requests</li>
+<li>Building <a href="http://www.listotron.com/">Listotron</a></li>
+<li>Building <a href="http://welcome.toyourmac.com/">WelcomeToYourMac</a></li>
+<li>Updating the layout/plugins of this site</li>
+</ol>
+<ol> </ol>
+<p>Add into that my the normal responsibilities of work, church, and family (and multiply the family line-item by 2 to properly account for my two year old daughter), and you’ve just about summed up my current ambitions.</p>
+<p>Recently I’ve made a fair amount of progress on #5, but at the expense of just about everything else. And while updating this site can be fun, I’d hardly call it <em>productive</em> in the true sense of the word. And so all of this brings me to this post – focus. Not wanting to throw anything off the boat, I’ve instead decided to rotate my attention to a specific task each month.</p>
+<p>Since Google Analytics tells me you’re much more interested in the MVC and Columnizer more than any of the other items, in the coming month I’m going to focus in earnest on the the MVC tutorial (with Columnizer next in queue), but before I switch gears I’ve made some moderately exciting progress on the Listotron front that I want to share. It’s completely altered my development plan – more specifically my testing plan – for Listotron.</p>
+<p>I’ve been in desperate need of adding unit tests to Listotron, and last night I began playing around with <a href="http://code.google.com/p/jqunit/">jqUnit</a>. I realized soon after setting up some basic tests that since I’m building the entire application in JavaScript – as I’ve planned to do with Listotron – jqUnit will not only let me write tests for individual modules of the application, but also for any and every <em>user action</em> with the application. </p>
+<p>What’s exciting – I think we can all agree that unit tests are wildly exciting – is that the MVC in Javascript provides a clean separation of model and view, and each can be tested easily and independently. More importantly, the entire UI – indeed the entire application – can easily be tested in the same framework. The fact that Listotron will load exactly 1 page – and from then on be run entirely in JavaScript – means that I can test any and every user workflow with a corresponding functional test.</p>
+<p>Absolutely any error that the user runs into, I’ll be able to write a duplicate functional test for exactly that workflow. For any “standard” web app that works over multiple page loads, testing a user path would be tedious and near impossible. Tools like <a href="http://selenium.openqa.org/">Selenium</a> and <a href="http://www.borland.com/us/products/silk/silktest/index.html">SilkTest</a> get of most of the way there, but with a properly engineered AJAX application, we can test just as much with fewer dependancies on other tools.</p>
+<p>And I’m a big fan of using fewer tools to accomplish the same ends. Less <em>stuff</em> to do during development decreases cycles spent on process and increases cycles spent on actual development.</p>
+<p>I already have a prototype of the Listotron UI running alongside some basic unit tests, but it still needs a bit of code cleanup before I won’t be embarrassed to have others look at it. Expect a full code release and walkthrough in the coming weeks.</p>

@@ -1,0 +1,41 @@
++++
+title = "Fastlane, xcconfig files, and build numbers"
+date = "2021-11-11T05:19:42+0000"
+slug = "fastlane-xcconfig-files-and-build-numbers"
+type = "post"
++++
+
+<p>I recently migrated 4 Xcode build configuration settings from being stored in the <code>*.xcodeproj</code> file into separate <code>*.xcconfig</code> files per configuration. I used <a href="https://jamesdempsey.net/2015/01/31/generating-xcode-build-configuration-files-with-buildsettingextractor-xcodeproj-to-xcconfig/">James Dempsey</a>‘s <a href="https://buildsettingextractor.com/">Build Settings Extractor</a> to autogenerate the config files for me from the existing project build settings.</p>
+<p>I updated the build configurations to use these xcconfig files, and then deleted the manually set values from the project file’s build settings. All of those bold customized values in Xcode’s build settings are a thing of the past – everything is in clean xcconfig files now, and it’s fantastic. Any changes we make to a build are much easier to see in the git diff, a bit win for simplicity and readability.</p>
+<p>An interesting thing happened to our Fastlane release though. We use the following snippet in our <code>Fastfile</code> to update the build number for the build: <code>increment_build_number(build_number: build_number)</code>. Oddly – our build number stopped getting updated after I made the switch to xcconfig files. All of the settings were the same, but fastlane stopped updating the build number for some reason.</p>
+<p>This manifested by the build failing with the following in the logs:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="generic" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">[03:56:43]: ------------------------------------
+[03:56:43]: --- Step: increment_build_number ---
+[03:56:43]: ------------------------------------
+There does not seem to be a CURRENT_PROJECT_VERSION key set for this project.  Add this key to your target's expert build settings.
+...
+[03:58:42]: ERROR ITMS-90189: "Redundant Binary Upload. You've already uploaded a build with build number '2' for version number '2.0.0'. Make sure you increment the build string before you upload your app to App Store Connect. Learn more in Xcode Help (http://help.apple.com/xcode/mac/current/#/devba7f53ad4)."
+</pre>
+<p>Strange, since the xcconfig files most certainly had the <code>CURRENT_PROJECT_VERSION</code> defined. However, re-editing that one key in the build settings and setting the value to sometime custom brought me one step closer. Fastlane was then able to update the build number, but was for some reason still showing the wrong static build number during upload.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="generic" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">[03:56:43]: ------------------------------------
+[03:56:43]: --- Step: increment_build_number ---
+[03:56:43]: ------------------------------------
+[03:56:44]: $ cd /Users/distiller/project &amp;&amp; agvtool new-version -all 210575 &amp;&amp; cd -
+[03:56:44]: ▸ Setting version of project Muse to:
+[03:56:44]: ▸ 210575.
+[03:56:44]: ▸ Also setting CFBundleVersion key (assuming it exists)
+...
+[03:58:42]: ERROR ITMS-90189: "Redundant Binary Upload. You've already uploaded a build with build number '2' for version number '2.0.0'. Make sure you increment the build string before you upload your app to App Store Connect. Learn more in Xcode Help (http://help.apple.com/xcode/mac/current/#/devba7f53ad4)."</pre>
+<p>The noncommittal note about <code>CFBundleVersion</code> gave me a clue. Our path to the <code>Info.plist</code> had also been set explicitly in the build settings before the move to xcconfig. I removed <code>INFOPLIST_FILE</code> from the xcconfig files and set the value manually in the project build settings, and suddenly fastlane was able to correctly generate new build numbers and set them for the product.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="generic" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">[05:16:54]: ------------------------------------
+[05:16:54]: --- Step: increment_build_number ---
+[05:16:54]: ------------------------------------
+[05:16:55]: $ cd /Users/distiller/project &amp;&amp; agvtool new-version -all 210591 &amp;&amp; cd -
+[05:16:56]: ▸ Setting version of project Muse to:
+[05:16:56]: ▸ 210591.
+[05:16:56]: ▸ Also setting CFBundleVersion key (assuming it exists)
+[05:16:56]: ▸ Updating CFBundleVersion in Info.plist(s)...
+[05:16:56]: ▸ Updated CFBundleVersion in "Muse.xcodeproj/../Muse Tests/Info.plist" to 210591
+[05:16:56]: ▸ Updated CFBundleVersion in "Muse.xcodeproj/../Muse/Info.plist" to 210591
+[05:16:56]: ▸ Updated CFBundleVersion in "Muse.xcodeproj/../MuseShare/Info.plist" to 210591</pre>
+<p>Sure enough! After explicitly setting both the <code>CURRENT_PROJECT_VERSION</code> and the <code>INFOPLIST_FILE</code>, Fastlane was able to set the build number correctly. If either or both of those were set only in xcconfig files, the build version would fail – they both need to be set manually in the project’s build settings.</p>

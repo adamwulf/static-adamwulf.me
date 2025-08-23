@@ -1,0 +1,62 @@
++++
+title = "Testing Background Uploads in iOS"
+date = "2025-01-07T23:46:36+0000"
+slug = "testing-background-uploads-in-ios"
+type = "post"
++++
+
+<p>When implementing background uploads on iOS, I found this incredibly <a href="https://www.avanderlee.com/swift/urlsession-common-pitfalls-with-background-download-upload-tasks/">helpful article by Antoine van der Lee.</a> Any feature that relies on uncontrollable iOS system behavior is a tough one to implement, and his article was my map through the void. Since it was published, some things have changed slightly in iOS, so I’m writing this post to add some corrections about implementing background uploads in iOS.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#invalidating-urlsession" id="invalidating-urlsession"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Invalidating URLSession</h2>
+<p>One tip it gives at the end is to invalidate the URLSession on app launch so that you can start from a clean slate:</p>
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<h4 class="wp-block-heading" id="h-starting-from-scratch"><a aria-hidden="true" class="aal_anchor" href="#starting-from-scratch" id="starting-from-scratch"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Starting from scratch</h4>
+<p>First of all, it’s good to start with a clean slate. We can do this by executing the following piece of code on launch to invalidate our URLSession and its tasks:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">#if DEBUG
+    if debuggingBackgroundTasks {
+        /// Cancel any running tasks and invalidate the session.
+        URLSession.shared.invalidateAndCancel()
+    }
+#endif</pre>
+</blockquote>
+<p>I’m not sure this is a good idea, or at the very least requires relaunching your app after invalidating all tasks. The issue is that this is invalidating <code>URLSession.shared</code>, not the background <code>URLSession</code> we created to handle background uploads.</p>
+<p>The <a href="https://developer.apple.com/documentation/foundation/urlsession/1411538-invalidateandcancel">Apple Documentation for <code>URLSession.invalidateAndCancel()</code></a> states:</p>
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<p>Calling this method on the session returned by the <a href="doc://com.apple.documentation/documentation/foundation/urlsession/1409000-shared"><code>shared</code></a> method has no effect.</p>
+</blockquote>
+<p>If we invalidate our background <code>URLSession</code> instead, we run into a new problem: Only a single URLSession for a given configuration identifier will ever be created. This means that if we invalidate and then re-create our background <code>URLSession</code>, we actually get back the same <code>URLSession</code> that we just invalidated!</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">        backgroundSession.invalidateAndCancel()
+        let config = URLSessionConfiguration.background(withIdentifier: Self.backgroundSessionIdentifier)
+        config.sessionSendsLaunchEvents = true
+        config.isDiscretionary = false
+        backgroundSession = URLSession(configuration: config)  // &lt;--- This returns the same `backgroundSession` that we just invalidated!</pre>
+<p>The <a href="https://developer.apple.com/documentation/foundation/urlsession/1411538-invalidateandcancel">Apple Documentation for <code>URLSession.invalidateAndCancel()</code></a> states:</p>
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<p>Once invalidated, references to the delegate and callback objects are broken. After invalidation, session objects cannot be reused.</p>
+</blockquote>
+<p>This does mention we shouldn’t use the same session, but doesn’t mention that the exact same <code>URLSession</code> will be returned from the <code>init(configuration:)</code>, which I found surprising.</p>
+<p>Instead of invalidating the session to clear out old upload tasks, simply iterate through the tasks and cancel them individually:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">let tasks = await yourBackgroundURLSession.allTasks
+for task in tasks {
+    task.cancel()
+}</pre>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#forcing-app-background" id="forcing-app-background"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Forcing App Background</h2>
+<p>One other note, in the article Antoine recommends calling <code>exit(0)</code> from <code>applicationDidEnterBackground(<code>_:</code>)</code>:</p>
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<h4 class="wp-block-heading" id="h-make-your-app-suspend-sooner"><a aria-hidden="true" class="aal_anchor" href="#make-your-app-suspend-sooner" id="make-your-app-suspend-sooner"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Make your app suspend sooner</h4>
+<p>Waiting for your app to suspend is a waste of time. By using <code>exit(0)</code> we can force our app to suspend:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">func applicationDidEnterBackground(_ application: UIApplication) {
+    #if DEBUG
+        if debuggingBackgroundTasks {
+            /// Exit to make our app suspend directly.
+            exit(0)
+        }
+    #endif
+}</pre>
+</blockquote>
+<p>However, <a href="https://developer.apple.com/documentation/uikit/uiapplicationdelegate/applicationdidenterbackground(_:)">the Apple documentation for that method</a> notes that <code>applicationDidEnterBackground(_:)</code> will not be called for applications using scenes:</p>
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<p>If you’re using scenes (see <a href="https://developer.apple.com/documentation/uikit/scenes">Scenes</a>), UIKit will not call this method. Use <a href="https://developer.apple.com/documentation/uikit/uiscenedelegate/scenedidenterbackground(_:)"><code>scene<wbr/>Did<wbr/>Enter<wbr/>Background(_:)</code></a> instead to perform any final tasks. UIKit posts a <a href="https://developer.apple.com/documentation/uikit/uiapplication/didenterbackgroundnotification"><code>did<wbr/>Enter<wbr/>Background<wbr/>Notification</code></a> regardless of whether your app uses scenes.</p>
+</blockquote>
+<p>Oops! I’d completely forgotten about this, and I was left wondering why my app delegate method wasn’t call. The fix is easy, I switched to use <code><br/>sceneDidEnterBackground(_ scene: UIScene)</code> in your scene delegate.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#conclusion" id="conclusion"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Conclusion</h2>
+<p>If you want to cancel all background tasks and start from scratch, call <code>cancel()</code> on your background <code>URLSession.allTasks</code>. Otherwise, if you invalidate your background session, the background session will not be able to be re-used in the same app session that it was invalidated in. To start new background tasks, you would need to relaunch the app and not <code>invalidateAndCancel()</code> a second time.</p>

@@ -1,0 +1,62 @@
++++
+title = "The JavaScript Basics: Class Definitions"
+date = "2008-04-06T18:41:17+0000"
+slug = "the-javascript-basics-class-definitions"
+type = "post"
++++
+
+<p>This is the first post in a new series “The JavaScript Basics” that I hope will be interesting to you the reader, but more importantly I hope will foster some conversation.</p>
+<p>I’ll be posting about (1) how I do things in JavaScript – from the basics of class definitions to optimizing 1000+ line applications – and (2) why I choose to do things this way. Hopefully our conversations will teach us both something new about this powerful client-side language. 😀</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#class-definitions" id="class-definitions"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Class Definitions</h2>
+<p>Without further ado – let’s start with the basics: defining a class in JavaScript.</p>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#the-two-options-for-class-definitions" id="the-two-options-for-class-definitions"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>The Two Options for Class Definitions</h3>
+<p>There are two standard ways of defining a class. The simplest, and the one I’ve opted for, is to define a new class simply by defining a new function. The syntax is as follows:</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#option-1" id="option-1"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Option 1</h4>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="js" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">function myClass(constructor, arguments, here){
+    var privateVar = 12;
+
+    this.publicVar = "asdf";
+
+    function privateFunction(){
+        return privateVar;
+    }
+
+    this.publicFunction = function(){
+        return this.publicVar;
+    }
+}</pre>
+<p>The above code defines a simple class with a private variable and function, and a public variable and function.</p>
+<p>The other way to define a class, and the one used by the majority of JavaScript libraries out there, uses JavaScript’s prototype system.</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#option-2" id="option-2"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Option 2</h4>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="js" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">function myClass(contructor, arguments, here){
+    var privateVar = 12;
+
+    function privateFunction(){
+        return privateVar;
+    }
+}
+
+myClass.prototype.publicVar = "asdf";
+myClass.prototype.publicFunction =
+function(){
+    return this.publicVar;
+}</pre>
+<p>This code also defines a class with a private variable and function and a public variable and function. And so, the question of the hour is…</p>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#is-there-a-difference" id="is-there-a-difference"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Is There A Difference?</h3>
+<p>Absolutely. The differences between these two definitions is subtle but important, and each of these two ways of defining a class has its pros and cons. You should choose carefully when defining your class. In fact – the best way to define a class may be a merger of these two options, but I’ll talk about that at the end of the article.</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#difference-1-syntax" id="difference-1-syntax"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Difference 1: Syntax</h4>
+<p>Obviously the syntax of these options is different, and at the end of the day, syntax is just syntax. It’s the mechanics of the language that determine which option is truly better. That said, the syntax of Option 1 is much much closer to class definitions in most other languages, and this is one reason I’m partial to Option 1. Still, personal preference should always take second place to script performance, security, etc.</p>
+<p>I like Option 1 better, but it this shouldn’t sway our final choice.</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#difference-2-memory-consumption" id="difference-2-memory-consumption"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Difference 2: Memory Consumption</h4>
+<p>The public functions in Option 1 are copied into each and every object that is instantiated from this class. This means that if you create 1000 objects from this class, each of those objects has its very own copy of every private and public function. This is potentially a ton of wasted memory and a huge con for Option 1!</p>
+<p>In Option 2’s favor, the public functions defined in the prototype object are shared by all objects instantiated from this class. This means that if you create 1000 objects from Option 2 class definition, there’s still only 1 copy of the public functions in memory! Depending on your class and usage, this may be a substantial savings in memory.</p>
+<p>Option 2 wins this round.</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#difference-3-access-to-private-variables-and-functions" id="difference-3-access-to-private-variables-and-functions"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Difference 3: Access to Private Variables and Functions</h4>
+<p>In Option 1, the public functions always have access to the private variables of the class. However, in Option 2, the public functions <em>do not</em> have access to the object’s private functions and variables! I’ve set up an <a href="http://ovrthetop.com/samples/javascript/class_definitions.html" rel="noopener" target="_blank">example html page</a> (<a href="http://www.ovrthetop.com/wp-content/uploads/2008/04/class_definitions.html" title="Class Definitions Sample 1">download</a>) that demonstrates that this isn’t the case. Load it up with FireBug and you’ll see that it errors out.</p>
+<p>This means that public functions defined in Option 2 <em>cannot</em> use private variables in the class. This is a huge loss for Option 2, and severely limits which functions can be defined like this.</p>
+<p>Option 1 definitely wins this round.</p>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#summary" id="summary"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Summary</h3>
+<p>So what’s the best way to define functions? I always opt for Option 1 because private variables and functions are a <em>huge</em> win. Private variables let you protect data from malicious scripts which may also be running on your page, and being able to properly define getter and setter methods for private properties is incredibly important – especially if you need to restrict access to private properties for more secure JavaScript code. Option 2 would force you to make all of your properties public, which leads to sloppy public interface for your class and usually weaker security (depending on your needs).</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#ive-found-that-the-definitive-best-way-to-define-classes-in-javascript-is" id="ive-found-that-the-definitive-best-way-to-define-classes-in-javascript-is"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>I’ve found that the definitive best way to define classes in Javascript is:</h4>
+<p>The very best way to define a class in JavaScript is to use Option 1 for all private properties, functions, and any public functions that access these private properties and functions. Any function that relies solely on the class’s public interface should be defined as Option 2, since this will help lower memory consumption of the overall program.</p>
+<p>So the best way to define a class in JavaScript is a merger of Option 1 and 2!</p>

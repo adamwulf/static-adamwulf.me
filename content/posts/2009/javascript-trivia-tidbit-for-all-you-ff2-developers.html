@@ -1,0 +1,25 @@
++++
+title = "JavaScript trivia tidbit for all you FF2 developers"
+date = "2009-03-04T19:51:38+0000"
+slug = "javascript-trivia-tidbit-for-all-you-ff2-developers"
+type = "post"
++++
+
+<p>Did you know, that in Firefox 2, creating a link like:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="js" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">&lt;a onclick="javascript:"&gt;click me!&lt;/a&gt;</pre>
+<p>will actually open up the Firefox error console?</p>
+<figure class="wp-block-image"><img alt="picture-25" class="wp-image-1607" decoding="async" fetchpriority="high" height="267" sizes="(max-width: 354px) 100vw, 354px" src="/files/2009/03/picture-25.png" srcset="/wp-content/uploads/2009/03/picture-25.png 354w, /wp-content/uploads/2009/03/picture-25-300x226.png 300w" title="picture-25" width="354"/></figure>
+<p>You’d think it’d do nothing, since the href is just “javascript:”, but that’s not the case. To do nothing you need a bit more:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="js" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">&lt;a onclick="javascript:;"&gt;click me!&lt;/a&gt;
+or
+&lt;a onclick="javascript:void(0)"&gt;click me!&lt;/a&gt;</pre>
+<p>Notice the semicolon in that first line. If you leave out that semicolon (or a void(0)), then your users will enjoy looking at the error console instead of your site – yikes!</p>
+<p><a href="http://groups.google.com/group/Firefox-Users/browse_thread/thread/c942ed97e680dae2/dba5bb882b4b36fd">Other fixes</a>:</p>
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<p>You can stop this from happening if you go to Web Developer’s Options<br/>drop-down menu and then choose Options.  Then choose Miscellaneous tab<br/>and untick all the boxes for Error Console.</p>
+<p>change your a href with onclick<br/>from something like:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="js" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">&lt;a onclick="javascript:OpenPopUp();"&gt;click me!&lt;/a&gt;</pre>
+<p>to:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="generic" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">&lt;a onclick="javascript:OpenPopUp();return false;"&gt;click me!&lt;/a&gt;</pre>
+</blockquote>
+<p>… in other words, just add <code>return false;</code></p>

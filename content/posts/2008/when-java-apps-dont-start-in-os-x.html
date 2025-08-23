@@ -1,0 +1,23 @@
++++
+title = "When Java Apps don’t start in OS X…"
+date = "2008-10-23T19:46:28+0000"
+slug = "when-java-apps-dont-start-in-os-x"
+type = "post"
++++
+
+<p>I had a problem recently – I use IntelliJ at work, and one day it just stopped launching on my Mac altogether. Looking at the console, I found:</p>
+<blockquote>
+<p>10/23/08 4:13:16 PM idea[248] Apple AWT Startup Exception : *** -[NSCFArray insertObject:atIndex:]: attempt to insert nil </p>
+</blockquote>
+<p>Googling for that error I was led to <a href="http://discussions.apple.com/thread.jspa?messageID=7195093">this Apple support thread</a>, which says:</p>
+<blockquote>
+<p>You might want to check that the symlink:</p>
+<p>/System/Library/Frameworks/JavaVM.framework/Versions/Current</p>
+<p>points to:</p>
+<p>/System/Library/Frameworks/JavaVM.framework/Versions/A </p>
+<p>As described in this post:</p>
+<p><a class="jive-link-external" href="http://blog.nominet.org.uk/tech/2008/04/24/restarting-the-awt-native-event-thread/" onclick='s_objectID="http://blog.nominet.org.uk/tech/2008/04/24/restarting-the-awt-native-event-thread/_1";return this.s_oc?this.s_oc(e):true'>http://blog.nominet.org.uk/tech/2008/04/24/restarting-the-awt-native-event-thread/</a> </p>
+</blockquote>
+<p>Sure enough, my symlink was wrong! I’d completely forgotten I’d mucked around moving symlinks, and honestly can’t remember now why I ever did in the first place. Pointing the Current link back to A solved the problem, and IntelliJ starts up just fine.</p>
+<p><span style="color: #0060af;"><a href="/files/2008/10/picture-21.png"><img class="alignnone size-full wp-image-1251" decoding="async" fetchpriority="high" height="257" src="/files/2008/10/picture-21.png" title="Fixing the Symlink" width="398"/></a></span></p>
+<p><img alt=":-)" decoding="async" height="15" src="/wp-includes/images/smilies/icon_smile.gif" title=":-)" width="15"/></p>

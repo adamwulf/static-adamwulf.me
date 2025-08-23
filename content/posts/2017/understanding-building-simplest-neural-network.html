@@ -1,0 +1,17 @@
++++
+title = "Understanding and Building the Simplest Neural Network"
+date = "2017-11-09T14:44:23+0000"
+slug = "understanding-building-simplest-neural-network"
+type = "post"
++++
+
+<p>Over the past year I’ve been reading and learning about neural networks, how they work, and how to use them. I’ve found the overwhelming majority of tutorials and introductions to NN either: a) focus on the math and derivations, or b) focus on the code and tools, but rarely seem to c) match the math 1:1 with the code. Both of these tutorial styles are often guilty of handwaving and simplifying the derivations, making it difficult for me to follow exactly how the math and code relate to each other.</p>
+<p>An example: neural networks are built in layers of neurons, but <em>why</em> are they built in fully-connected layers?</p>
+<p><img alt="" class="alignnone size-full wp-image-5117" decoding="async" fetchpriority="high" height="281" sizes="(max-width: 370px) 100vw, 370px" src="/files/2017/11/neuronLayers.png" srcset="/wp-content/uploads/2017/11/neuronLayers.png 370w, /wp-content/uploads/2017/11/neuronLayers-300x228.png 300w" width="370"/></p>
+<p>The primary reason turns out to be performance. It’s dramatically faster to use matrix operations to calculate hundreds or thousands of neurons in parallel on the GPU. Using layers of neurons lends the math to using linear algebra and matrices for a dramatic speedup.</p>
+<p>But at the very very very basic mathematical level, a neural network doesn’t <em>have to</em> use layers, it can look like anything:</p>
+<p><img alt="" class="alignnone size-full wp-image-5118" decoding="async" height="236" sizes="(max-width: 370px) 100vw, 370px" src="/files/2017/11/neuronGraph.png" srcset="/wp-content/uploads/2017/11/neuronGraph.png 370w, /wp-content/uploads/2017/11/neuronGraph-300x191.png 300w" width="370"/></p>
+<p>The neuron-level math works exactly the same, even though the network-level math wouldn’t be able to optimize with matrices. They layered structure is computationally optimized, but not computationally necessary, for building a neural network.</p>
+<p>As I was learning, I wanted to separate in my mind what was <em>necessary</em> for a neural network to function vs what was an <em>optimization</em>.</p>
+<p>I’ve decided to start writing my own ‘book’ of sorts to document everything I’m learning about neural networking, starting from the very basics. The <a href="https://www.milestonemade.com/building-with-neurons/">First Chapter</a> covers the very smallest bits of math and code needed to build the Smallest Possible Neural network. The goal is to start with what is absolutely <em>necessary</em> for neural networks, and nothing more, and slowly build upon that foundation chapter by chapter.</p>
+<p>If you’ve been searching for the simplest and most complete primer on neural networking, then <a href="https://www.milestonemade.com/building-with-neurons/">download Chapter 1</a> and <a href="https://www.milestonemade.com/building-with-neurons/">signup to be notified</a> as I write the next chapters.</p>

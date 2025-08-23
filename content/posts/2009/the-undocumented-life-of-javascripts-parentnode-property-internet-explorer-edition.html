@@ -1,0 +1,55 @@
++++
+title = "The undocumented life of JavaScript’s parentNode property – Internet Explorer edition!"
+date = "2009-07-21T02:22:21+0000"
+slug = "the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition"
+type = "post"
++++
+
+<div class="related">Related: <a href="/2009/03/19/the-undocumented-life-of-jquerys-append/">The undocumented life of jQuery’s .append()</a></div>
+<p>Did you know that the parentNode property in JavaScript <em>doesn’t always point to the element’s parent??!</em> And not only that, but that very same node that’s lying to you <em>also appears multiple times in the DOM.</em></p>
+<p>I didn’t want to have to tell you this way, but there’s just no way around it: in Internet Explorer 7 (I’ve left testing 6 and 8 as an exercise for the reader 🙂 ) the parentNode property can flat out <em>lie</em> to you – specifically – with pasted content in a rich text editor like <a href="http://tinymce.moxiecode.com/">TinyMCE</a>. That’s right, a bold-faced chain-yanking tall-tale’d lie, and I’ll prove it to you.</p>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#documented-behavior" id="documented-behavior"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Documented Behavior</h3>
+<p>According to the <a href="http://www.w3schools.com/dom/prop_node_parentnode.asp">W3C documentation</a>, “the parentNode property returns the parent node of a node.” And based on that, you would expect the following code to alert “true!” for as many times as the node has children:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="js" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">var node = document.getElementById('someElement');
+for(var i=0;i&amp;lt;node.childNodes.length;i++){ alert(node == node.childNodes[i].parentNode); }</pre>
+<p> This is true for the vast majority of cases, but is not always the case. I’ve found an exception in how Internet Explorer 7 handles pasted content inside rich text areas like <a href="http://tinymce.moxiecode.com/index.php">TinyMCE</a>. Even <a href="http://jquery.com/">jQuery</a> will select children who’s parentNode is incorrect!</p>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#just-get-to-the-demo" id="just-get-to-the-demo"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Just get to the Demo!</h3>
+<p>I’ve set up a <a href="/examples/tinymce/simple.html" target="_new">demo page</a> that can consistently repeat the bug. For the demo to work, you’ll need to:</p>
+<ul class="wp-block-list">
+<li>use Internet Explorer 7</li>
+<li>open the <a href="/examples/tinymce/sample.rtf">attached rtf</a> in <strong>WordPad</strong></li>
+<li>paste into the TinyMCE content area</li>
+<li>press the “validate” button on the bottom toolbar</li>
+</ul>
+<p>Besides IE’s fearsome use of the <a href="http://www.w3schools.com/tags/tag_dir.asp">DIR tag</a>, you’ll notice:</p>
+<ul class="wp-block-list">
+<li>I’ve painted duplicate nodes red in TinyMCE</li>
+<li>An brief XML output of the DOM is output into a text area beneath TinyMCE showing the duplicate node</li>
+<li>A count of each node is displayed as an attribute in the text area. Notice the count=2 in the nodes at the bottom of the textarea! Yikes!</li>
+</ul>
+<p>If you’re not in the mood to fire up the demo yourself, just click the link below to see what the DOM ends up looking like. Take special notice of the count=2 on the nodes at the bottom:</p>
+<p><a class="code-link" id="dom"></a>View IE7’s invalid DOM after a paste</p>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#try-it-yourself" id="try-it-yourself"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Try It Yourself!</h3>
+<p>For the demo, I created a simple TinyMCE plugin that validates the editor’s DOM. Paste the magic text in IE7, and it’ll mark any invalid nodes in red and also updates a textarea with a simplified XML representation of the DOM. The plugin uses both native JavaScript functions and jQuery to find nodes with invalid parentNodes.</p>
+<p><a class="code-link" id="plugin"></a>View the plugin code</p>
+<p><a href="/examples/tinymce/duplicate.zip">Download the plugin code</a></p>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#a-tinymce-bug" id="a-tinymce-bug"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>A TinyMCE Bug?</h3>
+<p>An obvious question is: is this a TinyMCE bug? and the answer is “No.” There is no way to manually add the exact same node to multiple places in the DOM. Instead, the browser simply moves the node to the new place, and removes it from its original location. Even if <a href="http://www.linkedin.com/pub/johan-%22spocke%22-s%C3%B6rlin/11/444/a04">Spocke</a> tried to create this bug, he couldn’t 🙂</p>
+<p>If you believe me, skip to the conclusion. If you don’t believe me, open up <a href="/examples/tinymce/nodups.html" target="_new">this second demo</a> that uses the following code to append a node without calling removeChild() first. Even without specifically removing a node before appending it somewhere else, there still only exists one node in the document:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="js" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">$(function(){
+var node = document.getElementById("copyMe");
+var target = document.getElementById("target");
+target.appendChild(node);
+});</pre>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#in-conclusion" id="in-conclusion"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>In Conclusion</h3>
+<p>As far as parentNode is concerned, if:</p>
+<ul class="wp-block-list">
+<li>you’re writing a plugin for TinyMCE or similar</li>
+<li>you’re dealing with (possibly) pasted content</li>
+<li>relying on parentNode</li>
+</ul>
+<p>then:</p>
+<ul class="wp-block-list">
+<li>validate! If(myNode != myNode.childNodes[i].parentNode) is true then you have a problem!</li>
+</ul>
+<p>I hope you enjoyed the latest the-undocumented-life-of post! Also a fun read: <a href="/2009/03/19/the-undocumented-life-of-jquerys-append/">The undocumented life of jQuery’s .append()</a>!</p>

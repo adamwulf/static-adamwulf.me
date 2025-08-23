@@ -1,0 +1,71 @@
++++
+title = "Dynamic Multi-Page Multi-Column Newsletter Layout with Columnizer"
+date = "2009-06-18T16:19:06+0000"
+slug = "dynamic-multi-page-multi-column-newsletter-layout-with-columnizer"
+type = "post"
++++
+
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#a-columnizer-case-study" id="a-columnizer-case-study"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>A Columnizer Case Study</h3>
+<div class="wp-block-image">
+<figure class="alignright"><img alt="Sample Page Layout" class="wp-image-1798" decoding="async" fetchpriority="high" height="281" src="/files/2009/06/pagelayout.png" title="Sample Page Layout" width="218"/></figure></div>
+<p>I got an interesting email this week, asking about how to use <a href="/columnizer-jquery-plugin/">Columnizer</a> to help layout a multipage and multicolumn newsletter. The length of the content would vary from week to week, so the newsletter needed to be grow/shrink to as many pages as necessary. It also needed a custom header and footer for each page.</p>
+<p><a href="/autocolumn/sample10.html" rel="noopener" target="_new">Here’s the sample page</a> showing the solution in action.</p>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#the-html" id="the-html"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>The HTML</h3>
+<p>How does it work? Let’s take a look at the source, beginning with the HTML:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="html" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">&lt;div id="page_template"&gt;
+    &lt;div class="header"&gt;
+        This is a header
+        &lt;hr&gt;
+    &lt;/div&gt;
+    &lt;div class="content"&gt;&lt;/div&gt;
+    &lt;div class="footer"&gt;
+        &lt;hr&gt;
+        Page: This is the footer.
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="newsletterContent"&gt;Newsletter Content Goes Here&lt;/div&gt;
+</pre>
+<p>We define the template for what we want each page to look like. For our case, every page will have the exact same header and footer (with the page number shown in the footer), and page content should be split into 2 columns. Beneath our template, we just print out the entire contents of the newsletter that we want columnized.</p>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#columnizing-the-content" id="columnizing-the-content"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Columnizing the Content</h3>
+<p>Our basic algorithm will be:</p>
+<ol class="wp-block-list">
+<li>Copy the page template and append it to the bottom of the &lt;body&gt;</li>
+<li>Columnize what’s in #newsletterContent into that last page until it’s full</li>
+<li>Put whatever doesn’t fit back into #newsletterContent</li>
+<li>Repeat until #newsletterContent is empty</li>
+</ol>
+<p>Awesome, so lets see that in real life code:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="js" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">$(function() {
+  // the height of the content, discluding the header/footer
+  var content_height = 652;
+  // the beginning page number to show in the footer
+  var page = 1;
+  function buildNewsletter() {
+    if ($('#newsletterContent').contents().length &amp; gt; 0) {
+      // when we need to add a new page, use a jq object for a template
+      // or use a long HTML string, whatever your preference
+      $page = $("#page_template").clone().addClass("page").css("display", "block");
+      // append the page number to the footer
+      $page.find(".footer span").append(page);
+      $("body").append($page);
+      page++;
+      // here is the columnizer magic
+      $('#newsletterContent').columnize({
+        columns: 2,
+        target: ".page:last .content",
+        overflow: {
+          height: content_height,
+          id: "#newsletterContent",
+          doneFunc: function() {
+            console.log("done with page");
+            buildNewsletter();
+          }
+        }
+      });
+    }
+  }
+  buildNewsletter();
+});</pre>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#the-result" id="the-result"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>The Result</h3>
+<p>Check out the fully columnized and multi-paged <a href="/autocolumn/sample10.html">newsletter sample</a>, and be sure to check out the <a href="/columnizer-jquery-plugin/">Columnizer project page</a> for more samples, documentation, and of course, to download Columnizer!</p>
+<p>It’s been really fun over the past few months to see how different people are using Columnizer. If your site uses Columnizer, give me a shout in the comments, I’d love to check it out!</p>

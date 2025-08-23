@@ -1,0 +1,50 @@
++++
+title = "How to migrate from WordPress to WordPress MU"
+date = "2008-10-04T02:02:37+0000"
+slug = "how-to-migrate-from-wordpress-to-wordpress-mu"
+type = "post"
++++
+
+<div class="related">
+Related: <a href="/2009/05/06/changing-wordpress-mu-from-subdomains-to-subdirectories/">Changing WordPress Mu from Subdomains to Subdirectories</a>
+</div>
+<p>I’m quite excited to have successfully migrated my blog from 2 <a href="http://wordpress.org/"><span>WordPress</span></a> blogs to just 1 <a href="http://mu.wordpress.org/"><span>WordPress MU</span></a> install. I had initially set up 2 blogs running on one code-base using <a href="http://wordpress.org/extend/plugins/wp-hive/"><span>WP-Hive</span></a>, and while I’m really impressed with the hive plugin, it’s always felt more like a hack than a true trustable upgradable solution.</p>
+<p>My weekend began with, “Migrating from WordPress to MU can’t be <em>that</em> hard, can it?!” Boy, was I in for a surprise. I hope this brief post will spare you the pain I went through.</p>
+<h3><a aria-hidden="true" class="aal_anchor" href="#1-download-and-install" id="1-download-and-install"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>1. Download and Install</h3>
+<p>First, some good news: the <a href="http://trac.mu.wordpress.org/browser/trunk/README.txt"><span>README file</span></a> does a great job walking you through the process of getting a blank MU install up and running. The default installation process for MU is strikingly similar to the standard WordPress install. A quick unzip of the MU files on your server, a few chmod’s, a fresh mysql database, and everything should be peachy.  But that’s the good news, what’s the bad news?</p>
+<h3><a aria-hidden="true" class="aal_anchor" href="#2-importing-your-wordpress-data" id="2-importing-your-wordpress-data"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>2. Importing Your WordPress Data</h3>
+<p>Now if you’re like me, you might have noticed the tempting “Import” and “Export” buttons.</p>
+<p><img alt="" class="size-full wp-image-1135 alignnone" decoding="async" height="40" src="/files/2008/10/picture-14.png" width="137"/></p>
+<p><em>Don’t touch them</em><em>!</em> These buttons are nothing more than cleverly designed distractions – little pixel sirens – they are not your solution. With my very modest 5.8 Mb export file, I had one hell of a time getting MU to import the thing.</p>
+<p>No matter what settings I tweaked, the import timed out after 60 seconds. I changed WPMU settings, I changed PHP <a href="http://us2.php.net/manual/pl/ini.core.php#ini.upload-max-filesize">max upload size</a>, <a href="http://us2.php.net/manual/pl/info.configuration.php#ini.max-execution-time">max timeout</a>, and <a href="http://us2.php.net/manual/pl/ini.core.php#ini.memory-limit">max memory</a> settings. I ended up <a href="http://www.google.com/search?hl=en&amp;q=split+wordpress+xml&amp;btnG=Search">splitting the file</a> into over 30 tiny pieces, and <em>still</em> couldn’t get it imported.</p>
+<p>mind. numbing.</p>
+<p>In my dedication slash foolishness, I wrestled with it for about 6 hours split over 3 days until I finally had enough. Maybe you’ll want to wrestle with splitting xml files and tweaking random upload settings (or maybe you’re lucky enough for it to just work), but not me. There <em>had</em> to be a better way, and luckily there is.</p>
+<h3><a aria-hidden="true" class="aal_anchor" href="#3-create-a-new-blog" id="3-create-a-new-blog"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>3. Create a New Blog</h3>
+<p>Creating a new blog in MU is a super easy process, just click <img alt="" class="alignnone size-full wp-image-1140" decoding="async" height="39" src="/files/2008/10/picture-15.png" width="90"/> then the <img alt="" class="alignnone size-full wp-image-1141" decoding="async" height="42" src="/files/2008/10/picture-16.png" width="59"/> button. Fill out the form and away you go.</p>
+<p>Take special note of the ID that WPMU gives your new blog. The ID is in the left most column of the blogs list.</p>
+<p><a href="/files/2008/10/picture-17.png"><img alt="" class="alignright size-full wp-image-1147" decoding="async" height="86" loading="lazy" src="/files/2008/10/picture-17.png" width="209"/></a></p>
+<h3><a aria-hidden="true" class="aal_anchor" href="#4-migrate-your-data-this-time-for-real" id="4-migrate-your-data-this-time-for-real"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>4. Migrate Your DAta – This Time For Real!</h3>
+<p>Fire up phpMyAdmin, and take a look at your old blog’s database. You’ll want to export the following tables to a .sql file:</p>
+<div class="columnize2">
+<ul>
+<li>wp_comments</li>
+<li>wp_links</li>
+<li>wp_postmeta</li>
+<li>wp_posts</li>
+<li>wp_terms</li>
+<li>wp_term_relationships</li>
+<li>wp_term_taxonomy</li>
+</ul>
+</div>
+<p>Remember that ID from step 3? Open up the .sql in your text editor of choice, and globally replace “wp_” with “wp_{ID}_” (where {ID} is your blog’s ID).</p>
+<p><a href="/files/2008/10/picture-18.png"><img align="right" alt="" class="alignright size-medium wp-image-1148" decoding="async" height="300" loading="lazy" src="/files/2008/10/picture-18-183x300.png" width="183"/></a>Now point your phpMyAdmin at your WPMU’s database. You’ll notice in this database that you’ll already have tables with names like “wp_1_posts”, etc, so prefix all the tables with your blog ID in them with “old_”. The only table you’ll skip is “wp_1_options”.</p>
+<p>Now that you’ve renamed those 7 tables, upload your .sql file into your WPMU database. You should now have a table list that looks something like the image to the right.</p>
+<h3><a aria-hidden="true" class="aal_anchor" href="#5-fix-author-of-posts" id="5-fix-author-of-posts"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>5. Fix Author of Posts</h3>
+<p>Last step! For every author in your old blog (probably just you), create a user in WPMU (if it’s you, it’ll be the MU admin). To assign all the posts to the admin MU user, run the following command in your MU database (substitute {ID} for the blog ID):</p>
+<p>[code lang=’sql’ line=’1′]<br/>
+UPDATE wp_{ID}_posts SET post_author = 1<br/>
+[/code]</p>
+<h3><a aria-hidden="true" class="aal_anchor" href="#6-done" id="6-done"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>6. Done!</h3>
+<p>That’s it! You’ll probably want to log into the admin console and re-enable any plugins you need, and tweak your settings again. We omitted the wp_options table, so this process doesn’t import any blog settings at all. I tried importing settings as well, but hit a wall and was plenty happy to manually fix those.</p>
+<p>At this very moment I am enjoying 1 admin panel, 1 click install for new blogs, 1 database, and 1 codebase. Simple. Upgradable. Trustable.</p>
+<p>Enjoy your WordPress MU powered blog!</p>

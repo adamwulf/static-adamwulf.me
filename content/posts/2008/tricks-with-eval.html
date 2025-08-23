@@ -1,0 +1,33 @@
++++
+title = "Tricks with eval()"
+date = "2008-07-07T12:10:26+0000"
+slug = "tricks-with-eval"
+type = "post"
++++
+
+<p>Great <a href="http://ejohn.org/blog/eval-kerfuffle">Resig post regarding JavaScript’s eval() statement</a>:</p>
+<blockquote><p>Last week it <a href="http://peter.michaux.ca/article/8069">came out</a> that, in Firefox (and other Gecko-based browsers) you could dip into the private scope of a function using eval, like so:</p>
+<div class="syntax_hilite">
+<div id="js-1">
+<pre><span>// Getting "private" variables</span>
+<span>var</span> obj = <span>(</span><span>function</span><span>(</span><span>)</span> <span>{</span>
+  <span>var</span> a = <span>21</span>;
+  <span>return</span> <span>{</span>
+    <span>// public function must reference 'a'</span>
+    fn: <span>function</span><span>(</span><span>)</span> <span>{</span>a;<span>}</span>
+  <span>}</span>;
+<span>}</span><span>)</span><span>(</span><span>)</span>;
+ 
+
+<span>var</span> foo;
+<span>eval</span><span>(</span><span>'foo=a'</span>, obj.<span>fn</span><span>)</span>;
+console.<span>log</span><span>(</span>foo<span>)</span>; <span>// 21</span></pre>
+</div>
+</div>
+<p>I think the common response to seeing the above was something like: WUH!?!?</p></blockquote>
+<p>I’ll admit I had no idea that the eval() let you essentially peek into any arbitrary scope that you wanted to. What should otherwise be private members of a class or object are suddenly as public as any other. This means there are zero guarantees that your private data and code actually remain private in the JavaScript world.</p>
+<p>Moral of the story? Don’t trust data in the browser! We’ve always known to validate any data that comes in to the server – form validation just isn’t enough – but now we know that we can’t necessarily trust our own private variables. If any 3rd party script runs on the same page as your scripts, you’re open to an “attack” of them reading and writing your private variables or functions! No private data or code is safe!</p>
+<p>But what if – <em>what if</em> – you control 100% of the JavaScript that runs on a web page – what then? Can you still trust the that your private variables and private functions haven’t been tampered with? Nope. Firefox plugins like <a href="https://addons.mozilla.org/en-US/firefox/addon/748">GreaseMonkey</a> let users run any bit of JavaScript on any page they want – including your “100% controlled” page.</p>
+<p>Don’t get me wrong – if you control 100% of the JavaScript on your page, then it’s certainly not <em>likely</em> that you’re code will be tampered with, but it is <em>possible</em>, and IMO that’s equally scary.</p>
+<p>There’s no such thing as secure data or code in JavaScript.</p>
+<p>The good news? <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=442333">It’s been fixed</a>. So future versions of future browsers will one day not have this problem. In Firefox. Other browsers? No idea.</p>

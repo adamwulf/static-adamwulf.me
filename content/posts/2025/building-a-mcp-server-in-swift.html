@@ -1,0 +1,193 @@
++++
+title = "Building a MCP server in Swift"
+date = "2025-03-16T22:33:10+0000"
+slug = "building-a-mcp-server-in-swift"
+type = "post"
++++
+
+<p>Cursor is a fantastic tool for developing with AI, but it’s also a wonderful tool for interacting with any folder of files with AI. I use it to search through and chat with a folder of 1000s of Markdown files (downloaded from my Notion bookmarks database). Cursor indexes the files with its vector index, can read the file contents, summarize multiple files, and link to the source files – it’s changed how I interact with my bookmarks.</p>
+<p>So when <a href="https://www.cursor.com/changelog/-cursor-rules-better-codebase-understanding-new-tab-model">Cursor added MCP support</a> – I was very excited. Instead of opening a Cursor window pointed at my bookmarks folder, I could build my own MCP server that indexed the bookmarks, and provide tools so that local bookmark search was available in <em>all</em> of my Cursor windows. I’ve successfully nerd-sniped myself into the MCP abyss for the foreseeable weekends.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#just-gimme-the-code" id="just-gimme-the-code"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Just gimme the code</h2>
+<p><em>Ok ok!</em> Here’s my <a href="https://github.com/adamwulf/mcp-template">barebones MCP server in Swift</a> that uses <code><a href="https://github.com/loopwork-ai/mcp-swift-sdk">loopwork-ai/mcp-swift-sdk</a></code>.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#mcp-in-swift" id="mcp-in-swift"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>MCP in Swift</h2>
+<p>It’s not hard to find <a href="https://github.com/modelcontextprotocol/servers">example MCP servers</a>, it’s a bit harder to <a href="https://youtu.be/oAoigBWLZgE?si=fFSeHOgqh6CIsm0w&amp;t=299">find MCP servers that work</a>, and it’s very hard to find <a href="https://github.com/loopwork-ai/iMCP">MCP servers written in Swift</a>. I found two SDKs on Github that look promising, the first one I found is <a href="https://github.com/gsabran/mcp-swift-sdk">https://github.com/gsabran/mcp-swift-sdk</a>, and the second is the similarly-named-but-different <a href="https://github.com/loopwork-ai/mcp-swift-sdk">https://github.com/loopwork-ai/mcp-swift-sdk</a>. Both are under active development, so by the time you read this the ‘best’ one of these two may change, or even have more libraries available on Github.</p>
+<p>I started with <code>gsabran</code>‘s repo, and now I’m happier with <code>loopwork-ai</code>‘s repository. Maybe it’s because their repo is better, or maybe it’s because I understand things better now, who could say?</p>
+<p>A big benefit of <code>loopwork-ai</code>‘s repo – it also contains a fully functional Mac app that attaches to the MCP server. So how does that work? what is an “MCP server” anyway?</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#mcp-architecture" id="mcp-architecture"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>MCP Architecture</h2>
+<p>Servers need to accept input requests and provide responses somehow. MCP is based on <a href="https://www.jsonrpc.org/specification">JSON-RPC v2.0</a>, which makes the format of its input and output very clear. The <a href="https://spec.modelcontextprotocol.io/latest">MCP specification</a> gives clear definitions for the various MCP specific messages.</p>
+<p>When I hear the word “server,” I think of HTTP servers like Apache or Nginx running on port 80, or 443 for SSL, or 8080, or etc etc. However, the recommended and most common MCP server runs on <code>stdio</code> input and output streams. Huh?! It’s not how I typically think of a server. The specification does also define SSE – an MCP protocol on HTTP, though the spec says that that “Clients <strong>SHOULD</strong> support <code>stdio</code> whenever possible.”</p>
+<p>I suspect this is motivated as much by security and authentication as it is by simplicity. If clients spawn the MCP process locally and communication through <code>stdin</code> and <code>stdout</code>, there’s a much smaller surface area for bad actors. If I instead run a small HTTP server locally on my Mac – that’s a much bigger potential hole in my security, both by accidentally exposing the MCP outside my device, as well as any security holes in the HTTP server I use.</p>
+<p>At the end of the day, clients and servers are just trading JSON back and forth, so <a href="https://spec.modelcontextprotocol.io/specification/2024-11-05/basic/transports/#custom-transports">custom transports are entirely possible</a>.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#specification-summary" id="specification-summary"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Specification Summary</h2>
+<p>Very simply, MCP servers provide prompts, resources, and tools. Clients connect to servers and discover what’s provided, and then surface those to the LLM and/or user as they see fit. The easiest way to think of an MCP server is a bag of functions – servers list the functions (tools) to the client, and the client calls those functions with some input.</p>
+<p>Importantly, the MCP server does not see the context of the chat with the LLM – it only gets the parameters sent for a specific tool invocation. Clients are encouraged to verify with the user before calling a tool, so this means minimal context is sent to an MCP server, and all tools calls ideally go through human approval to mitigate the risk of leaking sensitive data.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#authentication" id="authentication"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Authentication</h2>
+<p>The MCP specification does not specify authentication, just like HTTP. Any authorization that you want to enforce for a client/server session you must handle yourself. For <a href="https://spec.modelcontextprotocol.io/specification/2024-11-05/basic/transports/#stdio"><code>stdio</code> servers</a>, you can track state in your running server without issue, as its only ever connected to a single client. Since it’s using input/output streams, there’s generally no authentication for stdio connections which is much easier.</p>
+<p>For <code>SSE</code> servers, you’ll need to handle authentication yourself, potentially with HTTP headers or something similar, potentially with a <code>Bearer</code> token header using OAuth, etc.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#sse-transport" id="sse-transport"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>SSE Transport</h2>
+<p>A quick primer on the <a href="https://spec.modelcontextprotocol.io/specification/2024-11-05/basic/transports/#http-with-sse">SSE protocol</a> – while the stdio transport allows only a single client to connect to the single server, an SSE enabled MCP server can potentially serve multiple clients. It does this by exposing a single GET endpoint. When a new connection is made, the server immediately sends a POST endpoint for that client to send requests to. Since all clients are using the same GET request, the server is responsible for separating out which requests belong to which GET connection. One strategy would be to use a separate POST endpoint per connection.</p>
+<p>This <a href="https://github.com/modelcontextprotocol/specification/discussions/102">discussion in the modelcontextprotocol/specification Github</a> is a deep dive on the tradeoffs of stateful and stateless servers and possible future changes to allow for traditional stateless HTTP architecture, or using connections like WebSockets instead of long-lived GET.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#debugging-tools" id="debugging-tools"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Debugging Tools</h2>
+<p>The MCP documentation lists an <a href="https://modelcontextprotocol.io/docs/tools/debugging">number of helpful debugging tools</a>.</p>
+<ol class="wp-block-list">
+<li><strong><a href="https://github.com/modelcontextprotocol/inspector">MCP Inspector</a></strong>: This is a small server that runs on your machine and can launch and connect to MCP servers. I strongly suggest getting your tool working with this inspector before moving on to Claude or Cursor integration.</li>
+<li><strong><a href="https://modelcontextprotocol.io/quickstart/user">Claude Desktop Developer Tools</a></strong>: Claude itself can be helpful for debugging your server as you develop. Add your server into <code>claude_desktop_config.json</code> and restart Claude. Then <code>tail</code> logs at <code><br/>tail -f /Users/{username}/Library/Logs/Claude/mcp-server-{yourservername}.log</code></li>
+<li><strong>Server logs</strong>: I use Swift Logging for my server, as does the <code>loopwork-ai/mcp-swift-sdk</code>, which makes seeing logs in Xcode’s console very simple. The MCP specification uses <code>stdin</code> and <code>stdout</code>, so anything you send to <code>stderr</code> will generally show up in the client’s logs somewhere.</li>
+<li><strong>Xcode</strong>: After launching the client (which then spawns the server), I connect the debugger to it and can then use all of the normal tools in Xcode: breakpoints, logging, etc. I also use the built executables path (Xcode → Product → Show Build Folder) as the server in Claude/Cursor so that I can rebuild in Xcode → relaunch Claude and see the new version.</li>
+</ol>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#mcp-tools-walkthrough" id="mcp-tools-walkthrough"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>MCP Tools Walkthrough</h2>
+<p>When the server initializes, it tells the connecting client what capabilities it has, and for the <code>tool</code> capability there’s an option to notify when those tools change:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="json" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">{
+  "capabilities": {
+    "tools": {
+      "listChanged": true
+    }
+  }
+}</pre>
+<p>Once the client hears the capabilities, it requests the tool list from the server. From what I’ve seen, clients are not very well behaved, and will ask for tools, prompts, and resources regardless of the capabilities described by the server. The specification for requesting the tool list is a request from the client:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="json" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/list",
+  "params": {
+    "cursor": "optional-cursor-value"
+  }
+}</pre>
+<p>The server would reply with its list of tools according to the specification. This example shows a <code>helloPerson</code> tool that accepts a name:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="json" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "tools": [
+      {
+        "name": "helloPerson",
+        "description": "Returns a friendly greeting message",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": [
+              "type": "string",
+              "description": "Name of the person to say hello to",
+            ]
+          },
+          "required": ["name"]
+        }
+      }
+    ],
+    "nextCursor": "next-page-cursor"
+  }
+}</pre>
+<p>At this point, the client has all of the information it needs to start calling the function:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="json" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/call",
+  "params": {
+    "name": "helloPerson",
+    "arguments": {
+      "name": "Adam"
+    }
+  }
+}</pre>
+<p>And the server can send its response to <code>stdout</code>. Note that the response contains the <code>id</code> of the request that it is responding to. This allows multiple requests to be in-flight, and the client can match responses with the corresponding request:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="json" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Hello, Adam!"
+      }
+    ],
+    "isError": false
+  }
+}</pre>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#gotchas" id="gotchas"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Gotchas</h2>
+<h2 class="wp-block-heading has-medium-font-size"><a aria-hidden="true" class="aal_anchor" href="#stdio-format" id="stdio-format"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>stdio Format</h2>
+<p>Note that all of the JSON examples in this post and in the documentation are formatted for humans, but aren’t verbatim allowed responses. <a href="https://spec.modelcontextprotocol.io/specification/2024-11-05/basic/transports/#stdio">All server responses</a> must <em>not</em> contain any newlines, and <em>must</em> be separated by a single newline.</p>
+<p><code>stdin</code> is reserved for input RPC requests, and <code>stdout</code> is reserved for RPC responses. Nothing else can be sent on those streams – any other logging must be sent on <code>stderr</code>. Those <code>print()</code> statements you use when debugging? Gotta find another way! I’ve been using <a href="https://github.com/apple/swift-log">Swift Logging</a> instead.</p>
+<h2 class="wp-block-heading has-medium-font-size"><a aria-hidden="true" class="aal_anchor" href="#tools-changed-notification" id="tools-changed-notification"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Tools Changed Notification</h2>
+<p>The MCP specification allows for servers to notify clients when the list of tools updates. When the client hears this notification, it should send a new <code>list/tools</code> request to get the new list of available tools.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="json" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">{
+  "jsonrpc": "2.0",
+  "method": "notifications/tools/list_changed"
+}</pre>
+<p>Once I had a barebones MCP server working with Claude, I spent quite a bit of time trying to diagnose why it wasn’t responding to my updated tools notification. Welp, it turns out <a href="https://github.com/orgs/modelcontextprotocol/discussions/76">Claude doesn’t support updating tools</a> yet, and it appears Cursor doesn’t either.</p>
+<p>Making it more confusing, the <a href="https://github.com/modelcontextprotocol/inspector">modelcontextprotocol/inspector</a> does not show <code>tools/list_changed</code> notifications either. After some digging, I found that <a href="https://github.com/modelcontextprotocol/inspector/blob/main/client/src/lib/hooks/useConnection.ts#L252-L266">only a few notification types will appear</a> in the UI. So when you work on your MCP and can’t seem to get this notification to work – don’t worry, it’s [possibly] not you. It seems we’re so early in MCP ecosystem that tool list updates just aren’t widely support yet. The workaround? Restart your client 😬.</p>
+<h2 class="wp-block-heading has-medium-font-size"><a aria-hidden="true" class="aal_anchor" href="#list-tools" id="list-tools"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>List Tools</h2>
+<p>Tools are the meat and potatoes of MCP servers. The client requests available tools from the server with the <code>tools/list</code> method request, which accepts a single optional cursor parameter. When implementing <code>Codable</code> in Swift, be careful when decoding optional parameters. When I began using <code>loopwork-ai</code>‘s repository, there was a subtle decoding issue, and to show the issue, take a look at possible request JSON’s from a client:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="json" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">// Specification for the List Tools requests to the server
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/list",
+  "params": {
+    "cursor": "optional-cursor-value"
+  }
+}</pre>
+<p>Note that the cursor parameter is optional, so which of the following is a valid request? All of them? Probably? The right answer is “whatever the client that you need to integrate with sends you…”</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="json" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/list",
+  "params": {
+    "cursor": null
+  }
+}
+
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/list",
+  "params": {}
+}
+
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/list",
+  "params": null
+}
+
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/list"
+}</pre>
+<p>When I started working with <code>loopwork-ai</code>‘s sdk, the decoding was a bit too strict and failed to decode this message correctly. I’ve <a href="https://github.com/loopwork-ai/mcp-swift-sdk/pull/13">submitted a PR for the fix</a> to make it more lenient, and have a <a href="https://github.com/adamwulf/mcp-swift-sdk/tree/feature/wait-until-complete">branch on my <code>mcp-swift-sdk</code> fork</a> that I use for my development with a few other niceties.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#follow-along" id="follow-along"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Follow Along</h2>
+<p>I’m working on a barebones template for building MCP servers in Swift on the Mac. I’ve started a repository at <code><a href="https://github.com/adamwulf/mcp-template">adamwulf/mcp-template</a></code> which uses <code>loopwork-ai</code>‘s SDK. My goal is to provide a simple <code>EasyMCP</code> server that manages the MCP server lifecyle, provides easy tool registration, and provides an App Store safe way to ship an MCP command line tool that connects to a Mac app for its functionality.</p>
+<p>So far, I have a simple wrapper around the <code>loopwork-ai</code> SDK that handles the MCP <code>stdio</code> transport setup and provides a simple tool registration method:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">        // Build the MCP server with logging
+        let logger = Logger(label: "com.milestonemade.easymcp")
+        let mcp = EasyMCP(logger: logger)
+
+        // Register a simple tool that accepts a single parameter.
+        // The name, description, and inputSchema will be sent to
+        // the client so that the LLM knows what the tool does.
+        try await mcp.register(tool: Tool(
+            name: "helloPerson",
+            description: "Returns a friendly greeting message",
+            inputSchema: [
+                "type": "object",
+                "properties": [
+                    "name": [
+                        "type": "string",
+                        "description": "Name of the person to say hello to",
+                    ]
+                ],
+                "required": ["name"]
+            ]
+        )) { input in
+            // It's an async closure, so you can await whatever you need to for long running tasks
+            await someOtherAsyncStuffIfYouWant()
+            // Return your result and flag if it is/not an error
+            return Result(content: [.text(hello(input["name"]?.stringValue ?? "world"))], isError: false)
+        }
+
+        try await mcp.start()
+        try await mcp.waitUntilComplete()</pre>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#its-alive" id="its-alive"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>It’s Alive!</h2>
+<p>After two weekends of fiddling, I have the <code>mcpexample</code> command line server in <code><a href="https://github.com/adamwulf/mcp-template">mcp-template</a></code> working in Claude and Cursor! 🎉</p>
+<figure class="wp-block-video"><video controls="" src="/wp-content/uploads/2025/03/CleanShot-2025-03-15-at-01.52.57.mp4"></video></figure>

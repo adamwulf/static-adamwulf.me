@@ -1,0 +1,111 @@
++++
+title = "Type-safe notifications in Swift"
+date = "2022-02-13T08:19:43+0000"
+slug = "type-safe-notifications-in-swift"
+tags = ["Notifications", "Swift", "Type Safe"]
+type = "post"
++++
+
+<p>I’ve been coding exclusively in Swift for the past 2 years, and I’ve really been enjoying it. So much of my career has been in type-ambiguous languages – Javascript, PHP, or Objective-C. There’s some typing there, but the compiler doesn’t enforce too much. Swift, on the other hand, has brought me back to my Rice days, where so much of the education in Java and Scheme was built on functional programming and strong typing.</p>
+<p>The number one lesson I took away from that time is that casting to types breaks the contract that strong types have with the compiler. In Swift, I can write:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">let foo = bar as? SomeType</pre>
+<p>If <code>bar</code> is a <code>SomeType</code>, then it will be assigned to <code>foo</code>, but otherwise <code>nil</code> will be set. This is often used to short circuit certain code paths that require certain types, like the following:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">guard let foo = bar as? SomeType else { return }</pre>
+<p>What this line does is enforce that <code>bar</code> is a <code>SomeType</code> and is assigned to <code>foo</code>, and otherwise will return from the function. So we know that <code>foo</code> can never be <code>nil</code> after this line.</p>
+<p>This happen quite a bit when implementing <code>Notifications</code> in Swift, a feature largely unchanged from <code>Objective-C</code>. In that world, a notification can be broadcast throughout the app with a <code>String</code> name, and an arbitrary <code>[String: Any]</code> dictionary of additional information, called the notification’s <code>userInfo</code>. </p>
+<p>Posting a notification in Swift looks like:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">let myKey: Int = 10
+let otherStuff: CGFloat = 20
+
+NotificationCenter.default.post(name: .MyNotificationName, userInfo: ["someItem": myKey, "otherThing": otherStuff)</pre>
+<p>The above code sends a notification with the <code>MyNotificationName</code> along with a dictionary of two values. Observing a notification in Swift generally follows this boilerplate:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">NotificationCenter.default.addObserver(self, selector: #selector(didNotify), name: .MyNotificationName object: nil)
+
+...
+
+
+@objc func didNotify(_ notification: Notification) {
+    guard
+        let myKey = notification.userInfo?["someItem"] as? Int,
+        let otherStuff = notification.userInfo?["otherThing"] as? CGFloat
+    else {
+        // The notification with the name `MyNotificationName` was sent, but I wasn't able to get the information out of the dictionary...?
+        return
+    }
+    ...
+    // do stuff with myKey and otherStuff
+}</pre>
+<p>The above shows the problem sending notification information through a weakly typed dictionary and relying on casting to pull it out. It’s not uncommon to send the same type of notification from multiple places in the same app, and as the program grows, some parameters of a notification may change or get added. It’s easy for the key names used to encode the information in a dictionary to have typos unless you use constants, and even then the wrong type of variable may inadvertently get sent – maybe a <code>Float</code> instead of <code>CGFloat</code> – and then the observer on the other end fails silently.</p>
+<p>So there’s a few problems with this method:</p>
+<ul class="wp-block-list"><li>There’s no compiler support to help me catch when I make a mistake or a typo in a key name</li><li>There’s nothing to stop me sending the wrong type of variable which will also fail to decode</li><li>The observer silently fails at runtime, instead of loudly failing at compile-time</li></ul>
+<p>To help send strongly typed information along with a notification, I’ve added the following extension and <code>Enum</code> to my projects:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">extension NotificationCenter {
+    func post(name: NSNotification.Name, object: Any? = nil, info: UserInfo) {
+        post(name: name, object: object, userInfo: [Notification.InfoKey: info])
+    }
+}
+
+extension Notification {
+    fileprivate static let InfoKey = "InfoKey"
+
+    var info: UserInfo? {
+        return userInfo?[Self.InfoKey] as? UserInfo
+    }
+}
+
+enum UserInfo {
+    case example(_ some: Int, other: CGFloat)
+    case bumble(_ stuff: CGFloat, identifier: String)
+    case foo(_ bar: Float, baz: Double)
+}
+
+...
+
+// And now, sending the notification above looks like:
+NotificationCenter.default.post(name: .MyNotificationName, info: .example(myKey, otherStuff))</pre>
+<p>This lets me define packages of information that can be sent along with a notification and then decoded in a type-safe way on the observer’s side. There’s only a limited number of possible options that I can send, and these will be compile-time checked for correctness and type-safety, and since I’m sending a <code>UserInfo</code> enum, the compiler forces me to choose one of those three options and will raise an error if any of its parameters are of the wrong type.</p>
+<p>On the receiving end, I do the following to decode them in a type-safe way:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">@objc func didNotify(_ notification: Notification) {
+    guard
+        case .some(.example(let someItem, let otherThing)) = notification.info
+    else {
+        assertionFailure("could not decode \(notification.info)")
+        return
+    }
+
+    // someItem and otherThing are strongly typed all the way through, enforced by the compiler
+}
+</pre>
+<p>Adding an <code>assert</code> on the receiving end helps protect against sending the wrong/no enum at all with a notification. I’m really happy with this solution. It doesn’t involve much extra code to get working, and adding a new <code>UserInfo</code> enum case is extremely easy as new parameters are needed.</p>
+<p>A similar idea has been pursued by <a href="https://twitter.com/mergesort">Joe Fabisevich</a> with his <a href="https://github.com/mergesort/TypedNotifications">TypedNotifications library</a>. In that version, each notification is its own type, and an <code>associatedType</code> defines the <code>userInfo</code> that is attached. This lets both the notification name and its user info be married into a single type, which makes it impossible to send a mismatched userInfo with any particular notification name, very cleverly done.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">// define the notification and payload in the same place
+
+struct TypedPersonNotification: TypedPayloadNotification {
+    let payload: Person
+}
+
+...
+
+// send the notification
+
+let amanda = Person(name: "Amanda", job: .softwareDeveloper)
+let amandaNotification = TypedPersonNotification(payload: amanda)
+NotificationCenter.default.post(typedNotification: amandaNotification)
+
+...
+
+// and observe the notification
+
+NotificationCenter.default.register(type: TypedPersonNotification.self, observer: self, selector: #selector(personNotificationWasReceived))
+
+@objc func personNotificationWasReceived(notification: Notification) {
+    guard
+        let person = notification.getPayload(notificationType: TypedPersonNotification.self)
+    else {
+        assertionFailure("could not decode \(notification.name)")
+        return
+    }
+    ...
+    // continue processing
+}</pre>
+<p>I really like that the notification name and its payload are linked through the type, which adds that additional compiler check that my enum solution doesn’t have. I think the only missing piece for both our options is matching the type of the observing function. If there was a way to enforce the <code>#selector()</code> matched the notification type when adding the observer, I think that would be the holy grail.</p>

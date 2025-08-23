@@ -1,0 +1,32 @@
++++
+title = "Columnizer 1.0.1 Update"
+date = "2008-07-24T21:10:12+0000"
+slug = "columnizer-101-update"
+type = "post"
++++
+
+<p>Small update to Columnizer and sample files:</p>
+<ol class="wp-block-list">
+<li>Ability to set column pixel width or static number of columns</li>
+<li>Column contents are constantly regenerated during resize instead of only during adding or removing a column</li>
+<li>Inline CSS for columns no longer includes padding</li>
+</ol>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#the-plugin" id="the-plugin"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>The Plugin</h4>
+<p>Check out the <a href="/columnizer-jquery-plugin/">Columnizer Project Page</a> for download links and the latest news.</p>
+<p>Check out the <a href="/autocolumn/sample.html">first</a>and <a href="/autocolumn/sample2.html">second</a> sample pages to see a fluid newspaper layout in action. <em>Resize your browser window to see columns be automatically added based on available space. 😀</em> The new <a href="/autocolumn/sample3.html">third sample page</a> shows forced static number of columns instead of dynamic columns. The Columnizer Plugin can handly any html div, and can layout text, images, links, and nested tags into multiple columns on the fly.</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#the-code" id="the-code"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>The Code</h4>
+<p>The default setting lets you specify a column width, and Columnizer will auto add/remove columns of roughly that width to fill the browser window.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="js" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">$(function(){
+$('.wide').columnize({width:400});
+$('.thin').columnize({width:200});
+});</pre>
+<p>Or – you can specify a static number of columns for your content:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="generic" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">$(function(){
+$('.wide').columnize({columns:2});
+$('.thin').columnize({columns:4});
+});</pre>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#styling-your-columns" id="styling-your-columns"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Styling your columns</h4>
+<p>When Columnizer generates columns, it gives each column a “column” CSS class. The first column also gets a “first” class, and the last column gets a “last” class. The 1.0.1 update no longer includes inline padding, so you can specify whatever your preference in your own stylesheet. To style your columns, just use:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="js" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">.first .column { }
+.last .column { }
+.column { padding: 3px; }</pre>

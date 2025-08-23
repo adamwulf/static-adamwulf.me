@@ -1,0 +1,46 @@
+{{ define "main" }}
+<div class="row row--index">
+  <div class="col-xs-12">
+    <div id="primary" class="content-area">
+      <main id="main" class="site-main" role="main">
+        {{ if eq .Type "post" }}
+        <article id="post-{{ .File.UniqueID }}" class="post-{{ .File.UniqueID }} post type-post status-publish format-standard hentry">
+          <div class="row no-pad">
+            <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 no-pad">
+              <header class="entry-header">
+                <h1 class="entry-title">{{ .Title }}</h1>
+                <div class="entry-meta">
+                  <span class="posted-on">
+                    <time class="entry-date published" datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+                      {{ .Date.Format "January 2, 2006" }}
+                    </time>
+                  </span>
+                </div><!-- .entry-meta -->
+              </header><!-- .entry-header -->
+              <div class="entry-content">
+                {{ .Content | safeHTML }}
+              </div><!-- .entry-content -->
+              <footer class="entry-footer"></footer><!-- .entry-footer -->
+            </div>
+          </div><!-- end .row-->
+        </article><!-- #post-## -->
+        {{ else }}
+        {{/* Page layout */}}
+        <article class="page type-page status-publish hentry">
+          <div class="row no-pad">
+            <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 no-pad">
+              <header class="entry-header">
+                <h1 class="entry-title">{{ .Title }}</h1>
+              </header><!-- .entry-header -->
+              <div class="entry-content">
+                {{ .Content | safeHTML }}
+              </div><!-- .entry-content -->
+            </div>
+          </div><!-- end .row-->
+        </article><!-- #page -->
+        {{ end }}
+      </main><!-- #main -->
+    </div><!-- #primary -->
+  </div>
+</div>
+{{ end }}

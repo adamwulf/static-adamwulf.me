@@ -1,0 +1,30 @@
++++
+title = "Building a Proper MVC Pattern for the web"
+date = "2008-08-05T23:38:06+0000"
+slug = "mvc-pattern-for-the-web"
+type = "post"
++++
+
+<div class="related">
+Related to: <a href="/tutorials/model-view-controller-in-jquery/">Model-View-Controller in JQuery</a>
+</div>
+<p>Search Google for “web application MVC patterns” or any variant thereof, and the vast majority of results will talk about the server side MVC. This traditional answer will tell you the browser sits outside the MVC altogether, and sends in HTTP requests that are handled by the Controller, then all the MVC garble happens, and finally the View spits out a brand new HTML page (or XML/JSON for AJAX) for the browser to consume. All this ends up looking something like:</p>
+<p><a href="/wp-content/uploads/2008/08/oldschool.png"><img alt="" class="alignnone size-medium wp-image-450" decoding="async" fetchpriority="high" height="300" sizes="(max-width: 259px) 100vw, 259px" src="/wp-content/uploads/2008/08/oldschool-259x300.png" srcset="/wp-content/uploads/2008/08/oldschool-259x300.png 259w, /wp-content/uploads/2008/08/oldschool.png 350w" title="Old School MVC" width="259"/></a></p>
+<p>“So what’s the problem with this model?” you ask? The JavaScript layer of course 😉 . All of the code that runs in the browser doesn’t fit anywhere inside the classic MVC architecture. What ends up happening is usually one of two things:</p>
+<ol>
+<li>All of the JavaScript in an app is completely unmanaged, and it ends up looking like spaghetti, or</li>
+<li>The server side View tries to manage and encompass everything that happens in the browser – including JS – and the code still looks like spaghetti</li>
+</ol>
+<p>The “honest” version of the above diagram should really look more like this:<br/>
+<a href="/wp-content/uploads/2008/08/javascript_mvc_1-2.png"><img alt="" class="alignnone size-medium wp-image-492" decoding="async" height="218" sizes="(max-width: 300px) 100vw, 300px" src="/wp-content/uploads/2008/08/javascript_mvc_1-2-300x218.png" srcset="/wp-content/uploads/2008/08/javascript_mvc_1-2-300x218.png 300w, /wp-content/uploads/2008/08/javascript_mvc_1-2.png 382w" title="javascript_mvc_1-2" width="300"/></a></p>
+<p>Clearly this isn’t any way to design an app. JavaScript and AJAX have become increasingly important in an application’s user interface, and many web apps entirely depend on it. There has to be a better way to organize the JavaScript in your app to be more efficient, testable, and most importantly – <em>manageable</em>.</p>
+<p>What’s needed is to rethink web application architecture. What’s needed is a new MVC pattern- er, <em>patterns</em>.</p>
+<p>The solution is to not only build an MVC on your server, but also a second MVC in JavaScript. Stop thinking of your web app as <em>a</em> web app. Instead – think of it as <em>two</em>: one in the browser and one on your server.</p>
+<p><a href="/wp-content/uploads/2008/08/new-school-mvc.png"><img alt="" class="alignnone size-medium wp-image-452" decoding="async" height="300" sizes="(max-width: 259px) 100vw, 259px" src="/wp-content/uploads/2008/08/new-school-mvc-259x300.png" srcset="/wp-content/uploads/2008/08/new-school-mvc-259x300.png 259w, /wp-content/uploads/2008/08/new-school-mvc.png 350w" title="New School MVC" width="259"/></a></p>
+<p>This architecture lets you isolate JavaScript code that’s inherent to AJAX and your data, letting you build a bridge between your JavaScript UI and your server. What’s more, it does it in an organized and manageable way.</p>
+<p>Now all of your JavaScript UI code doesn’t need to be re-hacked every time you make a slight change to your AJAX responses, and all of your AJAX code doesn’t have to care about what div is updating or what widget is changing which other widget. Data code manages data, view code manages view, and a controller to tie it all together.</p>
+<p>To demonstrate how easy it is to set up a client-side MVC, I’ve released my <a href="/tutorials/model-view-controller-in-jquery/">first JavaScript tutorial</a> that walks through exactly this: creating an MVC in JavaScript using JQuery. I’ve also set up a <a href="/tutorials/">tutorials section</a> on the site (this being the only tutorial so far :P) and hope to expand over the coming weeks and months.</p>
+<p>Also be sure to check out <a href="http://www.listotron.com/">Listotron.com</a>, a project <a href="http://www.keepthewebweird.com/">Buck</a> and I are starting that will be using exactly this architecture.</p>
+<div class="footnote">
+First image courtesy of <a href="http://glyphobet.net/blog/essay/153">Matt Chisholm</a> – sort of – I modified it a bit. The other diagram is a photochop of it as well. <a href="http://www.gliffy.com/">Gliffy</a> made the boxy image.
+</div>

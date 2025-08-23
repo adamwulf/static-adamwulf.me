@@ -1,0 +1,113 @@
++++
+title = "Translating an iOS/Mac app with AI and humans"
+date = "2024-12-15T22:55:08+0000"
+slug = "translating-an-ios-mac-app-with-ai-and-humans"
+type = "post"
++++
+
+<p>I’ve long wanted to get Muse translated into multiple languages – Muse has been English-only since launch. The problem isn’t so much the one time translation cost at the beginning, but having a strategy to translate for every single update going forward. Getting Muse into German isn’t a problem, keeping Muse in German is the problem.</p>
+<p>Unlike just a few years ago, we now live in a world with high quality AI translations! As good as these AIs are, they’re still not human, and they’ll still miss important context about how these translations are used and viewed in the app, so having a human in the loop is still incredibly important. However – they do reduce the human-time cost of adding and maintaining multiple languages.</p>
+<p>I’ve recently shipped a French translation for Muse, and I have German and Spanish cooking and expect those to release in the next week or two. Thats three languages in less than a month of time, and better yet, less than a few days of my coding time. Here’s how I’m able to translate Muse with minimal coder time and minimal volunteer time.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#step-1-prep-the-codebase-for-localization" id="step-1-prep-the-codebase-for-localization"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Step 1: Prep the codebase for localization</h2>
+<p>SwiftUI provides much of localization for free with its <code>Text</code> node, however all of Muse’s codebase is UIKit. Following <a href="https://developer.apple.com/documentation/xcode/localizing-and-varying-text-with-a-string-catalog">Apple’s localization documentation</a>, the first step is to add a Localizable.xcstrings String Catalog file into the project.</p>
+<div class="wp-block-image">
+<figure class="aligncenter size-large is-resized"><img alt="" class="wp-image-5885" decoding="async" fetchpriority="high" height="726" sizes="(max-width: 1024px) 100vw, 1024px" src="/wp-content/uploads/2024/12/localizable-strings-catalog-1024x726.png" srcset="/wp-content/uploads/2024/12/localizable-strings-catalog-1024x726.png 1024w, /wp-content/uploads/2024/12/localizable-strings-catalog-300x213.png 300w, /wp-content/uploads/2024/12/localizable-strings-catalog-768x544.png 768w, /wp-content/uploads/2024/12/localizable-strings-catalog.png 1462w" style="width:477px;height:auto" width="1024"/></figure></div>
+<p>When you build your project, Xcode will automatically update this strings catalog with all of the localized strings in your codebase. As long as you use <code>Text</code> from SwiftUI or <code>NSLocalizedString</code>, the string keys will appear automatically.</p>
+<p>Next, add the new language into the project’s settings:</p>
+<div class="wp-block-image">
+<figure class="aligncenter size-large"><img alt="" class="wp-image-5886" decoding="async" height="632" sizes="(max-width: 1024px) 100vw, 1024px" src="/wp-content/uploads/2024/12/add-language-1024x632.png" srcset="/wp-content/uploads/2024/12/add-language-1024x632.png 1024w, /wp-content/uploads/2024/12/add-language-300x185.png 300w, /wp-content/uploads/2024/12/add-language-768x474.png 768w, /wp-content/uploads/2024/12/add-language-1536x947.png 1536w, /wp-content/uploads/2024/12/add-language.png 1670w" width="1024"/></figure></div>
+<p>Now, you’ll see the new language appear in the string catalog that you’ve just added. Xcode shows a fancy editor for the strings file, but what happens if we open as source code instead? the <code>Localizable.xcstrings</code> file is really just a JSON file! And what tool is good with JSON? LLMs.</p>
+<div class="wp-block-image">
+<figure class="aligncenter size-large is-resized"><img alt="" class="wp-image-5889" decoding="async" height="578" sizes="(max-width: 1024px) 100vw, 1024px" src="/wp-content/uploads/2024/12/open-as-source-code-1-1024x578.png" srcset="/wp-content/uploads/2024/12/open-as-source-code-1-1024x578.png 1024w, /wp-content/uploads/2024/12/open-as-source-code-1-300x169.png 300w, /wp-content/uploads/2024/12/open-as-source-code-1-768x434.png 768w, /wp-content/uploads/2024/12/open-as-source-code-1.png 1202w" style="width:532px;height:auto" width="1024"/></figure></div>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#step-2-cursor-and-claude" id="step-2-cursor-and-claude"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Step 2: Cursor and Claude</h2>
+<p>Now that we have our application’s translations as a single JSON file, let’s use AI to automatically translate our app. Open the root folder of your project in Cursor, and open to the <code>Localizable.xcstrings</code> file.</p>
+<p>Next, use Command+L to open the Chat interface, and ask to add a new translation to the file. Here’s the prompt I used to translate Muse into German:</p>
+<pre class="wp-block-code"><code>Here are the key guidelines for German localization of Muse:
+
+Canonical translation:
+- English is the original translation and should be the primary reference
+
+Brand &amp; Common App-Specific Terms:
+- "Muse" (never translate)
+- "Board(s)" (keep English term)
+- "Card(s)" (keep English term)
+- "Workspace(s)" (keep English term)
+- "Backstage Pass" (keep English)
+- File types like "PDF", "URL"
+- Technical terms like "debug", "database", "sync", "cache" (only if commonly kept in English when used in German)
+
+Formality &amp; Tone:
+- Use informal "du" form rather than formal "Sie"
+- Friendly but professional tone
+- Direct address to user
+- Keep technical explanations simple and clear
+
+Gender &amp; Inclusivity:
+- Use gender-inclusive forms with -In suffix where applicable (e.g., "BenutzerIn", "MitarbeiterIn")
+- When possible, use gender-neutral terms
+
+Capitalization &amp; Grammar:
+- Capitalize nouns per German rules
+- Compound words with English terms maintain English spelling (e.g., "Workspace-Karten")
+- Maintain English terms in their original form when part of compound words
+- Use German quotation marks („") for quotes
+
+UI Elements:
+- Button text should be concise
+- Menu items use infinitive form
+- Error messages should be clear and direct
+- Maintain consistent terminology throughout
+
+Special Considerations:
+- Preserve emoji and formatting tags (e.g., &lt;highlight&gt;, &lt;small&gt;)
+- Maintain placeholder syntax (e.g., %@, %d)
+- Keep technical command references (e.g., ⌘, ⇧) unchanged
+- Preserve HTML tags and links exactly as in source
+
+Length:
+- German translations tend to be longer than English
+- Keep UI elements as concise as possible while maintaining clarity
+- Consider space constraints in buttons and menus
+
+
+If you see a string that does not match the guidelines, please generate a replacement JSON that can be applied to the file to replace it with a corrected version. explain the change.</code></pre>
+<p>That’s quite a prompt! My goal is for the prompt to give the LLM enough context to know how to translate my app with the correct tone and localization decisions. Each language has its own nuance: gender, plurals, formality, etc. Explain to the LLM how you want your app to be translated for the given language.</p>
+<p>For extremely long <code>xcstrings</code> files, I will select the range of keys that I want translated, use Command+Shift+L to add that snippet to the chat context, and ask to translate only that portion. Then I’ll copy/paste into Cursor to replace the selection. Why not use Apply? For extremely long files, Apply can both take too long and use too many tokens for the model’s limited output size.</p>
+<figure class="wp-block-video"><video controls="" src="/wp-content/uploads/2024/12/translate-ai-cursor.mp4"></video></figure>
+<p>For all of Muse’s translations, I used Claude Sonnet 3.5.</p>
+<p>After updating the xcstrings file, save it in Cursor and open it in Xcode to verify that the JSON is still in the valid format. Save again in Xcode, as Xcode will format it with alphabetical language keys, whitespace, etc. Commit to your repo and off you go!</p>
+<p>For Muse, a codebase with ~700 localized keys, it takes me ~2 hours to translate all of them with AI. I could probably optimize my flow to take less than an hour, but that’s only 10-15 hours total for 5 languages!</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#step-3-upload-to-poeditor" id="step-3-upload-to-poeditor"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Step 3: Upload to POEditor</h2>
+<p>At this point, we have a fairly accurate translation from an AI – but we don’t know how accurate it actually is. In my first pass at German, I didn’t know about its gender or formality, so after a volunteer looked it over and gave their first feedback, I re-ran the AI with a better prompt to get a more accurate translation. Now the volunteers have fewer strings to manually edit.</p>
+<p>But how do we get these strings to our volunteers or translation team? I use <a href="https://poeditor.com/">POEditor</a> to coordinate with volunteers on Muse’s translations.</p>
+<p>To get the translations from Xcode into POEditor, use the Export Localizations item in the Product menu.</p>
+<div class="wp-block-image">
+<figure class="aligncenter size-full is-resized"><img alt="" class="wp-image-5876" decoding="async" height="252" loading="lazy" sizes="auto, (max-width: 624px) 100vw, 624px" src="/wp-content/uploads/2024/11/product-menu.png" srcset="/wp-content/uploads/2024/11/product-menu.png 624w, /wp-content/uploads/2024/11/product-menu-300x121.png 300w" style="width:345px;height:auto" width="624"/></figure></div>
+<p>This will export a folder at the location you choose with 1 bundle file per language that your app supports. POEditor doesn’t handle <code>xcloc</code> bundle files, but it does handle <code>xliff</code> files. To get to your <code>xliff</code> file, right click the bundle and choose Show Package Contents, and find the <code>xliff</code> file in the Localized Contents subfolder.</p>
+<figure class="wp-block-gallery has-nested-images columns-default is-cropped wp-block-gallery-1 is-layout-flex wp-block-gallery-is-layout-flex">
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-5877" data-id="5877" decoding="async" height="398" loading="lazy" sizes="auto, (max-width: 832px) 100vw, 832px" src="/wp-content/uploads/2024/12/show-package-contents.png" srcset="/wp-content/uploads/2024/12/show-package-contents.png 832w, /wp-content/uploads/2024/12/show-package-contents-300x144.png 300w, /wp-content/uploads/2024/12/show-package-contents-768x367.png 768w" width="832"/></figure>
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-5878" data-id="5878" decoding="async" height="400" loading="lazy" sizes="auto, (max-width: 706px) 100vw, 706px" src="/wp-content/uploads/2024/12/language-xliff.png" srcset="/wp-content/uploads/2024/12/language-xliff.png 706w, /wp-content/uploads/2024/12/language-xliff-300x170.png 300w" width="706"/></figure>
+</figure>
+<p>Upload this <code>xliff</code> file to the same language in POEditor. Note: There’s two different places to upload in POEditor, there’s an import link at the project level, and another import link in the specific language – you want the import link in the language.</p>
+<div class="wp-block-image">
+<figure class="aligncenter size-large is-resized"><img alt="" class="wp-image-5879" decoding="async" height="895" loading="lazy" sizes="auto, (max-width: 1024px) 100vw, 1024px" src="/wp-content/uploads/2024/12/poe-import-1024x895.png" srcset="/wp-content/uploads/2024/12/poe-import-1024x895.png 1024w, /wp-content/uploads/2024/12/poe-import-300x262.png 300w, /wp-content/uploads/2024/12/poe-import-768x671.png 768w, /wp-content/uploads/2024/12/poe-import.png 1432w" style="width:400px;height:auto" width="1024"/></figure></div>
+<p>Choose to overwrite any existing translations in POEditor, save and upload, and enjoy all of your strings in POEditor!</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#step-4-review-translations" id="step-4-review-translations"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Step 4: Review translations</h2>
+<p>Next, add your contributors to POEditor for the language. These are the people who’ll be able to view and make changes to all of the translations.</p>
+<p>Once your volunteers or translation team has validated and corrected your translation, it’s time to get their work back into Xcode.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#step-5-export-from-poeditor" id="step-5-export-from-poeditor"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Step 5: Export from POEditor</h2>
+<p>In POEditor, navigate into the language and choose its Export link. In the export menu, choose the <code>xliff</code> file format, and export to overwrite the exact same file you uploaded to POEditor.</p>
+<div class="wp-block-image">
+<figure class="aligncenter size-large is-resized"><img alt="" class="wp-image-5880" decoding="async" height="896" loading="lazy" sizes="auto, (max-width: 1024px) 100vw, 1024px" src="/wp-content/uploads/2024/12/export-from-poe-1024x896.png" srcset="/wp-content/uploads/2024/12/export-from-poe-1024x896.png 1024w, /wp-content/uploads/2024/12/export-from-poe-300x263.png 300w, /wp-content/uploads/2024/12/export-from-poe-768x672.png 768w, /wp-content/uploads/2024/12/export-from-poe.png 1348w" style="width:445px;height:auto" width="1024"/></figure></div>
+<figure class="wp-block-image size-full is-resized"><img alt="" class="wp-image-5881" decoding="async" height="222" loading="lazy" sizes="auto, (max-width: 603px) 100vw, 603px" src="/wp-content/uploads/2024/12/xcode-import-localization.png" srcset="/wp-content/uploads/2024/12/xcode-import-localization.png 603w, /wp-content/uploads/2024/12/xcode-import-localization-300x110.png 300w" style="width:368px;height:auto" width="603"/></figure>
+<p>Then, from Xcode, choose Import Localizations from the Product menu and select the Localizations folder that it had exported before. Since you’ve just overwritten the language’s <code>xliff</code> file inside that same folder, Xcode will now read in and use all of those new translations.</p>
+<p>Congratulations! You’ve just translated your app into another language using AI, POEditor, and a small focused dose of human help.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#wrap-up" id="wrap-up"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Wrap up</h2>
+<p>This is a long post, but the core idea is simple:</p>
+<ul class="wp-block-list">
+<li>Use <code>xcstring</code> files in Xcode to get auto-updated translation keys, including <a href="https://developer.apple.com/documentation/xcode/localizing-strings-that-contain-plurals">localized plurals</a></li>
+<li>Use Cursor and AI to get a draft translation for your new language</li>
+<li>Upload to POEditor and validate with human helpers</li>
+<li>Download and import back into Xcode, and enjoy!</li>
+</ul>
+<p><a href="https://museapp.com/">Muse</a> is available today in English and French, and soon in German and Spanish as well.</p>

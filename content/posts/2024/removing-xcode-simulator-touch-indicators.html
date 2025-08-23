@@ -1,0 +1,33 @@
++++
+title = "Removing Xcode Simulator Touch Indicators"
+date = "2024-01-26T03:09:53+0000"
+slug = "removing-xcode-simulator-touch-indicators"
+type = "post"
++++
+
+<p>I’ve been working on creating new <a href="https://museapp.com/">Muse</a> onboarding and tutorial videos, and I’m using my <a href="https://github.com/adamwulf/HandShadows">HandShadows</a> Swift package to show the gestures visually during the video. Muse is a gesture heavy app, and showing plain dots for the finger locations doesn’t always make it clear what’s actually happening. These shadows make each gesture much more clear.</p>
+<figure class="wp-block-video"><video autoplay="" controls="" loop="" src="/wp-content/uploads/2024/01/to-move-between-boards-ipad.mp4"></video></figure>
+<p>To record these demos, I’m using <a href="https://www.telestream.net/screenflow/overview.htm">Screenflow</a>, a wonderfully simple screen recorder and video editor.</p>
+<p>For reasons beyond my understanding, I found that using Screenflow to record the simulator gave higher quality video than using the Simulator’s built in Record Screen functionality. Similarly, it’s better quality than recording the screen directly on the iPad as well.</p>
+<p>I’ll have to eventually solve the quality problem, as it’s not currently possible to perform two simultaneous gestures on the simulator. For those future demo videos that do use simultaneous gestures, I’ll need to record directly on the iPad, but until then the simulator works great.</p>
+<p>However! By default, the simulator shows two dots for the touch points of a two finger gesture. I’m using HandShadows precisely to <em>not</em> show touch points, so I needed a way to either edit these points out or turn them off entirely.</p>
+<p>Luckily, there is are a few hidden user defaults for the Simulator to toggle touch points. I found the first one through Aman Mittal’s <a href="https://amanhimself.dev/blog/show-touch-indicator-on-ios-simulator/">blog post</a> about turning <em>on</em> the touch point for single touch gestures. To do that, you can do the following:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="bash" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">defaults write com.apple.iphonesimulator ShowSingleTouches 1</pre>
+<p>This turns touch points on for a single finger, which is very useful if you’re using the simulator’s touch indicators for videos, but in my case I wanted to turn them all <em>off</em>.</p>
+<p>I asked colleagues if they knew any other hidden simulator defaults, and one suggested to run <code>strings</code> on the simulator executable and see what came up. So that’s just what I did:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="bash" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">strings /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/Contents/MacOS/Simulator | grep Show</pre>
+<p>And what appears? Hope!</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="generic" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">...
+ShowSingleTouches
+ShowPinches
+ShowPinchPivotPoint
+...</pre>
+<p>And sure enough, toggling the <code>ShowPinches</code> removes the two finger gesture touch points from the simulator!</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="generic" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">defaults write com.apple.iphonesimulator ShowPinches 0</pre>
+<p>And an interesting 3rd option too: <code>ShowPinchPivotPoint</code>. Let’s see what the simulator looks like with all of these turned on:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="generic" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">defaults write com.apple.iphonesimulator ShowSingleTouches 1
+defaults write com.apple.iphonesimulator ShowPinches 1
+defaults write com.apple.iphonesimulator ShowPinchPivotPoint 1</pre>
+<p>When toggling these settings from the command line, it seems that the Simulator app needs to be completely quit and restarted before they take effect.</p>
+<figure class="wp-block-video"><video autoplay="" controls="" loop="" src="/wp-content/uploads/2024/01/simulator-touch-points.mp4"></video></figure>
+<p>These settings are a very helpful new tool in the toolbox!</p>

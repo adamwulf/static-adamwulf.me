@@ -1,0 +1,58 @@
++++
+title = "PonyExpress: Type-safe notifications in Swift"
+date = "2022-11-26T04:28:47+0000"
+slug = "ponyexpress-type-safe-notifications-in-swift"
+type = "post"
++++
+
+<p>I’m very excited to be releasing my type-safe notification Swift package <a href="https://github.com/adamwulf/PonyExpress">PonyExpress</a>. I’m really enjoying the type-safety of Swift, and all of the compiler warnings and errors that it provides. Each compiler error from a type issue is a runtime crash that’s been saved.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#the-swift-package" id="the-swift-package"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>The Swift Package</h2>
+<p>By default, the provided <code>NotificationCenter</code> inherited from Objective-C let’s us send notifications in Swift as well. Unfortunately, it’s not type-safe in a number of ways. First, observers are registered with a <code>#selector</code> which may or may not have it’s input argument correctly typed – the compiler won’t complain. </p>
+<p>Second, notification objects are sent in an untyped <code>userInfo: [String: Any]?</code> property of the <code>Notification</code>. Any additional information sent along with the notification needs to be inspected. That <code>String</code> key isn’t compiler checked, and if that key changes, or if new keys are added or removed, there’s no compile-time checks to prevent bugs sneaking in.</p>
+<p>As a brief example, you can see below the code to register, send, and receive a notification using the untyped <code>NotificationCenter</code> apis provided by <code>Foundation</code> in Swift.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">// Register an observer, I hope the `documentUpdated()` method is typed correctly!
+let obj = MumbleBumble()
+NotificationCenter.default.addObserver(obj, selector: #selector(documentUpdated), name: .DocumentUpdated, object: nil)
+
+class MumbleBumble {
+    // Process incoming notifications
+    @objc func documentUpdated(notification: Notification) {
+        // I hope we're using the correct key name and Type!
+        guard let scopeId = notification.userInfo?["scopeId"] as? LogScope.Id else { return }
+        ...
+    }
+}
+
+// Send the notification, I hope the observers are looking for the correct key names!
+let scopeId: LogScope.Id = LogScope.Id()
+NotificationCenter.default.post(Notification(name: .DocumentUpdated, object: nil, userInfo: ["scopeId": scopeId]))</pre>
+<p>There’s lots of hoping in the above code, and not a lot of static compiler-time checks. This is the problem I’m aiming to solve (or at least make better) in <a href="https://github.com/adamwulf/PonyExpress">PonyExpress</a>.</p>
+<p>In PonyExpress, any object that implements the empty <code>Mail</code> protocol can be sent as a notification. Then, any recipient can request to be notified of a specific <code>Mail</code> type (and optionally a specific sender and type too).</p>
+<p>Rewriting the above in <code>PonyExpress</code>, we get:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">// Register an observer, with compiler-time checks that `documentUpdated` accepts a `Mail` subtype
+let obj = MumbleBumble()
+PostOffice.default.register(obj, MumbleBumble.documentUpdated)
+
+class MumbleBumble {
+    // Process incoming strongly typed `notification`
+    func documentUpdated(notification: DocumentUpdatedNotification) {
+        let scopeId: LogScope.Id = notification.scopeId
+        ...
+    }
+}
+
+// Any type can implement the empty `Mail` protocol to be able to be sent as a notification
+struct DocumentUpdatedNotification: Mail {
+    let scopeId: LogScope.Id
+}
+
+// Send the notification, no magic strings or key names required
+PostOffice.default.post(DocumentUpdatedNotification(scopeId: LogScope.Id()))
+</pre>
+<p>Renaming the DocumentUpdateNotification.<code>scopeId</code> to some other name is now compiler checked and verified, unlike changing the name of the <code>Notification.userInfo</code> key. Much safer!</p>
+<p>Initially, I’d wanted to be able to constraint the notification type both when registering for a notification, and also when creating a PostOffice to send other specific type besides <code>Mail</code>. Unfortunately, Swift can’t yet constraint a type based on another generic type – <a href="/2022/11/limits-of-generic-types-in-swift/">I’ve written my findings on the topic here</a>.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#the-documentation" id="the-documentation"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>The Documentation</h2>
+<p>This is also the first time I’ve used <code><a href="https://developer.apple.com/documentation/docc">DocC</a></code> to generate documentation for a Swift package. All of the comments in the PonyExpress codebase are used to autogenerate <a href="https://adamwulf.github.io/PonyExpress/documentation/ponyexpress/">documentation for the package</a>. The best part, the documentation is both published on GitHub and can also be imported directly into Xcode. Overall, I’m very happy with the result. There was a bit to learn about how GitHub expects the documentation files to be formatted vs the <code>.doccarchive</code> that Xcode expects.</p>
+<p>Thankfully, I was able to script the documentation build process in the included <code><a href="https://github.com/adamwulf/PonyExpress/blob/main/builddocs.sh">builddocs.sh</a></code> script. One fun bit was using <code>jq</code> to format the json files generated by docc. Without the auto-formatting, each run of the build script could reorder keys in the json dictionaries, leading to unnecessary source changes between commits.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#conclusion" id="conclusion"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Conclusion</h2>
+<p>I’m excited to be using <code><a href="https://github.com/adamwulf/PonyExpress">PonyExpress</a></code> in my future projects, and I hope others find it helpful as well! 🙌</p>

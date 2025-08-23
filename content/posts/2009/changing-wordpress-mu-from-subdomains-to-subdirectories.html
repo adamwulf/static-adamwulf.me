@@ -1,0 +1,52 @@
++++
+title = "Changing WordPress Mu from Subdomains to Subdirectories"
+date = "2009-05-06T20:33:06+0000"
+slug = "changing-wordpress-mu-from-subdomains-to-subdirectories"
+type = "post"
++++
+
+<div class="related">Related Post: <a href="/2008/10/04/how-to-migrate-from-wordpress-to-wordpress-mu/">How to migrate from WordPress to WordPress MU</a></div>
+<p>When you install <a href="http://mu.wordpress.org/">WordPress Mu</a>, it warns you:</p>
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<p>Please choose whether you would like blogs for the WordPress µ install to use sub-domains or sub-directories. <strong>You can not change this later.</strong> We recommend sub-domains.</p>
+</blockquote>
+<p>It’s true there’s no <em>documented</em> way to change this setting, and the current advice is <a href="http://mu.wordpress.org/forums/topic.php?id=11308">to reinstall</a> (!), but I aim to change that. Instead of reinstalling plugins, reconfiguring plugins, and then powering through <a href="/2008/10/04/how-to-migrate-from-wordpress-to-wordpress-mu/">the nightmare that is WordPress export-&gt;import</a>, I resolved to find whatever setting was buried in WordPress and do it manually. And lucky for me, it turned out to be surprisingly easy<em>.</em></p>
+<p>I’d originally set up adamwulf.me to use subdomains for my Mu installation, but I decided recently that subdirectories would make much more sense. After all, I’m using Mu to power my one site, and subdomains <em>feel</em> like lots of separate sites. In retrospect, installing Mu as subdomains was the wrong decision.</p>
+<p>So during some downtime in <a href="/2009/04/29/the-month-of-april/">the ‘ole ICU</a> last month, I decided to see if this weren’t, in fact, a solvable problem, and it turns out it’s a pretty easy fix.</p>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#step-1-backup-your-database-and-config-file" id="step-1-backup-your-database-and-config-file"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Step 1: Backup your database and config file</h3>
+<p>I’ve always subscribed to the “protect my data from my #1 enemy: me!” mentality.</p>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#step-2-change-each-blogs-url" id="step-2-change-each-blogs-url"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Step 2: change each blog’s URL</h3>
+<p>In the admin console, go to the blogs page.</p>
+<figure class="wp-block-image"><img alt="Blogs section" class="wp-image-1689" decoding="async" height="122" src="/files/2009/05/picture-31.png" title="Blogs section" width="156"/></figure>
+<p></p>
+<p>For each blog, click the edit link to edit that blog’s details. You’ll want to edit the following fields to all be consistent with the <em>new</em> location you want each blog:</p>
+<ul class="wp-block-list">
+<li>Domain</li>
+<li>Path</li>
+<li>Siteurl</li>
+<li>Home</li>
+<li>Fileupload Url</li>
+</ul>
+<p>For instance, I used to have one of my blogs set up at http://page2.adamwulf.me/ but I moved it to /notes/. To do that, I changed the Domain from “page2.adamwulf.me” to just “adamwulf.me” and the Siteurl from just “/” to “/notes/”. I similarly updated all of the other fields for that blog.</p>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#step-3-update-wp-config-php" id="step-3-update-wp-config-php"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Step 3: Update wp-config.php</h3>
+<p>There’s one line in the wordpress config file that tells Mu to use subdomains instead of subdirectories. Change:</p>
+<pre class="wp-block-code"><code>define('VHOST', 'yes');</code></pre>
+<p>to:</p>
+<pre class="wp-block-code"><code>define('VHOST', 'no');</code></pre>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#step-4-update-httpd-conf" id="step-4-update-httpd-conf"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Step 4: Update httpd.conf</h3>
+<p>If you’ve set up Mu to use subdomains, then you need to undo your wildcard subdomain setup in your httpd.conf. <a href="http://ma.tt/2003/10/wildcard-dns-and-sub-domains/">Matt Mullenweg</a> has a great post explaining how <em>to</em> create the wildcard domain in the conf, so if you’re trying to go from subdirectories to subdomains it’s a great read.</p>
+<p>If you’re going from subdomains to subdirectories (like me), just remove the wildcard domain from your httpd.conf and restart apache.</p>
+<p>Make sure (of course!) that you still have a virtual host defined for your actual site’s domain. It should look something like:</p>
+<pre class="wp-block-code"><code>ServerName adamwulf.me
+ServerAlias www.adamwulf.me
+DocumentRoot /home/internet/public_html/welcome
+ServerAdmin webmaster@adamwulf.me
+UseCanonicalName Off</code></pre>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#optional-step-5-redirect-from-old-subdomain-to-new-subfolder" id="optional-step-5-redirect-from-old-subdomain-to-new-subfolder"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Optional Step 5: Redirect from old subdomain to new subfolder</h3>
+<p>Good SEO tells you to <a href="http://googlewebmastercentral.blogspot.com/2008/04/best-practices-when-moving-your-site.html">redirect a URL</a> you move to it’s new location with a 301 redirect header. To do that, I first setup a subdomain in CPanel that matched the blog’s old subdomain location. Then I just edited the .htaccess file for that subdomain to point all incoming traffic to the new URL. The .htaccess for page2.adamwulf.me is now:</p>
+<pre class="wp-block-code"><code>RewriteEngine On
+RewriteBase /
+RewriteRule ^(.*) /notes/$1 [R=301,QSA,L]</code></pre>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#conclusion" id="conclusion"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Conclusion</h3>
+<p>It turns out resetting WordPress Mu to use subdirectories instead of subdomains isn’t all that bad! And I’d imagine that moving from subdirectories to subdomains requires near identical steps.</p>
+<p>Hope this helps you out – it’s certainly saved me from a reinstall hell! 🙂</p>

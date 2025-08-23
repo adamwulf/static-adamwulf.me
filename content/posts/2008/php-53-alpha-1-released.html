@@ -1,0 +1,20 @@
++++
+title = "PHP 5.3 alpha 1 released"
+date = "2008-08-27T09:08:16+0000"
+slug = "php-53-alpha-1-released"
+type = "post"
++++
+
+<p>I’m admittedly a bit late (a month) to the news , but PHP 5.3 alpha 1 <a href="http://www.php.net/archive/2008.php#id2008-08-01-1">has been released</a>. I’m lucky to have stumbled on the news, because I haven’t followed PHP’s release schedule at all lately, but the 5.3 release is particularly exciting – PHP finally has support for proper lambda closures – now it’s a <em>real</em> language <img alt=";)" decoding="async" height="15" src="/wp-includes/images/smilies/icon_wink.gif" title=";)" width="15"/></p>
+<p>New features below, and <a href="http://cvs.php.net/viewvc.cgi/php-src/NEWS?view=markup&amp;pathrev=PHP_5_3">release notes here</a>:</p>
+<ol>
+<li><a href="http://php.net/language.namespaces">Namespaces</a> (documentation maybe out dated)</li>
+<li><a href="http://php.net/oop5.late-static-bindings">Late static binding</a> and <a href="http://php.net/language.oop5.overloading">__callStatic</a></li>
+<li><a href="http://wiki.php.net/rfc/closures">Lambda functions and closures</a><span>  <em>[Ed. – finally!]</em></span></li>
+<li>Addition of the <a href="http://php.net/book.intl">intl</a>, <a href="http://php.net/book.phar">phar</a> (phar is scheduled for some more work a head of alpha2), <a href="http://php.net/book.fileinfo">fileinfo </a>and <a href="http://php.net/book.sqlite3">sqlite3</a> extensions</li>
+<li>Optional cyclic garbage collection</li>
+<li>Optional support for the <a href="http://forge.mysql.com/wiki/PHP_MYSQLND">MySQLnd</a> replacement driver for libmysql</li>
+<li>Windows older than Windows 2000 (Windows 98, NT4, etc.) are not supported anymore (<a href="http://wiki.php.net/internals/windows/releasenotes">details</a>)</li>
+<li>New syntax features like <a href="http://php.net/language.types.string#language.types.string.syntax.nowdoc">NOWDOC</a>, limited GOTO, ternary short cut “?:”</li>
+</ol>
+<p>Also exciting: significantly better <a href="http://us3.php.net/book.intl">internationalization support</a>, and a PHP archive format – <a href="http://us2.php.net/book.phar">the .phar</a>. The combo of namespaces and the addition of .phar support should allow for much better organization of libraries and applications. I’d love to upgrade WordPress by uploading a single .phar file instead of <a href="http://codex.wordpress.org/Upgrading_WordPress">the hoopla</a> you have to go through now.</p>

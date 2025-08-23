@@ -1,0 +1,38 @@
+baseURL = 'https://adamwulf.me'
+languageCode = 'en-us'
+title = 'Adam Wulf'
+theme = 'adamwulf'
+
+[pagination]
+  pagerSize = 10
+  path = 'page'
+
+[permalinks]
+  posts = '/:year/:month/:slug/'
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[params]
+  description = 'Personal blog and portfolio covering iOS development, JavaScript, mobile apps, and software engineering'
+  author = 'Adam Wulf'
+
+[menu]
+  [[menu.main]]
+    name = 'Home'
+    url = '/'
+    weight = 1
+  [[menu.main]]
+    name = 'About'
+    url = '/about/'
+    weight = 2
+  [[menu.main]]
+    name = 'Projects'
+    url = '/projects/'
+    weight = 3
+  [[menu.main]]
+    name = 'Open Source'
+    url = '/open-source/'
+    weight = 4

@@ -1,0 +1,92 @@
+{{ define "main" }}
+<div class="row row--index">
+  <div class="col-xs-12">
+    <div id="primary" class="content-area">
+      <main id="main" class="site-main" role="main">
+        {{ if .IsHome }}
+        {{/* Home page with blog posts */}}
+        {{ range (.Paginate .Site.RegularPages).Pages }}
+        <article class="post type-post status-publish format-standard hentry">
+          <div class="row no-pad">
+            <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 no-pad">
+              <header class="entry-header">
+                <h2 class="entry-title">
+                  <a href="{{ .RelPermalink }}" rel="bookmark">{{ .Title }}</a>
+                </h2>
+                <div class="entry-meta">
+                  <span class="posted-on">
+                    <time class="entry-date published" datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+                      {{ .Date.Format "January 2, 2006" }}
+                    </time>
+                  </span>
+                </div><!-- .entry-meta -->
+              </header><!-- .entry-header -->
+              <div class="entry-summary">
+                {{ .Summary | safeHTML }}
+                {{ if .Truncated }}
+                <p><a href="{{ .RelPermalink }}" class="more-link">Continue reading <span class="screen-reader-text">"{{ .Title }}"</span></a></p>
+                {{ end }}
+              </div><!-- .entry-summary -->
+            </div>
+          </div><!-- end .row-->
+        </article><!-- #post -->
+        {{ end }}
+
+        {{/* Pagination */}}
+        {{ if gt .Paginator.TotalPages 1 }}
+        <nav class="navigation pagination" role="navigation">
+          <div class="nav-links">
+            {{ if .Paginator.HasPrev }}
+            <a class="prev page-numbers" href="{{ .Paginator.Prev.URL }}">&laquo; Previous</a>
+            {{ end }}
+            {{ range .Paginator.Pagers }}
+            {{ if eq . $.Paginator }}
+            <span class="page-numbers current">{{ .PageNumber }}</span>
+            {{ else }}
+            <a class="page-numbers" href="{{ .URL }}">{{ .PageNumber }}</a>
+            {{ end }}
+            {{ end }}
+            {{ if .Paginator.HasNext }}
+            <a class="next page-numbers" href="{{ .Paginator.Next.URL }}">Next &raquo;</a>
+            {{ end }}
+          </div>
+        </nav>
+        {{ end }}
+        {{ else }}
+        {{/* Archive pages */}}
+        <header class="page-header">
+          <h1 class="page-title">{{ .Title }}</h1>
+        </header><!-- .page-header -->
+
+        {{ range .Pages }}
+        <article class="post type-post status-publish format-standard hentry">
+          <div class="row no-pad">
+            <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 no-pad">
+              <header class="entry-header">
+                <h2 class="entry-title">
+                  <a href="{{ .RelPermalink }}" rel="bookmark">{{ .Title }}</a>
+                </h2>
+                <div class="entry-meta">
+                  <span class="posted-on">
+                    <time class="entry-date published" datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+                      {{ .Date.Format "January 2, 2006" }}
+                    </time>
+                  </span>
+                </div><!-- .entry-meta -->
+              </header><!-- .entry-header -->
+              <div class="entry-summary">
+                {{ .Summary | safeHTML }}
+                {{ if .Truncated }}
+                <p><a href="{{ .RelPermalink }}" class="more-link">Continue reading <span class="screen-reader-text">"{{ .Title }}"</span></a></p>
+                {{ end }}
+              </div><!-- .entry-summary -->
+            </div>
+          </div><!-- end .row-->
+        </article><!-- #post -->
+        {{ end }}
+        {{ end }}
+      </main><!-- #main -->
+    </div><!-- #primary -->
+  </div>
+</div>
+{{ end }}

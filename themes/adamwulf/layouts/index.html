@@ -1,0 +1,66 @@
+{{ define "main" }}
+<div class="row row--index">
+  <div class="col-xs-12">
+    <div id="primary" class="content-area">
+      <main id="main" class="site-main" role="main">
+        {{ range (.Paginate (where .Site.RegularPages "Type" "post")).Pages }}
+        <article class="post type-post status-publish format-standard hentry">
+          <div class="row no-pad">
+            <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 no-pad">
+              <header class="entry-header">
+                <h2 class="entry-title">
+                  <a href="{{ .RelPermalink }}" rel="bookmark">{{ .Title }}</a>
+                </h2>
+                <div class="entry-meta">
+                  <span class="posted-on">
+                    <time class="entry-date published" datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+                      {{ .Date.Format "January 2, 2006" }}
+                    </time>
+                  </span>
+                  {{ with .Params.categories }}
+                  <span class="cat-links">
+                    Posted in {{ range $index, $cat := . }}{{ if $index }}, {{ end }}<a href="/categories/{{ $cat | urlize }}/" rel="category tag">{{ $cat }}</a>{{ end }}
+                  </span>
+                  {{ end }}
+                </div><!-- .entry-meta -->
+              </header><!-- .entry-header -->
+              <div class="entry-summary">
+                {{ .Summary | safeHTML }}
+                {{ if .Truncated }}
+                <p><a href="{{ .RelPermalink }}" class="more-link">Continue reading <span class="screen-reader-text">"{{ .Title }}"</span></a></p>
+                {{ end }}
+              </div><!-- .entry-summary -->
+            </div>
+          </div><!-- end .row-->
+        </article><!-- #post -->
+        {{ end }}
+
+        {{/* Pagination */}}
+        {{ if gt .Paginator.TotalPages 1 }}
+        <div class="row">
+          <div class="col-xs-12">
+            <nav class="navigation pagination" role="navigation">
+              <div class="nav-links">
+                {{ if .Paginator.HasPrev }}
+                <a class="prev page-numbers" href="{{ .Paginator.Prev.URL }}">&laquo; Previous</a>
+                {{ end }}
+                {{ range .Paginator.Pagers }}
+                {{ if eq . $.Paginator }}
+                <span class="page-numbers current">{{ .PageNumber }}</span>
+                {{ else }}
+                <a class="page-numbers" href="{{ .URL }}">{{ .PageNumber }}</a>
+                {{ end }}
+                {{ end }}
+                {{ if .Paginator.HasNext }}
+                <a class="next page-numbers" href="{{ .Paginator.Next.URL }}">Next &raquo;</a>
+                {{ end }}
+              </div>
+            </nav>
+          </div>
+        </div>
+        {{ end }}
+      </main><!-- #main -->
+    </div><!-- #primary -->
+  </div>
+</div>
+{{ end }}

@@ -1,0 +1,107 @@
++++
+title = "Automatically Include Open Source Licenses into the Settings Bundle"
+date = "2015-07-13T06:30:30+0000"
+slug = "automatically-include-open-source-licenses-settings-bundle"
+type = "post"
++++
+
+<p>There’s a good chance your iOS app includes a number of open source frameworks in its codebase, and <a href="http://getlooseleaf.com/">Loose Leaf</a> is no different. Many of these dependencies’ licenses require that you include a copy of the license in your final build. Some require other attribution or URLs. Even with just a few includes, it can quickly become difficult to manage.</p>
+<p>Last week, we talked through how to automate our app’s version numbers, and this post will automate our bundled licenses.</p>
+<h2><a aria-hidden="true" class="aal_anchor" href="#the-goal-include-licenses-in-our-settings" id="the-goal-include-licenses-in-our-settings"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>The Goal: Include Licenses in our Settings</h2>
+<p>This walkthrough will help us create a custom sub-menu in our Settings.bundle to show all of our bundled licenses.</p>
+<p><a href="/files/2015/06/Screen-Shot-2015-06-12-at-4.01.08-PM.png"><img alt="Licenses in Settings" class="alignnone size-full wp-image-4977" decoding="async" height="71" sizes="(max-width: 319px) 100vw, 319px" src="/files/2015/06/Screen-Shot-2015-06-12-at-4.01.08-PM.png" srcset="/wp-content/uploads/2015/06/Screen-Shot-2015-06-12-at-4.01.08-PM.png 319w, /wp-content/uploads/2015/06/Screen-Shot-2015-06-12-at-4.01.08-PM-300x66.png 300w" width="319"/></a></p>
+<h2><a aria-hidden="true" class="aal_anchor" href="#step-1-prepare-the-settings-bundle" id="step-1-prepare-the-settings-bundle"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Step 1: Prepare The Settings Bundle</h2>
+<p>First, we need to define where that section will appear in our settings bundle.</p>
+<p>In your Settings bundle, create a new file Acknowledgements.plist:</p>
+<p><a href="/files/2015/06/Screen-Shot-2015-06-12-at-4.06.18-PM.png"><img alt="Acknowledgements" class="alignnone size-full wp-image-4979" decoding="async" height="77" src="/files/2015/06/Screen-Shot-2015-06-12-at-4.06.18-PM.png" width="218"/></a></p>
+<p>Since the contents of this file will be auto-generated each time we compile, there’s no reason to add it into your git repo. I suggest adding the path to Acknowledgements.plist into your .gitignore file.</p>
+<p>Next,you’ll need to add 2 items to your Root.plist – a Title and a Child Pane:</p>
+<p><a href="/files/2015/06/Screen-Shot-2015-06-12-at-4.03.00-PM.png"><img alt="License Root.plist item" class="alignnone size-full wp-image-4978" decoding="async" fetchpriority="high" height="127" sizes="(max-width: 560px) 100vw, 560px" src="/files/2015/06/Screen-Shot-2015-06-12-at-4.03.00-PM.png" srcset="/wp-content/uploads/2015/06/Screen-Shot-2015-06-12-at-4.03.00-PM.png 560w, /wp-content/uploads/2015/06/Screen-Shot-2015-06-12-at-4.03.00-PM-300x68.png 300w" width="560"/></a></p>
+<p>The first item creates the “LICENSE” title item, and the second creates the link to our sub-menu. It references the file “Acknowledgements.plist” to use as the child pane.</p>
+<h2><a aria-hidden="true" class="aal_anchor" href="#step-2-add-license-files" id="step-2-add-license-files"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Step 2: Add License Files</h2>
+<p>Next, we need to define the licenses that we’ll be wanting to include in our Settings bundle. For each license, create a separate .license file in your project contents. No need to copy these into your built product, we only need them in our source tree – we’ll be using them to generate the contents of our Acknowledgements.plist file in the next step.</p>
+<p>Each license file should be in the following format:</p>
+<pre>Name of the Licensed Object, eg. "JRSwizzle License" etc
+
+contents of the license here - copy of the MPL or MIT License, etc</pre>
+<h2><a aria-hidden="true" class="aal_anchor" href="#step-3-the-build-script" id="step-3-the-build-script"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Step 3: The Build Script</h2>
+<p>I’m using the perl script from <a href="http://stackoverflow.com/questions/6428353/best-way-to-add-license-section-to-ios-settings-bundle">this Stack Overflow answer</a>, and I’ve saved it as “generateLicenses.pl”. This perl script will be modifying the Acknowledgements.plist file for us.</p>
+<pre>#!/usr/bin/perl -w
+
+use strict;
+
+my $out = "Settings.bundle/en.lproj/Acknowledgements.strings";
+my $plistout =  "Settings.bundle/Acknowledgements.plist";
+
+system("rm -f $out");
+
+open(my $outfh, '&gt;', $out) or die $!;
+open(my $plistfh, '&gt;', $plistout) or die $!;
+
+print $plistfh &lt;&lt;'EOD';
+
+StringsTable
+Acknowledgements
+PreferenceSpecifiers
+
+EOD
+for my $i (sort glob("*.license"))
+{
+    my $value=`cat $i`;
+    $value =~ s/\r//g;
+    $value =~ s/\n/\r/g;
+    $value =~ s/[\t]+\r/\r/g;
+    $value =~ s/\"/\\\"/g;
+    my $key=$i;
+    $key =~ s/\.license$//;
+    
+    my $fullstr = "";
+    
+    my $cnt = 1;
+    my $keynum = $key;
+    for my $str (split /\r\r/, $value)
+    {
+        if ($cnt == 1){
+            print $plistfh "\n";
+            print $plistfh "Type\n";
+            print $plistfh "PSGroupSpecifier\n";
+            print $plistfh "Title\n";
+            print $plistfh "$keynum\n";
+            print $outfh "\"$keynum\" = \"$str\";\n";
+        }else{
+            $fullstr .= "\n\n" . $str;
+        }
+        
+        $keynum = $key.(++$cnt);
+    }
+    
+    $fullstr =~ s/^\s+//;
+    $fullstr =~ s/\s+$//;
+    
+    print $outfh "\"$keynum\" = \"$fullstr\";\n";
+    print $plistfh "FooterText\n";
+    print $plistfh "$keynum\n";
+    print $plistfh "\n";
+
+
+    print $plistfh "\n";
+    print $plistfh "Type\n";
+    print $plistfh "PSGroupSpecifier\n";
+    print $plistfh "FooterText\n";
+    print $plistfh "\n\n";
+    print $plistfh "\n";
+}
+
+print $plistfh &lt;&lt;'EOD';
+
+
+
+EOD
+close($outfh);
+close($plistfh);
+</pre>
+<p><strong>Important!</strong></p>
+<p>Make sure the Run Script is near the top of your Phases section. This script needs to be run before the Copy Resources item in your Build Phases.</p>
+<h2><a aria-hidden="true" class="aal_anchor" href="#step-4-build-your-project" id="step-4-build-your-project"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Step 4: Build your project!</h2>
+<p>That’s it! Just build and run your project, and all of the licenses should be auto-included into your Settings bundle automatically. If you ever need to add or remove more licenses, just add or remove more .license files from your project’s directory and they’ll be automatically included in the next build. Easy!</p>
+<p>This process has been incredibly helpful for <a href="http://getlooseleaf.com/">Loose Leaf</a>‘s build process. I include a number of different open source frameworks, and this has been incredibly helpful for organizing those licenses into the build. Of course, I also have a number of <a href="https://getlooseleaf.com/opensource/">frameworks that I’ve open sourced as a part of Loose Leaf’s development</a>, so maybe I’ll see one of those included in your project too!</p>

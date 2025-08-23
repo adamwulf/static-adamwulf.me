@@ -1,0 +1,81 @@
++++
+title = "Staying Sane with Git"
+date = "2016-02-01T15:56:18+0000"
+slug = "staying-sane-git"
+type = "post"
++++
+
+<p>You might have seen it – <a href="https://twitter.com/kkuchta/status/679397017039142912">@kkuchta christmas tree gif</a> making the rounds these past holidays:</p>
+<p><a href="/files/2016/02/tumblr_inline_o0mdgf6twL1t74qoj_540.png"><img alt="tumblr_inline_o0mdgf6twL1t74qoj_540" class="alignnone size-full wp-image-5037" decoding="async" fetchpriority="high" height="309" sizes="(max-width: 300px) 100vw, 300px" src="/files/2016/02/tumblr_inline_o0mdgf6twL1t74qoj_540.png" srcset="/wp-content/uploads/2016/02/tumblr_inline_o0mdgf6twL1t74qoj_540.png 300w, /wp-content/uploads/2016/02/tumblr_inline_o0mdgf6twL1t74qoj_540-291x300.png 291w" width="300"/></a></p>
+<p>For a short story, that sums up my early experience with git with surprisingly accuracy!</p>
+<p>For anyone else who’s struggled with git over the years, here’s a bit of my process to help me stay sane with git:</p>
+<h2><a aria-hidden="true" class="aal_anchor" href="#1-where-i-am-in-the-tree" id="1-where-i-am-in-the-tree"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>1. Where I am in the tree?</h2>
+<p>I use the command line to make new commits, pull, merge, etc, and when I first started using git I had a lot of trouble understanding just <i>where</i> I was in the repo at any given time. After branching a few times, I’d get lost pretty easily and forget which branch I was currently on. A simple fix – I added the following line to my .bash_profile:</p>
+<pre><code># Put Git branch name it shell prompt
+parse_git_branch() {
+  git branch 2&gt; /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+PS1='\W$(parse_git_branch)\$ '
+`
+</code></pre>
+<p>This simply printed out my current location in my console’s prompt:</p>
+<pre><code>loose-leaf(master)$ 
+</code></pre>
+<p>Now I felt comfortable <code>git add branch-name</code>ing and <code>git checkout</code>ing as often as I needed without getting lost.</p>
+<h2><a aria-hidden="true" class="aal_anchor" href="#2-where-i-can-go-in-the-tree" id="2-where-i-can-go-in-the-tree"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>2. Where I can go in the tree?</h2>
+<p>Now that I knew <i>my</i> location in the tree, I still wasn’t sure where I was in relation to all the other branches. For that, I use a GUI app called GitX-dev: <a href="http://rowanj.github.io/gitx/">http://rowanj.github.io/gitx/.</a> It’s a fantasic and incredibly simple app that shows the history, branches, and tags of your git repo.</p>
+<p><a href="/files/2016/02/tumblr_inline_o0mf1nh6NQ1t74qoj_500.png"><img alt="tumblr_inline_o0mf1nh6NQ1t74qoj_500" class="alignnone size-full wp-image-5038" decoding="async" height="327" sizes="(max-width: 500px) 100vw, 500px" src="/files/2016/02/tumblr_inline_o0mf1nh6NQ1t74qoj_500.png" srcset="/wp-content/uploads/2016/02/tumblr_inline_o0mf1nh6NQ1t74qoj_500.png 500w, /wp-content/uploads/2016/02/tumblr_inline_o0mf1nh6NQ1t74qoj_500-300x196.png 300w" width="500"/></a></p>
+<p>It’s incredibly handy for easily seeing at a glance where I am in relation to all of the other branches, both local and remote.</p>
+<h2><a aria-hidden="true" class="aal_anchor" href="#3-where-is-the-remote" id="3-where-is-the-remote"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>3. Where is the remote?</h2>
+<p>Speaking of remote – there’s been more than once where I’ve worked on a fork of a primary repo, so I needed to keep track of both the upstream original repo and the fork repo.</p>
+<p>For that, two simple commands help me know what’s what:</p>
+<pre><code># lists all of the remote repositories and their names
+get remote -v
+</code></pre>
+<p>and</p>
+<pre><code># fetches all of the branches and tags from the remote repo
+git fetch remote-name
+</code></pre>
+<p>These two commands let me know if my local branch was still simply an ancestor of the remote branch – if so, I could <code>git pull</code> without fear of an ugly surprise merge.</p>
+<p>If my local branch had diverged from the remote, then I could look through the recent commits for that remote branch in GitX, and then decide if I wanted to a) <code>git rebase</code> my local changes onto the end of the remote branch with:</p>
+<pre><code>git rebase branch-name remote-name/branch-name
+</code></pre>
+<p>or b) have more context going into the merge with <code>git pull</code>.</p>
+<h2><a aria-hidden="true" class="aal_anchor" href="#4-where-is-my-bug" id="4-where-is-my-bug"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>4. Where is my bug?!</h2>
+<p>Here’s the real gem that I’ve only recently started using to great effect: <code>git bisect</code>.</p>
+<p>Git bisect is a magical tool that will help you find the exact commit that caused the bug you’re trying to track down. Simply put, it does a binary search through your commit history until it finds the exact commit where the bug appeared.</p>
+<p>Assuming your repo is currently showing your bug, you can start the process with a simple:</p>
+<pre><code>$ git bisect bad
+You need to start by "git bisect start"
+Do you want me to do it for you [Y/n]? Y
+</code></pre>
+<p>Confirm the prompt with a Y, and then checkout a commit that you know doesn’t show the bug:</p>
+<pre><code>$ git checkout old-branch-that-worked
+
+And then mark that bugless commit as the 'good' commit.
+
+$ git bisect good
+</code></pre>
+<p>And now the magic has started! You’ll see something like the following show up soon:</p>
+<pre><code>Bisecting: 4 revisions left to test after this (roughly 2 steps)    
+[uglycommithash] an old commit message
+</code></pre>
+<p>Git has started its binary search through your tree, and all you have to do now is tell it whether the bug shows up in this commit with <code>git bisect bad</code> or if it’s bug free with <code>git bisect good</code>. Just keep going until you finally see:</p>
+<pre><code>ugly-commit-hash is the first bad commit
+commit ugly-commit-hash
+Author: Definitely Not You
+</code></pre>
+<p>And that’s it! Now you know <i>precisely</i> where the bug is and have a much better chance of tracking down its root cause. At this point I usually <code>git branch bug-name</code> just so I have a temporary flag in GitX for me to look for.</p>
+<p>Note: At the end of your <code>git bisect</code>, even though it’s shown you the offending commit, you’ll technically still be in bisect mode.</p>
+<pre><code># at this point after a bisect, your git status will be:
+$ git status
+HEAD detached at 4751a0a
+You are currently bisecting, started from branch 'master'.
+  (use "git bisect reset" to get back to the original branch)
+</code></pre>
+<p>To return to git business as usual, simply:</p>
+<pre><code>$ git bisect reset
+</code></pre>
+<p>And Tada! You’re back at your original branch as if nothing had happened. It’s an absolutely invaluable way to quickly narrow down a tricky to find bug.</p>
+<h2><a aria-hidden="true" class="aal_anchor" href="#a-little-goes-a-long-way" id="a-little-goes-a-long-way"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>A little goes a long way</h2>
+<p>This writeup barely scratches the surface of what’s possible in git – there’s huge swaths of functionality I haven’t even touched on – but if I had to choose only a handful of features, this would be it. This is 99% of what I use when I’m interacting with a repo, and I wish I’d seen it when I first made the switch to git many years ago.</p>

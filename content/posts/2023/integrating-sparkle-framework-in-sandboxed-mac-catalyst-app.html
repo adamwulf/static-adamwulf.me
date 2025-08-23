@@ -1,0 +1,33 @@
++++
+title = "Integrating Sparkle framework in a sandboxed Mac Catalyst app"
+date = "2023-06-15T23:03:09+0000"
+slug = "integrating-sparkle-framework-in-sandboxed-mac-catalyst-app"
+type = "post"
++++
+
+<p>I’m working to take an App Store-only Catalyst app and allow it to be distributed outside the App Store. Part of that is making sure that we can auto-update the app, and we’re using the Sparkle framework for the task.</p>
+<p>Since Sparkle is an AppKit framework, and our app is a UIKit Catalyst app, I needed some help joining these two worlds together, and I found this fantastic step-by-step tutorial by <a href="https://twitter.com/EskilSviggum">Eskil Sviggum</a>: <a href="https://betterprogramming.pub/configuring-app-updates-for-mac-catalyst-apps-with-sparkle-beef7a90a515">https://betterprogramming.pub/configuring-app-updates-for-mac-catalyst-apps-with-sparkle-beef7a90a515</a>.</p>
+<p>After embedding the SparklePlugin.bundle into the app, tying together the UIKit and AppKit so that it could attempt to check for updates at launch, I immediately got the following error when launching the app in Debug mode from Xcode:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="generic" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">2023-06-15 17:54:13.028099-0500 Muse[55654:1170102] [loading] Error loading /Users/adamwulf/Library/Developer/Xcode/DerivedData/Muse-cfdmmqzcfayzhrabrpyekznonhrk/Build/Products/Debug-maccatalyst/Muse.app/Contents/PlugIns/SparklePlugin.bundle/Contents/MacOS/SparklePlugin (194):  dlopen(/Users/adamwulf/Library/Developer/Xcode/DerivedData/Muse-cfdmmqzcfayzhrabrpyekznonhrk/Build/Products/Debug-maccatalyst/Muse.app/Contents/PlugIns/SparklePlugin.bundle/Contents/MacOS/SparklePlugin, 0x0109): Library not loaded: @rpath/Sparkle.framework/Versions/B/Sparkle
+  Referenced from: &lt;3B2706F0-30A4-3FF2-84B3-191F25C6A606&gt; /Users/adamwulf/Library/Developer/Xcode/DerivedData/Muse-cfdmmqzcfayzhrabrpyekznonhrk/Build/Products/Debug-maccatalyst/Muse.app/Contents/PlugIns/SparklePlugin.bundle/Contents/MacOS/SparklePlugin
+  Reason: tried: '/Users/adamwulf/Library/Developer/Xcode/DerivedData/Muse-cfdmmqzcfayzhrabrpyekznonhrk/Build/Products/Debug/Sparkle.framework/Versions/B/Sparkle' (file system sandbox blocked open()), 
+...</pre>
+<p>The issue is that the embedded plugin bundle includes an embedded Sparkle.framework, and that inner framework isn’t being codesigned with the same identity, which means the sandboxed app is refusing to load it. I found <a href="https://github.com/sparkle-project/Sparkle/issues/1885">this thread</a> pointing to the <a href="https://sparkle-project.org/documentation/sandboxing/#code-signing">framework’s documentation about codesigning</a>, and the solution is to add an extra code signing step to the build phases.</p>
+<p>I modified it slightly so that it pointed explicitly at the Sparkle.framework in the <code>BUILT_PRODUCTS_DIR</code>. Once I did that, I got the following build error:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="generic" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">Showing All Messages
+Apple Development: ambiguous (matches "Apple Development: Adam Wulf (SomeTeam)" and "Apple Development: Adam Wulf (OtherTeam)" in /Users/adamwulf/Library/Keychains/login.keychain-db)</pre>
+<p>My Apple ID is part of multiple teams, so I have multiple developer profiles that were matching. The fix is to use <code>EXPANDED_CODE_SIGN_IDENTITY_NAME</code> instead of <code>CODE_SIGN_IDENTITY</code>.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="bash" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">PluginsPath="${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME%.*}.app/Contents/PlugIns/SparklePlugin.bundle/Contents/Frameworks"
+
+echo "Codesign Sparkle"
+echo $PluginsPath
+
+codesign -f -s "$EXPANDED_CODE_SIGN_IDENTITY_NAME" -o runtime "${PluginsPath}/Sparkle.framework/Versions/B/XPCServices/Installer.xpc"
+codesign -f -s "$EXPANDED_CODE_SIGN_IDENTITY_NAME" -o runtime --entitlements Entitlements/Downloader.entitlements "${PluginsPath}/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc"
+
+codesign -f -s "$EXPANDED_CODE_SIGN_IDENTITY_NAME" -o runtime "${PluginsPath}/Sparkle.framework/Versions/B/Autoupdate"
+codesign -f -s "$EXPANDED_CODE_SIGN_IDENTITY_NAME" -o runtime "${PluginsPath}/Sparkle.framework/Versions/B/Updater.app"
+
+codesign -f -s "$EXPANDED_CODE_SIGN_IDENTITY_NAME" -o runtime "${PluginsPath}/Sparkle.framework"
+</pre>
+<p>After that change to the signing build phase script, it could build + run + check for updates just fine!</p>

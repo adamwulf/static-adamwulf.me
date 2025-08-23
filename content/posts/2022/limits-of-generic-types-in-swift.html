@@ -1,0 +1,152 @@
++++
+title = "Limits of Generic Types in Swift"
+date = "2022-11-06T04:09:52+0000"
+slug = "limits-of-generic-types-in-swift"
+type = "post"
++++
+
+<p>I’ve been working on a type-safe notification system for Swift called <a href="https://github.com/adamwulf/PonyExpress">PonyExpress</a>. The Foundation framework gives us <a href="https://developer.apple.com/documentation/foundation/notificationcenter">NotificationCenter</a>, but unfortunately we can only send <code>[String: Any]</code> along with the notification. Consider the following swift playground:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">import Foundation
+
+public extension NSNotification.Name {
+    static let MyCustomNotification = Notification.Name("MyCustomNotification")
+}
+
+struct MyData {
+    let data: Int
+    let other: Float
+}
+
+class SomeObserver {
+    init() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(didHearNotification),
+                                               name: .MyCustomNotification,
+                                               object: nil)
+    }
+    @objc func didHearNotification(_ notification: Notification) {
+        guard let myData = notification.userInfo?["myData"] as? MyData else {
+            fatalError("uh oh, didn't get my notification")
+            return
+        }
+        print("\(myData)")
+    }
+}
+
+let observer = SomeObserver()
+
+NotificationCenter.default.post(name: .MyCustomNotification, object: nil, userInfo: ["myData": MyCustomNotification(data: 12, other: 9)])</pre>
+<p>There’s a few issues with this code:</p>
+<ol class="wp-block-list"><li>There’s no guarantee that a posted <code>MyCustomNotification</code> will always include a <code>MyData</code> object.</li><li>The key <code>"myData"</code> in the <code>userInfo</code> is ripe for copy/paste errors, and has no compiler error or warning if mistyped.</li><li>Uses legacy Objective-C <code>#selectors</code>, which don’t even give compiler errors for mis-typing the <code>notification</code> parameter.</li><li>It’s all very verbose, which obfuscates what’s really going on.</li></ol>
+<p>Instead, my goal with <code>PonyExpress</code> is to give strong typing to notifications in Swift, both when posting a notification and when observing a notification.</p>
+<p>First, Instead of sending both a <code>String</code> notification name and a separate payload, simply send a single object as the notification. The notification <em>is</em> the payload.</p>
+<p>Next, allow the programmer to create their own NotificationCenters (Called <code>PostOffice</code> in <code>PonyExpress</code>) and include a generic type to limit the types of notifications that can be sent.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">protocol Mail { }
+struct Letter: Mail { }
+struct Box: Mail { }
+struct PostCard: Mail { }
+let postOffice = PostOffice&lt;Mail&gt;
+postOffice.post(Letter())        // ok
+postOffice.post(Box())           // ok
+postOffice.post(SomethingElse()) // compiler error</pre>
+<p>This can help prevent copy/paste errors when setting up and sending notifications. It’s using the type system help catch simple logic errors.</p>
+<p>What’s even better, is that observers can register a strongly typed observation block (or method):</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">class SomeObserver {
+    init() {
+        postOffice.register(self, SomeObserver.didHearNotification)
+    }
+    func didHearNotification(_ letter: Letter) {
+        print("\(letter)")
+    }
+}</pre>
+<p>The observer above registers its method, which automatically limits the type of notification that it hears from the <code>PostOffice</code>. The registration line 3 is type checked that the method accepts a subtype of <code>Mail</code>. Then the <code>PostOffice</code> filters all sent notifications and calls the observer method with any <code>Letters</code> that get sent.</p>
+<p>It’s now impossible for a sent notification to fail because of mismatched string keys in a <code>userInfo</code>, or because the payload changed shape, or copy/paste error, etc. It’s strongly typed both sending notifications and receiving them.</p>
+<p>Great! So what’s the problem?</p>
+<p>Well, it turns out that we can <em>either</em> constrain the notification types that can be posted through a <code>PostOffice</code>, <em>or</em> we can constrain the type of the notification in the observer’s method, but not both.</p>
+<p>To help make the magic work, we’ll define an <code>AnyRecipient</code> type to wrap the type of the observer:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">// This doesn't need to be exposed outside of PonyExpress, it's just for internal bookkeeping.
+internal struct AnyRecipient {
+    var block: ((Any) -&gt; Void)
+    init&lt;U&gt;(_ block: @escaping (_ notification: U) -&gt; Void) {
+        self.block = { notification in
+            guard let notification = notification as? U else { return }
+            block(notification)
+        }
+    }
+}</pre>
+<p>The following example code will create a <code>PostOffice</code> that allows for constraining the notification type, but doesn’t allow for constraining the observer’s method. Here we’ll use blocks instead of methods as the code is a little easier to read:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">class CompileCheckedExample&lt;Generic1&gt; {
+    var recipients: [AnyRecipient] = []
+    // error: type 'Generic2' constrained to non-protocol, non-class type 'Generic1'
+    func register&lt;Generic2: Generic1&gt;(block: @escaping (Generic2) -&gt; Void) {
+        recipients.append(AnyRecipient(block))
+    }
+    func post(notification: Generic1) {
+        recipients.forEach({ $0.block(notification) })
+    }
+}
+let example = RuntimeCheckedExample&lt;Mail&gt;()
+example.register(block: { (_ letter: Letter) in print("received: \(letter)") })</pre>
+<p>Unfortunately, we’re not able to define a generic type that constrains another generic type. We can hardcode the <code>Generic1</code> type, but that of course makes this cumbersome for a programmer to quickly implement.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">class SingleCheckedExample {
+    var recipients: [AnyRecipient] = []
+    // This works, but requires any type besides `Mail` to be reimplemented in another class
+    func register&lt;Generic2: Mail&gt;(block: @escaping (Generic2) -&gt; Void) {
+        recipients.append(AnyRecipient(block))
+    }
+    func post(notification: Mail) {
+        recipients.forEach({ $0.block(notification) })
+    }
+}
+let example = SingleCheckedExample()
+example.register(block: { (_ letter: Letter) in print("received: \(letter)") })</pre>
+<p>If we can’t check types at compile time, maybe we can check types at runtime? Unfortunately not here either:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">class RuntimeCheckedExample&lt;Generic1&gt; {
+    var recipients: [AnyRecipient] = []
+    func register&lt;Generic2&gt;(block: @escaping (Generic2) -&gt; Void) {
+        // every pair of types expect Generic1 == Generic2 will fail, even if Generic2 implements Generic1
+        guard Generic2.self is Generic1.Type else {
+            fatalError("\(Generic1.self) is not a \(Generic2.self)")
+        }
+        recipients.append(AnyRecipient(block))
+    }
+    func post(notification: Generic1) {
+        recipients.forEach({ $0.block(notification) })
+    }
+}</pre>
+<p>Our only option is to either constraint the type of notification that’s sent, dramatically limiting the type of the observer that can be registered:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">class ConstrainNotifierExample&lt;Generic1&gt; {
+    var recipients: [AnyRecipient] = []
+    func register(block: @escaping (Generic1) -&gt; Void) {
+        recipients.append(AnyRecipient(block))
+    }
+    func post(notification: Generic1) {
+        recipients.forEach({ $0.block(notification) })
+    }
+}
+let example = ConstrainNotifierExample&lt;Mail&gt;()
+example.register(block: { (_ mail: Mail) in print("received: \(mail)") })        // ok
+example.register(block: { (_ letter: Letter) in print("received: \(letter)") })  // compiler error</pre>
+<p>Or we can have expressive observers but require any object to be sent as a notification:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">class ConstrainObserverExample {
+    var recipients: [AnyRecipient] = []
+    func register&lt;Generic1&gt;(block: @escaping (Generic1) -&gt; Void) {
+        recipients.append(AnyRecipient(block))
+    }
+    func post(notification: Any) {
+        recipients.forEach({ $0.block(notification) })
+    }
+}
+
+let example = ConstrainObserverExample()
+example.register(block: { (_ mail: Mail) in print("received: \(mail)") })
+example.register(block: { (_ letter: Letter) in print("received: \(letter)") })
+example.post(notification: Letter())
+// Unfortunately, also able to post notifications of any type
+example.post(notification: FakeMail())
+</pre>
+<p>It’s unfortunate that we can’t constrain a generic type based on another generic type.</p>
+<p>For our purposes, I think the best compromise is to use <code>SingleCheckedExample</code> above, and provide a base <code>Mail</code> type that must be implemented for all posted notifications. As I continue to work on <code>PonyExpress</code>, I think that this is the direction I’ll be going.</p>
+<p>This prevents most objects from being accidentally sent as notifications, and <code>postOffice.post(someObject)</code> will show a compiler error for most typo mistakes. And it also allows the observer to constrain the type of notification that it receives, which prevents copy/paste logic errors when duplicating <code>guard</code> statements at the top of notification methods.</p>
+<p>Overall, we’ve gotten to an acceptable answer, but it leaves me wanting for a just a little bit more from Swift’s type system.</p>
+<p></p>

@@ -1,0 +1,53 @@
++++
+title = "Finding unused code with Periphery"
+date = "2024-12-14T23:38:00+0000"
+slug = "finding-unused-code-with-periphery"
+type = "post"
++++
+
+<p>The <a data-id="https://museapp.com/" data-type="link" href="https://museapp.com/">Muse</a> codebase is over 5 years old with over 350,000 lines of Swift, and I’m sure is filled with more than a few archeological code-fossils. Like any startup (frankly, like literally every code project), it’s difficult to prune old unused code while keeping up velocity of new features. Code cleanliness is always a tradeoff with velocity, and often comes in second place. That’s why I love tooling that can help automate this otherwise brutally slow manual task.</p>
+<p>I was recently told about <code><a href="https://github.com/peripheryapp/periphery">periphery</a></code>, a command line tool to find unused code in Swift projects. What’s a day off work for but for having fun playing with new tools? First up, install:</p>
+<pre class="wp-block-code"><code>$ brew install periphery</code></pre>
+<p>God bless <code>brew</code>, amirite.</p>
+<p>Next up, the README suggests we run its setup for a handheld first run:</p>
+<pre class="wp-block-code"><code>$ periphery scan --setup
+Welcome to Periphery!
+This guided setup will help you select the appropriate configuration for your project.
+
+* Inspecting project...
+
+Select build targets to analyze:
+? Delimit choices with a single space, e.g: 1 2 3, or 'all' to select all options
+1 AppKitBridge
+2 Muse
+3 Muse Integration Tests
+4 Muse Tests
+5 MuseShare
+6 SparklePlugin
+
+...</code></pre>
+<p>Super easy to get setup, what a pleasure! I selected the targets I needed, then the schemes. Next it asks about Objective-C code, and I selected Yes to assume obj-c code is in use. Muse has only a little, but some interactions with UIKit or AppKit still reach into Objective-C.</p>
+<pre class="wp-block-code"><code>Assume Objective-C accessible declarations are in use?
+? Declarations exposed to the Objective-C runtime explicitly with @objc, or implicitly by inheriting NSObject will be assumed to be in use. Choose 'No' if your project is pure Swift.
+(Y)es/(N)o &gt; y</code></pre>
+<p>Next, it asked about assuming all public declarations are in use – which would be very useful when building a framework or library, for for an app like Muse I answered No.</p>
+<pre class="wp-block-code"><code>Assume all 'public' declarations are in use?
+? You should choose 'Yes' here if your public interfaces are not used by any selected build target, as may be the case for a framework/library project.
+(Y)es/(N)o &gt; n</code></pre>
+<p>Last, I saved the configuration to <code>.periphery.yml</code> and let the first scan run. Luckily, it found the codebase squeaky clean! 😉</p>
+<figure class="wp-block-video"><video controls="" src="/wp-content/uploads/2024/12/muse-periphery-results.mp4"></video></figure>
+<p>I use <a href="https://github.com/krzysztofzablocki/Sourcery">Sourcery</a> to auto-generate some connector files between the custom Muse sync codebase and Muse-the-application codebase. There’s also a fair bit of old CoreData code that’s still in the codebase so that very old Muse libraries can be migrated to the current sync world. For each of these, I don’t need them included in <code>periphery</code>‘s output.</p>
+<p>To remove them, I used the <code><a href="https://github.com/peripheryapp/periphery?tab=readme-ov-file#excluding-files">--report-exclude</a></code> command line option to remove a few paths that I don’t need in the report. I’m also not concerned with redundant <code>public</code>, so I included <code><br/><a href="https://github.com/peripheryapp/periphery?tab=readme-ov-file#redundant-public-accessibility">--disable-redundant-public-analysis</a></code> too. Last, I’m not worried about unused function parameters, so i used <code><a href="https://github.com/peripheryapp/periphery?tab=readme-ov-file#function-parameters">--retain-unused-protocol-func-params</a></code>. I ran with <code>--verbose</code> which <a href="https://github.com/peripheryapp/periphery?tab=readme-ov-file#configuration">shows the <code>.yml</code> configuration</a> changes I needed to make to always run with these excluded.</p>
+<p>Last, I setup an Aggregate target in Xcode so that I can run <code>periphery</code> and see unused code in the Issue navigator. I updated the Build Settings to use iOS, added a User Defined setting for <code>SUPPORTS_MACCATALYST=YES</code>, and added a Run Script phase with the following:</p>
+<pre class="wp-block-code"><code>export PATH="$PATH:/opt/homebrew/bin"
+
+if which periphery &gt;/dev/null; then
+    periphery scan --config "${SRCROOT}/.periphery.yml"
+else
+    echo "warning: periphery not installed, install from https://github.com/peripheryapp/periphery"
+fi</code></pre>
+<p>Now, when building the Periphery aggregate target within Xcode, I can see all of the unused code inline right inside Xcode.</p>
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-5870" decoding="async" fetchpriority="high" height="553" sizes="(max-width: 1024px) 100vw, 1024px" src="/wp-content/uploads/2024/12/Muse-unused-code-results-1024x553.png" srcset="/wp-content/uploads/2024/12/Muse-unused-code-results-1024x553.png 1024w, /wp-content/uploads/2024/12/Muse-unused-code-results-300x162.png 300w, /wp-content/uploads/2024/12/Muse-unused-code-results-768x415.png 768w, /wp-content/uploads/2024/12/Muse-unused-code-results-1536x830.png 1536w, /wp-content/uploads/2024/12/Muse-unused-code-results-2048x1107.png 2048w" width="1024"/></figure>
+<p>Just a little bit of clean-up work to do! 😅</p>
+<figure class="wp-block-image size-large"><img alt="" class="wp-image-5872" decoding="async" height="72" sizes="(max-width: 1024px) 100vw, 1024px" src="/wp-content/uploads/2024/12/CleanShot-2024-12-14-at-17.31.12@2x-1-1024x72.png" srcset="/wp-content/uploads/2024/12/CleanShot-2024-12-14-at-17.31.12@2x-1-1024x72.png 1024w, /wp-content/uploads/2024/12/CleanShot-2024-12-14-at-17.31.12@2x-1-300x21.png 300w, /wp-content/uploads/2024/12/CleanShot-2024-12-14-at-17.31.12@2x-1-768x54.png 768w, /wp-content/uploads/2024/12/CleanShot-2024-12-14-at-17.31.12@2x-1.png 1052w" width="1024"/></figure>
+<p></p>

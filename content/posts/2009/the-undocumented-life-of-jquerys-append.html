@@ -1,0 +1,114 @@
++++
+title = "The undocumented life of jQuery’s .append()"
+date = "2009-03-19T00:17:55+0000"
+slug = "the-undocumented-life-of-jquerys-append"
+type = "post"
++++
+
+<div class="related">Related: <a href="/2009/07/21/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/">The undocumented life of JavaScript’s parentNode property – Internet Explorer edition!</a></div>
+<p>Did you know that <a href="http://docs.jquery.com/Manipulation/append">.append()</a> sometimes <em>moves the nodes</em> you pass into it, and other times <em>clones them</em>? This undocumented behavior may cause you some grief if you’re assuming the first, but seeing the second.</p>
+<p>If you’re appending to more than 1 node, then jQuery <em>clones the input</em> and then appends the clones to each of the selected items. If you’re appending to just 1 node, then jQuery does not clone the input, but instead moves the item to that place in the document. These two behaviors can leave you with significantly different results.</p>
+<p>To help clarify the situation, and fill the documentation hole, I’ll examine the how the following HTML is affected for each of the two .append() behaviors.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="html" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">&lt;html&gt;
+&lt;head&gt;
+&lt;!-- scripts will go here --&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;p&gt;original text&lt;/p&gt;
+&lt;div&gt;&lt;/div&gt;
+&lt;div&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#append-with-cloning" id="append-with-cloning"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>.append() with cloning</h3>
+<p>First, let’s take a look at a script that will <em>clone</em> nodes and append them. <a href="/examples/jquery/append-clone.html">Demo</a>.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="js" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">$(function(){
+// select the only &amp;lt;p&amp;gt; in the document
+var $dom = $("p");
+var actualNode = $dom.get(0);
+actualNode.iAmReal = true;
+
+// append the node to a selection
+// of *two* &amp;lt;div&amp;gt; nodes
+$("body div").append($dom);
+
+// now set the text on our original &amp;lt;p&amp;gt;
+// selection. this will only show up if the
+// &amp;lt;p&amp;gt; is *not* a clone
+$dom.text("updated text");
+
+$appendedDom = $("body div p");
+// get the node that's *really*
+// in the &amp;lt;div&amp;gt; tag
+actualAppendedNode = $appendedDom.get(0);
+
+// this will alert "moved!" if it's
+// the real node, "cloned!" otherwise
+alert(typeof(actualAppendedNode.iAmReal) == "undefined" ? "cloned!" : "moved!");
+});</pre>
+<p>In the above example, I select the single &lt;p&gt; in the document, and append it to a selection of two divs. I then update the text in the original &lt;p&gt; selection. What is the output, you ask? The original &lt;p&gt; remains the first node of the &lt;body&gt;, and only it’s text is updated. A cloned &lt;p&gt; tag is added to each of the two &lt;div&gt;s, and the text for these 2 &lt;p&gt; tags is <em>not</em> updated.</p>
+<p>So, selecting 1 &lt;p&gt; and appending to 2 &lt;div&gt; tags leaves you with a total of <strong>3 &lt;p&gt; tags</strong>.</p>
+<p>The resulting DOM structure looks like:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="html" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">&lt;html&gt;
+&lt;head&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;p&gt;updated text&lt;/p&gt;
+&lt;div&gt;
+&lt;p&gt;original text&lt;/p&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;p&gt;original text&lt;/p&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+[/code]</pre>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#append-without-cloning" id="append-without-cloning"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>.append() without cloning</h3>
+<p>Next, let’s take a look at a script that will <em>move</em> nodes instead of clone them. <a href="/examples/jquery/append-original.html">Demo</a>.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="js" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">$(function(){
+var $dom = $("p");
+var actualNode = $dom.get(0);
+actualNode.iAmReal = true;
+
+// append the node to a selection
+// of *one* node
+$("body div:first").append($dom);
+
+// now set the text on the original item
+// this will only show up if it's not
+// a clone
+$dom.text("updated text");
+
+$appendedDom = $("body div:first p");
+// get the node that's *really*
+// in the &amp;lt;div&amp;gt; tag
+actualAppendedNode = $appendedDom.get(0);
+
+// this will alert "moved!" if it's
+// the real node, "clonded!" otherwise
+alert(typeof(actualAppendedNode.iAmReal) == "undefined" ? "cloned!" : "moved!");
+});</pre>
+<p>In this above example, I’ve changed the &lt;div&gt; selector to include only a single div instead of both. Since jQuery is now appending the selected &lt;p&gt; to a single &lt;div&gt; the behavior is changed, and the &lt;p&gt; is <em>not</em> cloned, but instead is moved. Line 13 updates the &lt;p&gt;’s text, just as you’d imagine.</p>
+<p>So, selecting 1 &lt;p&gt; and appending to 1 &lt;div&gt; tag leaves you with a total of <strong>1 &lt;p&gt; tag</strong>.</p>
+<p>The resulting DOM structure looks like:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="html" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">&lt;html&gt;
+&lt;head&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div&gt;
+&lt;p&gt;updated text&lt;/p&gt;
+&lt;/div&gt;
+&lt;div&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+<h3 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#summary" id="summary"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>summary</h3>
+<p>jQuery’s .append() behaves different on it’s input depending on if it’s appending to a single node or to multiple nodes. Appending to more than 1 target node:</p>
+<ol class="wp-block-list">
+<li>will <em>not</em> remove the input from the DOM</li>
+<li><em>will</em> clone the input and append to the selection</li>
+</ol>
+<p>but, appending to exactly 1 target node does the opposite:</p>
+<ol class="wp-block-list">
+<li><em>will</em> remove the input from the DOM</li>
+<li>will <em>not</em> clone the input and append to the selection</li>
+</ol>
+<p>As far as I know, this behavior is true for all functions in the <a href="http://docs.jquery.com/Manipulation">Manipulation area of the docs</a>.</p>

@@ -1,0 +1,31 @@
++++
+title = "Multi Column Layout With CSS and JQuery"
+date = "2008-07-22T05:27:05+0000"
+slug = "multi-column-layout-with-css-and-jquery"
+type = "post"
++++
+
+<p>Until we get <a href="http://www.w3.org/TR/2007/WD-css3-multicol-20070606/">native CSS support</a> for multi-column newspaper-style layouts (and draft documents from a year ago don’t give too much hope…), our choices are limited to <a href="http://csscreator.com/node/178">static</a> <a href="http://www.webmasterworld.com/forum83/267.htm">column</a> <a href="http://drupal.org/node/46415">markup</a>, and as <a href="http://labnol.blogspot.com/2006/02/create-newspaper-or-magazine-layouts.html">has been discussed</a>, there are problems with all of these solutions:</p>
+<ol class="wp-block-list">
+<li>Text doesn’t wrap from column to column</li>
+<li>Images and tables can’t easily span multiple columns</li>
+</ol>
+<p>But the primary problem with these static column layouts, is that they break down when viewed on a variety of widths. There’s no good way to have multiple dynamic columns for your content. Viewing your webpage on your high resolution wide screen monitor? Wouldn’t it be nice to see it in 4 neat columns instead of 2 extremely wide columns? Viewing on your iPhone? 4 columns is impossible to read!</p>
+<p>What’s needed is to adapt to the user’s screen width, and allow content to easily be resized and refit to as many columns as needed. What’s needed is the JQuery Columnizer Plugin.</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#the-plugin" id="the-plugin"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>The Plugin</h4>
+<p>Check out the <a class="pagelink" href="/columnizer-jquery-plugin/">Columnizer Project Page</a> for download links and the latest news.</p>
+<p>Check out the <a href="/autocolumn/sample.html">sample page</a> (mostly text) and the <a href="/autocolumn/sample2.html">second sample</a> (text, links, images) to see a fluid newspaper layout in action. <em>Resize your browser window to see columns be automatically added based on available space. 😀</em> The Columnizer Plugin can handly any html div, and can layout text, images, links, and nested tags into multiple columns on the fly.</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#the-code" id="the-code"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>The Code</h4>
+<p>So how does it work? Make sure your site is using <a href="http://jquery.com/">JQuery</a> (who isn’t?). Then, just use the newly available columnize() function, passing in an optional width:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="js" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">$(function(){
+$('.wide').columnize({width:400});
+$('.thin').columnize({width:200});
+});</pre>
+<p>That’s it! Your text is now columnized with only 1 line of code!</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#styling-your-columns" id="styling-your-columns"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Styling your columns</h4>
+<p>When Columnizer generates columns, it gives each column a “column” CSS class. The first column also gets a “first” class, and the last column gets a “last” class. To style your columns, just use:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="js" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">.first.column { }
+.last.column { }
+.column { }</pre>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#where-did-it-come-from" id="where-did-it-come-from"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Where Did It Come From?</h4>
+<p><a href="http://www.keepthewebweird.com/">Buck Wilson</a> and I wrote it over the past few days.</p>

@@ -1,0 +1,39 @@
++++
+title = "DocC build consistency"
+date = "2022-10-25T07:15:34+0000"
+slug = "docc-build-consistency"
+type = "post"
++++
+
+<p>I’ve been working on a Swift package for type-safe notifications called <a href="https://github.com/adamwulf/PonyExpress">PonyExpress</a>, and this is the first package I’ve built that <a href="https://adamwulf.github.io/PonyExpress/documentation/ponyexpress/">includes full documentation</a>. In the past, I’ve been content with a README, but this time I wanted documentation for each method to show neatly in Xcode’s info windows.</p>
+<div class="wp-block-image">
+<figure class="aligncenter size-full is-resized"><img alt="" class="wp-image-5691" decoding="async" fetchpriority="high" height="286" sizes="(max-width: 449px) 100vw, 449px" src="/wp-content/uploads/2022/10/Screen-Shot-2022-10-24-at-11.52.47-PM.png" srcset="/wp-content/uploads/2022/10/Screen-Shot-2022-10-24-at-11.52.47-PM.png 1022w, /wp-content/uploads/2022/10/Screen-Shot-2022-10-24-at-11.52.47-PM-300x191.png 300w, /wp-content/uploads/2022/10/Screen-Shot-2022-10-24-at-11.52.47-PM-768x490.png 768w" width="449"/><figcaption>Xcode integrated documentation.</figcaption></figure></div>
+<p>The magic to make this happen is <a href="https://developer.apple.com/documentation/docc">DocC comments</a> – neatly formatted comments preceded by <code>///</code>. This is the same format documentation that Apple provides for their own frameworks. After generating documentation for my packages, the documentation will be available both in Xcode and online. And of course, generated automatically with the build script.</p>
+<p>DocC comments are compiled with <code>xcodebuild</code> into a <code>doccarchive</code> bundle. I can’t find my original links, likely somewhere from StackOverflow, but I settled on two build commands. The first will generate documentation into the <code>docs/</code> folder, ready to be hosted by GitHub pages.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="bash" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">xcodebuild docbuild -scheme PonyExpress -destination generic/platform=iOS OTHER_DOCC_FLAGS="--transform-for-static-hosting --hosting-base-path PonyExpress --output-path docs"</pre>
+<p>The second will generate a <code>doccarchive</code> that can be installed into Xcode for local documentation.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="bash" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">xcodebuild docbuild -scheme PonyExpress -destination generic/platform=iOS OTHER_DOCC_FLAGS="--output-path PonyExpress.doccarchive"</pre>
+<p>The built documentation is web-based, and contains numerous html and json files. However, the JSON files aren’t built deterministically – the exported dictionaries list their key/value pairs in random order. This means that building the documentation without changing any of the source files will generate <em>different</em> documentation files. This makes is generally untidy in the git commits that include documentation changes – noisy and ugly.</p>
+<p>With a bit more command-line-foo, we can format all of the <code>json</code> files to sort their keys:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="bash" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">find docs -name *.json -exec bash -c 'jq -M -c --sort-keys . &lt; "{}" &gt; "{}.temp"; mv "{}.temp" "{}"' \;</pre>
+<p>This will read in every documentation <code>json</code> file, format it into a temp file, and then replace the original with the temp file. Now building the documentation repeatedly without any source changes also won’t generate any changes in the <code>docs/</code> folder – nice!</p>
+<p>Putting it all together:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="bash" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">// remove old built documentation
+rm -rf .build
+// build the web version for github
+xcodebuild docbuild -scheme PonyExpress -destination generic/platform=iOS OTHER_DOCC_FLAGS="--transform-for-static-hosting --hosting-base-path PonyExpress --output-path docs"
+// build the Xcode doccarchive version
+xcodebuild docbuild -scheme PonyExpress -destination generic/platform=iOS OTHER_DOCC_FLAGS="--output-path PonyExpress.doccarchive"
+// move that Xcode version into a hidden folder and open it to install it
+mkdir .build
+mv PonyExpress.doccarchive .build/PonyExpress.doccarchive
+open .build/PonyExpress.doccarchive
+// format all json files in the docs folder so that the built files are deterministic
+find docs -name *.json -exec bash -c 'jq -M -c --sort-keys . &lt; "{}" &gt; "{}.temp"; mv "{}.temp" "{}"' \;
+// add an empty Package.swift into docs/ so that it doesn't appear in Xcode
+printf "// swift-tools-version: 5.7\n// The swift-tools-version declares the minimum version of Swift required to build this package.\n\nimport PackageDescription\n\nlet package = Package()\n" &gt; docs/Package.swift</pre>
+<p>This will also add an empty <code>Package.swift</code> into the <code>docs/</code> folder so that it won’t show up in Xcode when the package is open.</p>
+<p>And that’s it! Now I can quickly rebuild the documentation from the command line whenever I update the DocC comments. In Github, I set the <code>docs</code> folder to be published to the site for the repo, and now the <a href="https://adamwulf.github.io/PonyExpress/documentation/ponyexpress/">documentation is live</a> after every <code>git push</code>!</p>
+<div class="wp-block-image">
+<figure class="aligncenter size-large is-resized"><img alt="" class="wp-image-5693" decoding="async" height="147" sizes="(max-width: 550px) 100vw, 550px" src="/wp-content/uploads/2022/10/Screen-Shot-2022-10-25-at-12.10.07-AM-1024x275.png" srcset="/wp-content/uploads/2022/10/Screen-Shot-2022-10-25-at-12.10.07-AM-1024x275.png 1024w, /wp-content/uploads/2022/10/Screen-Shot-2022-10-25-at-12.10.07-AM-300x81.png 300w, /wp-content/uploads/2022/10/Screen-Shot-2022-10-25-at-12.10.07-AM-768x206.png 768w, /wp-content/uploads/2022/10/Screen-Shot-2022-10-25-at-12.10.07-AM.png 1266w" width="550"/></figure></div>
+<p></p>

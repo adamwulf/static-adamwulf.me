@@ -1,0 +1,11 @@
++++
+title = "Setting up cron / launchd on OS X 10.5?"
+date = "2008-11-27T02:53:52+0000"
+slug = "setting-up-cron-launchd-on-os-x-105"
+type = "post"
++++
+
+<p>I had the joy this week of my 1TB network storage dying on me. It now sits on my desk making horrible clicking sounds at me hours on end… Luckily, my irreplaceable music + photos are safe, but I’d literally spent <em>days</em> meticulously <a href="http://handbrake.fr/">ripping</a>, encoding, <a href="http://www.kerstetter.net/page53/page54/page54.html">tagging</a>, and importing my DVDs into iTunes, and I’m not remotely excited about doing all that work again… not excited at all…</p>
+<p>However, it <em>did</em> give me a great excuse to go buy two 1Tb <a href="http://www.wdc.com/en/products/Products.asp?DriveID=374">My Books</a> from the Apple store today – so that almost made up for it. <img alt=":)" decoding="async" height="15" src="/wp-includes/images/smilies/icon_smile.gif" title=":)" width="15"/> And after a bit of rsync research, I wrote up a nice shell script to keep the two disks mirrored.</p>
+<p>My next instinct was to set up a cron job to daily-sync everything at some ungodly hour in the morning, but to my surprise <span style="text-decoration: line-through;">OS X 10.5 does not support cron</span><a href="http://www.wickedlush.com/blog/2007/11/08/crontab-under-mac-os-x-105-leopard/">cron is deprecated in OS X</a>! I’ve tried setting up launchd plists to get it syncing, but am having exactly zero luck. I even abandoned the command line for a <a href="http://tuppis.com/lingon/">launchd GUI app</a> and still couldn’t get it working…</p>
+<p>Is anyone else doing this? How do you daily-run tasks in OS X?</p>
