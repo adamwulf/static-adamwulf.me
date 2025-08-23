@@ -104,10 +104,25 @@ a:has(img):after {
     content: none !important;
 }
 
-/* Float profile and Muse images to allow text wrapping */
+/* Profile paragraph positioning */
+.widget_custom_html .textwidget p:has(.profile) {
+    position: relative !important;
+    margin-left: 66px !important; /* 56px width + 10px spacing */
+    min-height: 56px !important;
+}
+
+/* Profile link positioning - position absolutely within the paragraph */
+a:has(.profile) {
+    position: absolute !important;
+    left: -66px !important; /* Move into the left margin */
+    top: 0 !important;
+    display: block !important;
+}
+
+/* Profile image styling */
 .profile {
-    float: left !important;
-    margin: 0 10px 10px 0 !important;
+    border-radius: 2pt !important;
+    margin: 0 !important;
 }
 
 /* Muse icon float styling */
