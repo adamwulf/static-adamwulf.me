@@ -24,12 +24,9 @@
                   {{ end }}
                 </div><!-- .entry-meta -->
               </header><!-- .entry-header -->
-              <div class="entry-summary">
-                {{ .Summary | safeHTML }}
-                {{ if .Truncated }}
-                <p><a href="{{ .RelPermalink }}" class="more-link">Continue reading <span class="screen-reader-text">"{{ .Title }}"</span></a></p>
-                {{ end }}
-              </div><!-- .entry-summary -->
+              <div class="entry-content">
+                {{ .Content | safeHTML }}
+              </div><!-- .entry-content -->
             </div>
           </div><!-- end .row-->
         </article><!-- #post -->
@@ -40,20 +37,17 @@
         <div class="row">
           <div class="col-xs-12">
             <nav class="navigation pagination" role="navigation">
-              <div class="nav-links">
-                {{ if .Paginator.HasPrev }}
-                <a class="prev page-numbers" href="{{ .Paginator.Prev.URL }}">&laquo; Previous</a>
-                {{ end }}
-                {{ range .Paginator.Pagers }}
-                {{ if eq . $.Paginator }}
-                <span class="page-numbers current">{{ .PageNumber }}</span>
-                {{ else }}
-                <a class="page-numbers" href="{{ .URL }}">{{ .PageNumber }}</a>
-                {{ end }}
-                {{ end }}
-                {{ if .Paginator.HasNext }}
-                <a class="next page-numbers" href="{{ .Paginator.Next.URL }}">Next &raquo;</a>
-                {{ end }}
+              <div class="nav-links" style="display: flex; justify-content: space-between;">
+                <div>
+                  {{ if .Paginator.HasNext }}
+                  <a class="next page-numbers" href="{{ .Paginator.Next.URL }}">&laquo; Older</a>
+                  {{ end }}
+                </div>
+                <div>
+                  {{ if .Paginator.HasPrev }}
+                  <a class="prev page-numbers" href="{{ .Paginator.Prev.URL }}">Newer &raquo;</a>
+                  {{ end }}
+                </div>
               </div>
             </nav>
           </div>
