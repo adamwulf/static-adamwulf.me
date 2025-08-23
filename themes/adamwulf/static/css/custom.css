@@ -132,14 +132,35 @@ img[src*="muse"] {
 }
 
 /* Override Enlightener font size - make it more readable */
-.enlighter-default,
-.enlighter-default .enlighter-text {
+.enlighter-t-beyond,
+.enlighter-t-beyond .enlighter-text {
     font-size: 12pt !important;
 }
 
 /* Hide all Enlightener toolbar buttons */
 .enlighter-toolbar {
     display: none !important;
+}
+
+/* Customize Beyond theme colors and styling */
+.enlighter-t-beyond {
+    background-color: #fafafa !important;
+    border: solid 1px #e0e0e0 !important;
+    border-radius: 8px !important;
+}
+
+.enlighter-t-beyond div.enlighter>div {
+    background-color: #fafafa !important;
+}
+
+.enlighter-t-beyond div.enlighter>div.enlighter-special {
+    background-color: #f0f8ff !important;
+}
+
+/* Customize line numbers */
+.enlighter-t-beyond.enlighter-linenumbers div.enlighter>div::before {
+    color: #999 !important;
+    background-color: #f5f5f5 !important;
 }
 
 /* Alternative: inherit from page font size */
