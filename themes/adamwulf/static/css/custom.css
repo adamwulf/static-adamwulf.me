@@ -1,0 +1,58 @@
+/* Remove border-bottom from header anchor links - higher specificity to override style.css */
+.entry-content .aal_anchor,
+.entry-content .aal_anchor:hover,
+.entry-content .aal_anchor:focus,
+.entry-content .aal_anchor:active {
+    border-bottom: none !important;
+    text-decoration: none !important;
+    transition: none !important;
+    position: relative;
+    top: 2pt;
+}
+
+/* Remove the :after pseudo-element that creates the animated underline */
+.entry-content .aal_anchor:after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Also target anchor links that might be in other containers */
+h1 .aal_anchor, 
+h2 .aal_anchor, 
+h3 .aal_anchor, 
+h4 .aal_anchor, 
+h5 .aal_anchor, 
+h6 .aal_anchor {
+    border-bottom: none !important;
+    text-decoration: none !important;
+    transition: none !important;
+    position: relative;
+    top: 2pt;
+}
+
+h1 .aal_anchor:hover,
+h2 .aal_anchor:hover,
+h3 .aal_anchor:hover,
+h4 .aal_anchor:hover,
+h5 .aal_anchor:hover,
+h6 .aal_anchor:hover,
+h1 .aal_anchor:focus,
+h2 .aal_anchor:focus,
+h3 .aal_anchor:focus,
+h4 .aal_anchor:focus,
+h5 .aal_anchor:focus,
+h6 .aal_anchor:focus {
+    border-bottom: none !important;
+    text-decoration: none !important;
+}
+
+/* Remove :after pseudo-elements from header anchors too */
+h1 .aal_anchor:after,
+h2 .aal_anchor:after,
+h3 .aal_anchor:after,
+h4 .aal_anchor:after,
+h5 .aal_anchor:after,
+h6 .aal_anchor:after {
+    display: none !important;
+    content: none !important;
+}
