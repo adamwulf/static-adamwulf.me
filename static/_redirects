@@ -1,0 +1,4 @@
+# Redirect all other domains to primary domain
+https://totheinter.net/* https://adamwulf.me/:splat 301!
+https://www.totheinter.net/* https://adamwulf.me/:splat 301!
+https://welcome.totheinter.net/* https://adamwulf.me/:splat 301!
