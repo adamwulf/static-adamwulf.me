@@ -165,7 +165,7 @@ img[src*="muse"] {
 
 /* Extend navigation to counteract row padding */
 nav.pagination {
-    margin: 0 -30px;
+    margin: 0 24px 0 -30px;
 }
 
 .nav-links {
