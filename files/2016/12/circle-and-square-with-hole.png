@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Redirecting...</title>
+		<meta http-equiv="refresh" content="0;url=/wp-content/uploads/2016/12/circle-and-square-with-hole.png">
+	</head>
+	<body>
+		<script type="text/javascript">
+			window.location = "/wp-content/uploads/2016/12/circle-and-square-with-hole.png";
+		</script>
+
+		<p>You are being redirected to <a href="/wp-content/uploads/2016/12/circle-and-square-with-hole.png">/wp-content/uploads/2016/12/circle-and-square-with-hole.png</a></p>
+	</body>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Redirecting...</title>
+		<meta http-equiv="refresh" content="0;url=/wp-content/uploads/2009/01/3205536372_9014fba5fb.jpg">
+	</head>
+	<body>
+		<script type="text/javascript">
+			window.location = "/wp-content/uploads/2009/01/3205536372_9014fba5fb.jpg";
+		</script>
+
+		<p>You are being redirected to <a href="/wp-content/uploads/2009/01/3205536372_9014fba5fb.jpg">/wp-content/uploads/2009/01/3205536372_9014fba5fb.jpg</a></p>
+	</body>
+</html>

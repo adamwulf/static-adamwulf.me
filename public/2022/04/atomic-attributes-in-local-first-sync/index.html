@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Atomic Attributes in Local-First Sync &ndash; Adam Wulf</title>
+<meta name="robots" content="max-image-preview:large">
+<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
+
+
+<link rel="stylesheet" href="/wp-includes/css/dist/block-library/style.min.css" type="text/css" media="all">
+<link rel="stylesheet" href="/wp-content/plugins/add-anchor-links/assets/css/add-anchor-links.css" type="text/css" media="all">
+<link rel="stylesheet" href="/wp-content/themes/slightly/css/flexboxgrid.min.css" type="text/css" media="all">
+<link rel="stylesheet" href="/wp-content/themes/slightly/style.css" type="text/css" media="all">
+<link rel="stylesheet" href="/enlighter/enlighterjs.min.css" type="text/css" media="all">
+<link rel="stylesheet" href="/css/custom.css" type="text/css" media="all">
+
+
+<style>
+ 
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}
+:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+
+body, button, input, select, textarea, a { 
+    color: ;
+}
+
+.menu-toggle {
+  color: ;
+  background-color: #;
+}
+
+#primary-menu {
+  color: ;
+  background-color: #;
+}
+</style>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-180672-7', 'auto');
+ga('set', 'anonymizeIp', true);
+ga('set', 'forceSSL', true);
+ga('send', 'pageview');
+</script>
+</head>
+
+<body class="wp-singular post-template-default single single-post wp-theme-slightly">
+
+<div id="page" class="site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header" role="banner">
+  <div class="row">
+    <div class="col-xs-12 site-header-col">
+		<div class="site-branding">
+            <p class="site-title"><a href="/" rel="home">Adam Wulf</a></p>
+		</div>
+		<nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">Menu</button>
+			<div class="menu-navigation-container">
+                <ul id="primary-menu" class="menu">
+                    
+                    <li class="menu-item"><a href="/">Home</a></li>
+                    
+                    <li class="menu-item"><a href="/about/">About</a></li>
+                    
+                    <li class="menu-item"><a href="/projects/">Projects</a></li>
+                    
+                    <li class="menu-item"><a href="/open-source/">Open Source</a></li>
+                    
+                </ul>
+            </div>
+		</nav>
+      </div>
+    </div>
+</header>
+
+	<div id="content" class="site-content">
+        
+<div class="row row--index">
+  <div class="col-xs-12">
+    <div id="primary" class="content-area">
+      <main id="main" class="site-main" role="main">
+        
+        <article id="post-057489e917434ede4fac4e1ffe21ecf4" class="post-057489e917434ede4fac4e1ffe21ecf4 post type-post status-publish format-standard hentry">
+          <div class="row no-pad">
+            <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 no-pad">
+              <header class="entry-header">
+                <h1 class="entry-title">Atomic Attributes in Local-First Sync</h1>
+                <div class="entry-meta">
+                  <span class="posted-on">
+                    <time class="entry-date published" datetime="2022-04-13T12:00:00Z">
+                      April 13, 2022
+                    </time>
+                  </span>
+                </div>
+              </header>
+              <div class="entry-content">
+                
+<p>When we set out to build device-sync in <a href="https://museapp.com/">Muse</a>, we had a very strict requirement at the outset: it should be <a href="https://www.inkandswitch.com/local-first/">local-first</a>.</p>
+<p>Most apps work by storing all of your data on the server, and send only little bits of it to each device as you use it. Then, if a document is modified on two devices at once causing a conflict, the server is the mediator to choose the winner.</p>
+<p>With local-first sync, the world gets much more complicated. Every device you use contains a full copy of your data. If you edit the same document from multiple devices, there is no server to mediate which device wins. Instead, both devices get a full copy of each other’s changes, and they need to independently resolve to the same state.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#the-sync-protocol" id="the-sync-protocol"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>The Sync Protocol</h2>
+<p>When building the sync framework for Muse, we not only want to support Muse’s current feature set, but also support any future features we may build in the future. Ideally, implementing new features in Muse won’t also require new development on the sync protocol.</p>
+<p>Sync is hard. There’s no way around it, it’s a tough problem to solve, and so an important priority for us is finding ways we can simplify the problem. And our final solution is a bit counter-intuitive in this regard: we decided to build a sync protocol that is application agnostic.</p>
+<p>It sounds like building sync for only Muse would be simpler than building a general sync engine, but the opposite is true. Thinking about the general case has forced us to develop a simple protocol based around tiny atomic changes – which <a data-id="#atomic-changes" data-type="internal" href="#atomic-changes">we’ll get to soon</a>.</p>
+<p>Importantly, this lets us iterate on the sync protocol without making any changes to Muse logic, and also allows for us to build new Muse features without needing to add to the sync protocol at all. This decoupling helps simplify development dramatically, as any engineer working on Muse features doesn’t need to know the intricacies of the sync engine, and any engineer working on sync doesn’t need to know the details of a particular Muse feature implementation. This reduces complexity and reduces bugs.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#last-write-wins" id="last-write-wins"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Last-Write-Wins</h2>
+<p>Since the server won’t mediate which device’s changes win in the case of a conflict, this means that each device will need to resolve any conflict itself. Since all devices might not be online at the same time, it’s important for all devices to resolve any given conflict to the exact same resolution. We’ve decided to use the very simple <a href="/2021/05/distributed-clocks-and-crdts/">last-write-wins</a> method. In the case of a conflict, whichever device made the edit most recently wins and its edits will be used. </p>
+<p>We use a <a href="/2021/05/distributed-clocks-and-crdts/">hybrid logical clock</a> to determine the order of events between devices. These are built from the device’s wall clock, a counter, and the device id. We also considered a <a href="/2021/05/distributed-clocks-and-crdts/">vector clock</a>, which has some benefits over a HLC. specifically, it can differentiate between edits that were made sequentially and edits that are made in parallel. In the case of a conflict, it would give us the option to ask the user to choose between the two conflicting paths.</p>
+<p>We decided on HLCs for a few reasons: vector clocks grow in size over time, while HLCs can be a fixed size. Our edits will be so small, that asking the user to choose between conflicts is never an interaction we’d want to build into Muse, so that benefit as marginal at best.</p>
+<p>Another option would have been to use something like <a href="https://en.wikipedia.org/wiki/Operational_transformation">Operational Transforms</a>. This method requires tight coupling to the application data structure itself. The number of transforms can grow enormous for large data structures, and these are significantly more complicated to reason about compared to last-write-wins.</p>
+<p>For the above reasons, we decided to use fixed-size HLCs, small data changes, and a last-write-wins methodology. This gives us an application agnostic sync strategy that’s very easy to reason about.</p>
+<p>Our final strategy was inspired by the work many of the <a href="https://www.inkandswitch.com/local-first/">Muse team did while at Ink-and-Switch</a>, <a href="https://www.dotconferences.com/2019/12/james-long-crdts-for-mortals">James Long’s work on Actual Budget app</a>, and the <a href="https://docs.datomic.com/cloud/">Datomic</a> distributed database.</p>
+<h2 class="wp-block-heading" id="atomic-changes"><a aria-hidden="true" class="aal_anchor" href="#atomic-changes" id="atomic-changes"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Atomic Changes</h2>
+<p>In order to choose the most recent write to win, we needed a definition of what a actually composes a write. We wanted each distinct write to be as small as possible, so that any conflicts that arise will affect the smallest piece of the data-structure. we want the inevitable conflicts to be small and self-healing.</p>
+<p>The smallest change to the data-model would be to change the value of a single attribute of a single object, so at a minimum our change tracking should show:</p>
+<figure class="wp-block-table is-style-stripes"><table><thead><tr><th>Object Id</th><th>Attribute</th><th>Value</th><th>Clock</th></tr></thead><tbody><tr><td><em>UUID object identifier</em></td><td><em>String attribute name</em></td><td><em>Int, Double, String, or Binary</em></td><td><em>Hybrid Logical Clock</em></td></tr></tbody></table></figure>
+<p>We also need to know which device sent the changes. If a device is lost or stolen, we’d like the ability to ignore that devices changes after some given clock value. We also plan for encryption, so we’d need to know which encryption keys to encode/decode for a given message, as each device would have its own key-pair.</p>
+<p>The ability to add sharing and collaboration is on our minds as well. We want to provide an easy way for a user to share some portion of their data with someone else, without needing to share their entire corpus or share every application object individually. So we introduced the concept of Scopes. A Scope holds any number of objects, and in practice is mapped 1:1 to a Muse document, and is defined by a UUID. This also means that each object in the database is now addressed by both its Scope Id and Object Id. </p>
+<p>So our final model for an atomic change is:</p>
+<figure class="wp-block-table is-style-stripes"><table><thead><tr><th>Scope Id</th><th>Object Id</th><th>Attribute</th><th>Value</th><th>Clock</th><th>Device Id</th></tr></thead><tbody><tr><td><em>UUID</em></td><td><em>UUID</em></td><td><em>String name</em></td><td><em>Int, Double, String, or Binary</em></td><td><em>HLC</em></td><td><em>UUID</em></td></tr></tbody></table></figure>
+<p>Each row in the database is called an <code>Atom</code>, and is the smallest atomic change that can be made in the sync engine. Each device sends its list of <code>Atoms</code> to other devices, and the most recent change per <code>scopeId</code>, <code>objectId</code>, and <code>attribute</code> define the <code>value</code> for that property.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#mapping-the-sync-schema-to-swift" id="mapping-the-sync-schema-to-swift"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Mapping the Sync-Schema to Swift</h2>
+<p>Pre-sync Muse is built on top of CoreData. This gave us numerous advantages, first being that the Sqlite schema used by CoreData is automatically translated to the Swift class. We don’t need to manually query Sqlite and populate objects ourselves, all of that database logic is handled under-the-hood by CoreData.</p>
+<p><a href="https://docs.swift.org/swift-book/LanguageGuide/Properties.html#ID617">Property wrappers in Swift</a> let us do something similar for our own sync engine. Below is an example class definition for a sync-backed object type.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">class Board {
+    let scopeId: UUID
+    let objectId: UUID
+    @Merged var title: String
+}
+
+class Card {
+    let scopeId: UUID
+    let objectId: UUID
+    @Merged var position: CGPoint
+    @Merged var size: CGSize
+    @Merged var board: Board
+}</pre>
+<p>The <code>@Merged</code> property wrapper automatically saves/loads from the sqlite database for its property. The <code>@Merged</code> wrapper requires that the type of the property implement a protocol to facilitate that transformation – the property should be translated to/from an Int, Double, String, or opaque binary data. For the String title, if device <code>A</code> at time <code>1</code> makes the following change:   <code>myBoard.title = "some value"</code> , that will generate the sync change below:</p>
+<figure class="wp-block-table is-style-stripes"><table><thead><tr><th>Scope Id</th><th>Object Id</th><th>Attribute</th><th>Value</th><th>Clock</th><th>Device Id</th></tr></thead><tbody><tr><td><em>scopeId</em></td><td><em>objectId</em></td><td><em>“title”</em></td><td>“some value”</td><td><em>1</em></td><td><em>A</em></td></tr></tbody></table><figcaption>I’m using simple integers for the clock in the example, but in practice this is a hybrid logical clock.</figcaption></figure>
+<p>This change arrives in Sqlite as a row in the database. For cards, their <code>position</code> and <code>size</code> properties are more complicated than the board’s <code>title</code> property, as they contain 2 Doubles instead of 1 String. While we could store this structure in a single change inside a binary blob, it’s much easier and clearer to store each subpart separately.</p>
+<p>To support such a world, some Swift types such as <code>CGPoint</code> and <code>CGSize</code> are composed of two <code>CGFloat</code> atomic changes. So setting <code>myCard.size = CGSize(200, 200)</code> will generate the following two Atoms:</p>
+<figure class="wp-block-table is-style-stripes"><table><thead><tr><th>Scope Id</th><th>Object Id</th><th>Attribute</th><th>Value</th><th>Clock</th><th>Device Id</th></tr></thead><tbody><tr><td><em>scopeId</em></td><td><em>objectId</em></td><td><em>“size.width”</em></td><td>200</td><td>2</td><td><em>A</em></td></tr><tr><td><em>scopeId</em></td><td><em>objectId</em></td><td><em>“size.height”</em></td><td>200</td><td>3</td><td><em>A</em></td></tr></tbody></table></figure>
+<p>Since each Swift type can be either a single atomic row, or be composed of multiple atomic rows, this lets us define an arbitrary Swift data structure that can sync atomically between devices, and the property wrapper handles the translation between Swift and Sqlite automatically.</p>
+<p>Those changes can even be built up by multiple layers of Swift types, with <code>CGRect</code> being a simple example. The following pseudocode describes how changes for complex types can be built from changes to simpler types.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">// pseudocode for simplicity, as attribute names would be
+// separated with '.' for clarity
+
+// CGFloats return a single atomic change
+CGFloat: AtomicChanges {
+    func changes(for prefix: String) -&gt; [Atom] {
+        return [prefix + propertyName: self]
+    }
+}
+
+// CGPoint and CGSize return two changes - the changes from each CGFloat part
+CGPoint: AtomicChanges {
+    func changes(for prefix: String) -&gt; [Atom] {
+        return x.changes(for: prefix + "x") + y.changes(for: prefix + "y")
+    }
+}
+
+CGSize: AtomicChanges {
+    func changes(for prefix: String) -&gt; [Atom] {
+        return width.changes(for: prefix + "width") + height.changes(for: prefix + "height")
+    }
+}
+
+// CGRect is built from 4 changes, 2 from each of its origin and size
+CGRect: AtomicChanges {
+    func changes(for prefix: String) -&gt; [Atom] {
+        return origin.changes(for: prefix + "origin") + size.changes(for: prefix + "size")
+    }
+}</pre>
+<p>If we had defined a <code>Card.frame</code> property, its <code>CGRect</code> type would be built from <code>CGPoint</code> and <code>CGSize</code> types, which build <code>CGFloat</code> <code>Atoms</code>. </p>
+<p>If we had defined the <code>Card</code> with a single <code>frame</code> property:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="swift" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">class Card {
+    let scopeId: UUID
+    let objectId: UUID
+    @Merged var frame: CGRect
+    @Merged var board: Board
+}</pre>
+<p>Then we could edit a card with <code><meta charset="utf-8"/>myCard.frame = CGSize(125, 145, 200, 300)</code></p>
+<figure class="wp-block-table is-style-stripes"><table><thead><tr><th>Scope Id</th><th>Object Id</th><th>Attribute</th><th>Value</th><th>Clock</th><th>Device Id</th></tr></thead><tbody><tr><td><meta charset="utf-8"/><em>scopeId</em></td><td><meta charset="utf-8"/><em>objectId</em></td><td><em>“frame.origin.x”</em></td><td>125</td><td>4</td><td><meta charset="utf-8"/><em>A</em></td></tr><tr><td><meta charset="utf-8"/><em>scopeId</em></td><td><meta charset="utf-8"/><em>objectId</em></td><td><em>“frame.origin.y”</em></td><td>145</td><td>5</td><td><meta charset="utf-8"/><em>A</em></td></tr><tr><td><em>scopeId</em></td><td><em>objectId</em></td><td><em>“frame.size.width”</em></td><td>200</td><td>6</td><td><em>A</em></td></tr><tr><td><em>scopeId</em></td><td><em>objectId</em></td><td><em>“frame.size.height”</em></td><td>300</td><td>7</td><td><em>A</em></td></tr></tbody></table></figure>
+<p>To load an object, we can search Sqlite for all rows grouped by the <code>scopeId</code>, <code>objectId</code>, and <code>attribute</code> and group by the <code>clock</code>‘s max value. The property type can then load its value in a similar recursive way to decode the <code>Atoms</code> into the final Swift value.</p>
+<p>Referencing another object will simply save that object’s scope and object ids as the binary value. So setting <code>myCard.board = myBoard</code> will generate the following two <code>Atoms</code>.</p>
+<figure class="wp-block-table is-style-stripes"><table><thead><tr><th>Scope Id</th><th>Object Id</th><th>Attribute</th><th>Value</th><th>Clock</th><th>Device Id</th></tr></thead><tbody><tr><td><em>scopeId</em></td><td><em>objectId</em></td><td><em>“board.scopeId”</em></td><td><em>board’s scopeId data</em></td><td>8</td><td><em>A</em></td></tr><tr><td><em>scopeId</em></td><td><em>objectId</em></td><td><em>“board.objectId”</em></td><td><meta charset="utf-8"/><em>board’s objectId data</em></td><td>9</td><td><em>A</em></td></tr></tbody></table></figure>
+<p>This simple Sqlite schema storing <code>Atoms</code> in a table and translating these to Swift types with property wrappers gives us enormous flexibility in our application’s data structures while keeping the sync logic itself very simple.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#the-sync-foundation" id="the-sync-foundation"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>The Sync Foundation</h2>
+<p>Now we have a flexible and powerful local-first sync framework. The synced data is composed of <code>Atoms</code>, application-agnostic atomic changes, and from these small changes each client can resolve to the exact same state as every other client thanks to the hybrid logical clock.</p>
+<p>From this list of changes, we can build up complex application-specific data types, and Swift property-wrappers let us hide the underlying sync implementation from the application logic.</p>
+<p>While this post describes the structure of the synced changes into <code>Atoms</code>, it doesn’t describe how those <code>Atoms</code> are actually synced across devices. I may cover this in a future post, but the important piece is done – defining what it is that actually needs to be synced. The sync itself can happen over any number of pathways – peer to peer, a central server, <a href="https://en.wikipedia.org/wiki/Flag_semaphore">flag semaphore</a> or morse code. No matter the pathway, all synced devices will agree on the state of the application thanks to the simple sync data structure and hybrid logical clocks.</p>
+<h2 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#local-first-at-muse" id="local-first-at-muse"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Local First at Muse</h2>
+<p>If you’ve read this far, then <a href="https://museapp.com/jobs/local-first-engineer/">you’re a good fit for Muse – we’re hiring a local-first engineer</a>!</p>
+              </div>
+              <footer class="entry-footer"></footer>
+            </div>
+          </div>
+        </article>
+        
+      </main>
+    </div>
+  </div>
+</div>
+
+	</div>
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="row">
+    <div class="col-xs-12">
+		<div class="site-info">
+            &copy; 2025 <a href="/" rel="home">Adam Wulf</a> &bull; <a href="https://slightlytheme.com/?ref=footer">Slightly Theme</a>
+		</div>
+    </div>
+  </div>
+</footer>
+</div>
+
+
+<script src="/wp-content/themes/slightly/js/navigation.js"></script>
+<script src="/wp-content/themes/slightly/js/skip-link-focus-fix.js"></script>
+<script src="/enlighter/enlighterjs.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    EnlighterJS.init('pre.EnlighterJSRAW', 'code.EnlighterJSRAW', {
+      indent: 4,
+      ampersandCleanup: true,
+      linehover: false,
+      rawcodeDbclick: false,
+      textOverflow: 'break',
+      linenumbers: true,
+      theme: 'wpcustom',
+      language: 'generic',
+      retainCssClasses: false,
+      collapse: false
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Internet Explorer 7 .parentNode bug</title>
+
+<!-- TinyMCE -->
+<script src="http://welcome.totheinter.net/autocolumn/jquery.js" ></script>
+</head>
+<style>
+#copyMe{
+	border: 1px solid black;
+	color: red;
+}
+</style>
+<script>
+$(function(){
+	var node = document.getElementById("copyMe");
+	var target = document.getElementById("target");
+	target.appendChild(node);
+});
+</script>
+<body>
+
+<form method="post" action="http://tinymce.moxiecode.com/dump.php?example=true">
+	<h3>Can I copy the node below?</h3>
+	<p>
+		For more context around this demo, visit: <a href="http://welcome.totheinter.net/2009/07/21/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/">http://welcome.totheinter.net/2009/07/21/the-undocumented-life-of-javascripts-parentnode-property-internet-explorer-edition/</a>.
+	</p>
+	<p>Even though the javascript code on this page doesn't call removeChild(), the node below still
+	   only exists once in this document. It does not have 2 parents. You should see only 1 "one of me?!" nodes below:
+	</p>
+	<p>
+		<span id="copyMe">one of me?!</span>
+	</p>
+	<p id="target"></p>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Redirecting...</title>
+		<meta http-equiv="refresh" content="0;url=/wp-content/uploads/2008/10/plotkit-demo-278x300.jpg">
+	</head>
+	<body>
+		<script type="text/javascript">
+			window.location = "/wp-content/uploads/2008/10/plotkit-demo-278x300.jpg";
+		</script>
+
+		<p>You are being redirected to <a href="/wp-content/uploads/2008/10/plotkit-demo-278x300.jpg">/wp-content/uploads/2008/10/plotkit-demo-278x300.jpg</a></p>
+	</body>
+</html>

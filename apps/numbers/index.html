@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html><body><p>When multiplying any two numbers, for example 15 * 18, the value is the same as:<br>
+<br>
+x * y = avg(x,y)<sup>2</sup> - (avg(x,y) - min(x,y))<sup>2</sup><br>
+Which simplifies to:<br>
+x * y = 2 * avg(x,y) * min(x,y) - min(x,y)<sup>2</sup><br>
+<br>
+so 15 * 18 = <br>
+= avg(15,18)<sup>2</sup> - (avg(15,18) - min(15,18))<sup>2</sup><br>
+= 2 * avg(15,18) * min(15,18) - min(15,18)<sup>2</sup><br>
+= 2 * 16.5 * 15 - 15<sup>2</sup><br>
+= <b>270</b><br>
+<br>
+So the value of any multiplication is the same as the average of the two sides squared minus the distance from the numbers to the average squared.<br>
+<br>
+<br>
+<br>
+For example (reload page for more random examples):<br><br>
+-1 * 10 = <b>-10</b><br>avg(-1,10) = 4.5; min(-1,10) = -1<br>4.5<sup>2</sup> - (4.5 - -1)<sup>2</sup> = <b>-10</b><br>2 * 4.5 * -1 - -1<sup>2</sup>) = <b>-10</b><br><br>5 * 12 = <b>60</b><br>avg(5,12) = 8.5; min(5,12) = 5<br>8.5<sup>2</sup> - (8.5 - 5)<sup>2</sup> = <b>60</b><br>2 * 8.5 * 5 - 5<sup>2</sup>) = <b>60</b><br><br>-10 * 11.25 = <b>-112.5</b><br>avg(-10,11.25) = 0.625; min(-10,11.25) = -10<br>0.625<sup>2</sup> - (0.625 - -10)<sup>2</sup> = <b>-112.5</b><br>2 * 0.625 * -10 - -10<sup>2</sup>) = <b>-112.5</b><br><br>9 * 13.111111111111 = <b>118</b><br>avg(9,13.111111111111) = 11.055555555556; min(9,13.111111111111) = 9<br>11.055555555556<sup>2</sup> - (11.055555555556 - 9)<sup>2</sup> = <b>118</b><br>2 * 11.055555555556 * 9 - 9<sup>2</sup>) = <b>118</b><br><br>-12 * 1 = <b>-12</b><br>avg(-12,1) = -5.5; min(-12,1) = -12<br>-5.5<sup>2</sup> - (-5.5 - -12)<sup>2</sup> = <b>-12</b><br>2 * -5.5 * -12 - -12<sup>2</sup>) = <b>-12</b><br><br>9 * 10.5 = <b>94.5</b><br>avg(9,10.5) = 9.75; min(9,10.5) = 9<br>9.75<sup>2</sup> - (9.75 - 9)<sup>2</sup> = <b>94.5</b><br>2 * 9.75 * 9 - 9<sup>2</sup>) = <b>94.5</b><br><br>2 * 11 = <b>22</b><br>avg(2,11) = 6.5; min(2,11) = 2<br>6.5<sup>2</sup> - (6.5 - 2)<sup>2</sup> = <b>22</b><br>2 * 6.5 * 2 - 2<sup>2</sup>) = <b>22</b><br><br></p></body></html>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Swift on Adam Wulf</title>
+    <link>http://localhost:1313/tags/swift/</link>
+    <description>Recent content in Swift on Adam Wulf</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 13 Apr 2022 12:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/swift/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Atomic Attributes in Local-First Sync</title>
+      <link>http://localhost:1313/2022/04/atomic-attributes-in-local-first-sync/</link>
+      <pubDate>Wed, 13 Apr 2022 12:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/2022/04/atomic-attributes-in-local-first-sync/</guid>
+      <description>&lt;p&gt;When we set out to build device-sync in &lt;a href=&#34;https://museapp.com/&#34;&gt;Muse&lt;/a&gt;, we had a very strict requirement at the outset: it should be &lt;a href=&#34;https://www.inkandswitch.com/local-first/&#34;&gt;local-first&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;Most apps work by storing all of your data on the server, and send only little bits of it to each device as you use it. Then, if a document is modified on two devices at once causing a conflict, the server is the mediator to choose the winner.&lt;/p&gt;&#xA;&lt;p&gt;With local-first sync, the world gets much more complicated. Every device you use contains a full copy of your data. If you edit the same document from multiple devices, there is no server to mediate which device wins. Instead, both devices get a full copy of each other’s changes, and they need to independently resolve to the same state.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Type-safe notifications in Swift</title>
+      <link>http://localhost:1313/2022/02/type-safe-notifications-in-swift/</link>
+      <pubDate>Sun, 13 Feb 2022 08:19:43 +0000</pubDate>
+      <guid>http://localhost:1313/2022/02/type-safe-notifications-in-swift/</guid>
+      <description>&lt;p&gt;I’ve been coding exclusively in Swift for the past 2 years, and I’ve really been enjoying it. So much of my career has been in type-ambiguous languages – Javascript, PHP, or Objective-C. There’s some typing there, but the compiler doesn’t enforce too much. Swift, on the other hand, has brought me back to my Rice days, where so much of the education in Java and Scheme was built on functional programming and strong typing.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Changing WordPress Mu from Subdomains to Subdirectories &ndash; Adam Wulf</title>
+<meta name="robots" content="max-image-preview:large">
+	<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
+	<link rel="alternate" type="application/rss+xml" title="Adam Wulf &raquo; Feed" href="/feed/">
+<link rel="alternate" type="application/rss+xml" title="Adam Wulf &raquo; Comments Feed" href="/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Adam Wulf &raquo; Changing WordPress Mu from Subdomains to Subdirectories Comments Feed" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/feed/">
+<link rel="stylesheet" id="wp-block-library-css" href="/wp-includes/css/dist/block-library/style.min.css?ver=6.8.1" type="text/css" media="all">
+<style id="classic-theme-styles-inline-css" type="text/css">
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+</style>
+<style id="global-styles-inline-css" type="text/css">
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+</style>
+<link rel="stylesheet" id="add-anchor-links-style-css" href="/wp-content/plugins/add-anchor-links/assets/css/add-anchor-links.css?ver=1.0.2" type="text/css" media="all">
+<link rel="stylesheet" id="slightly-flexboxgrid-css" href="/wp-content/themes/slightly/css/flexboxgrid.min.css?ver=6.8.1" type="text/css" media="all">
+<link rel="stylesheet" id="slightly-style-css" href="/wp-content/themes/slightly/style.css?ver=6.8.1" type="text/css" media="all">
+<style id="akismet-widget-style-inline-css" type="text/css">
+
+			.a-stats {
+				--akismet-color-mid-green: #357b49;
+				--akismet-color-white: #fff;
+				--akismet-color-light-grey: #f6f7f7;
+
+				max-width: 350px;
+				width: auto;
+			}
+
+			.a-stats * {
+				all: unset;
+				box-sizing: border-box;
+			}
+
+			.a-stats strong {
+				font-weight: 600;
+			}
+
+			.a-stats a.a-stats__link,
+			.a-stats a.a-stats__link:visited,
+			.a-stats a.a-stats__link:active {
+				background: var(--akismet-color-mid-green);
+				border: none;
+				box-shadow: none;
+				border-radius: 8px;
+				color: var(--akismet-color-white);
+				cursor: pointer;
+				display: block;
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen-Sans', 'Ubuntu', 'Cantarell', 'Helvetica Neue', sans-serif;
+				font-weight: 500;
+				padding: 12px;
+				text-align: center;
+				text-decoration: none;
+				transition: all 0.2s ease;
+			}
+
+			/* Extra specificity to deal with TwentyTwentyOne focus style */
+			.widget .a-stats a.a-stats__link:focus {
+				background: var(--akismet-color-mid-green);
+				color: var(--akismet-color-white);
+				text-decoration: none;
+			}
+
+			.a-stats a.a-stats__link:hover {
+				filter: brightness(110%);
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 0 2px rgba(0, 0, 0, 0.16);
+			}
+
+			.a-stats .count {
+				color: var(--akismet-color-white);
+				display: block;
+				font-size: 1.5em;
+				line-height: 1.4;
+				padding: 0 13px;
+				white-space: nowrap;
+			}
+		
+</style>
+<link rel="https://api.w.org/" href="/wp-json/"><link rel="alternate" title="JSON" type="application/json" href="/wp-json/wp/v2/posts/1673"><link rel="EditURI" type="application/rsd+xml" title="RSD" href="/xmlrpc.php?rsd">
+<meta name="generator" content="WordPress 6.8.1">
+<link rel="canonical" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/">
+<link rel="shortlink" href="/?p=1673">
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="/wp-json/oembed/1.0/embed?url=https%3A%2F%2F%2F2009%2F05%2Fchanging-wordpress-mu-from-subdomains-to-subdirectories%2F">
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="/wp-json/oembed/1.0/embed?url=https%3A%2F%2F%2F2009%2F05%2Fchanging-wordpress-mu-from-subdomains-to-subdirectories%2F&amp;format=xml">
+
+		<!-- GA Google Analytics @ https://m0n.co/ga -->
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+			ga('create', 'UA-180672-7', 'auto');
+			ga('set', 'anonymizeIp', true);
+			ga('set', 'forceSSL', true);
+			ga('send', 'pageview');
+		</script>
+
+	<link rel="pingback" href="/xmlrpc.php">    <style>
+        body, button, input, select, textarea, a { 
+            color: ;
+        }
+      
+        .menu-toggle {
+          color: ;
+          background-color: #;
+        }
+      
+        #primary-menu {
+          color: ;
+          background-color: #;
+        }
+    </style>
+
+    </head>
+
+<body class="wp-singular post-template-default single single-post postid-1673 single-format-standard wp-theme-slightly">
+
+<div id="page" class="site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+
+	<header id="masthead" class="site-header" role="banner">
+  <div class="row">
+    <div class="col-xs-12 site-header-col">
+		<div class="site-branding">
+			                    <p class="site-title"><a href="/" rel="home">Adam Wulf</a></p>
+                		</div><!-- .site-branding -->
+		<nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">Menu</button>
+			<div class="menu-navigation-container"><ul id="primary-menu" class="menu"><li id="menu-item-5164" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-5164"><a href="/">Home</a></li>
+<li id="menu-item-5167" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5167"><a href="/about/">About</a></li>
+<li id="menu-item-5166" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5166"><a href="/projects/">Projects</a></li>
+<li id="menu-item-5165" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-5165"><a href="/open-source/">Open Source</a></li>
+</ul></div>		</nav><!-- #site-navigation -->
+      </div>
+    </div>
+	</header><!-- #masthead -->
+
+
+	<div id="content" class="site-content">
+
+  <div class="row row--index">
+    <div class="col-xs-12">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+<article id="post-1673" class="post-1673 post type-post status-publish format-standard hentry category-uncategorized">
+    <div class="row no-pad">
+      
+                    <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 no-pad">
+                <header class="entry-header">
+                    <h1 class="entry-title">Changing WordPress Mu from Subdomains to Subdirectories</h1>                    <div class="entry-meta">
+                        <span class="posted-on"><time class="entry-date published" datetime="2009-05-06T20:33:06+00:00">May 6, 2009</time><time class="updated" datetime="2025-01-08T08:40:09+00:00">January 8, 2025</time> </span>                    </div><!-- .entry-meta -->
+                                    </header><!-- .entry-header -->
+                <div class="entry-content">
+
+                    
+                    
+<div class="related">Related Post: <a href="/2008/10/04/how-to-migrate-from-wordpress-to-wordpress-mu/">How to migrate from WordPress to WordPress MU</a></div>
+
+
+
+<p>When you install <a href="http://mu.wordpress.org/">WordPress Mu</a>, it warns you:</p>
+
+
+
+<blockquote class="wp-block-quote is-layout-flow wp-block-quote-is-layout-flow">
+<p>Please choose whether you would like blogs for the WordPress &micro; install to use sub-domains or sub-directories. <strong>You can not change this later.</strong> We recommend sub-domains.</p>
+</blockquote>
+
+
+
+<p>It&rsquo;s true there&rsquo;s no <em>documented</em> way to change this setting, and the current advice is <a href="http://mu.wordpress.org/forums/topic.php?id=11308">to reinstall</a> (!), but I aim to change that. Instead of reinstalling plugins, reconfiguring plugins, and then powering through <a href="/2008/10/04/how-to-migrate-from-wordpress-to-wordpress-mu/">the nightmare that is WordPress export-&gt;import</a>, I resolved to find whatever setting was buried in WordPress and do it manually. And lucky for me, it turned out to be surprisingly easy<em>.</em></p>
+
+
+
+<p>I&rsquo;d originally set up adamwulf.me to use subdomains for my Mu installation, but I decided recently that subdirectories would make much more sense. After all, I&rsquo;m using Mu to power my one site, and subdomains <em>feel</em> like lots of separate sites. In retrospect, installing Mu as subdomains was the wrong decision.</p>
+
+
+
+<p>So during some downtime in <a href="/2009/04/29/the-month-of-april/">the &lsquo;ole ICU</a> last month, I decided to see if this weren&rsquo;t, in fact, a solvable problem, and it turns out it&rsquo;s a pretty easy fix.</p>
+
+
+
+<h3 class="wp-block-heading"><a href="#step-1-backup-your-database-and-config-file" aria-hidden="true" class="aal_anchor" id="step-1-backup-your-database-and-config-file"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Step 1: Backup your database and config file</h3>
+
+
+
+<p>I&rsquo;ve always subscribed to the &ldquo;protect my data from my #1 enemy: me!&rdquo; mentality.</p>
+
+
+
+<h3 class="wp-block-heading"><a href="#step-2-change-each-blogs-url" aria-hidden="true" class="aal_anchor" id="step-2-change-each-blogs-url"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Step 2: change each blog&rsquo;s URL</h3>
+
+
+
+<p>In the admin console, go to the blogs page.</p>
+
+
+
+<figure class="wp-block-image"><img decoding="async" width="156" height="122" src="/files/2009/05/picture-31.png" alt="Blogs section" class="wp-image-1689" title="Blogs section"></figure>
+
+
+
+<p></p>
+
+
+
+<p>For each blog, click the edit link to edit that blog&rsquo;s details. You&rsquo;ll want to edit the following fields to all be consistent with the <em>new</em> location you want each blog:</p>
+
+
+
+<ul class="wp-block-list">
+<li>Domain</li>
+
+
+
+<li>Path</li>
+
+
+
+<li>Siteurl</li>
+
+
+
+<li>Home</li>
+
+
+
+<li>Fileupload Url</li>
+</ul>
+
+
+
+<p>For instance, I used to have one of my blogs set up at http://page2.adamwulf.me/ but I moved it to /notes/. To do that, I changed the Domain from &ldquo;page2.adamwulf.me&rdquo; to just &ldquo;adamwulf.me&rdquo; and the Siteurl from just &ldquo;/&rdquo; to &ldquo;/notes/&rdquo;. I similarly updated all of the other fields for that blog.</p>
+
+
+
+<h3 class="wp-block-heading"><a href="#step-3-update-wp-config-php" aria-hidden="true" class="aal_anchor" id="step-3-update-wp-config-php"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Step 3: Update wp-config.php</h3>
+
+
+
+<p>There&rsquo;s one line in the wordpress config file that tells Mu to use subdomains instead of subdirectories. Change:</p>
+
+
+
+<pre class="wp-block-code"><code>define('VHOST', 'yes');</code></pre>
+
+
+
+<p>to:</p>
+
+
+
+<pre class="wp-block-code"><code>define('VHOST', 'no');</code></pre>
+
+
+
+<h3 class="wp-block-heading"><a href="#step-4-update-httpd-conf" aria-hidden="true" class="aal_anchor" id="step-4-update-httpd-conf"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Step 4: Update httpd.conf</h3>
+
+
+
+<p>If you&rsquo;ve set up Mu to use subdomains, then you need to undo your wildcard subdomain setup in your httpd.conf. <a href="http://ma.tt/2003/10/wildcard-dns-and-sub-domains/">Matt&nbsp;Mullenweg</a> has a great post explaining how <em>to</em> create the wildcard domain in the conf, so if you&rsquo;re trying to go from subdirectories to subdomains it&rsquo;s a great read.</p>
+
+
+
+<p>If you&rsquo;re going from subdomains to subdirectories (like me), just remove the wildcard domain from your httpd.conf and restart apache.</p>
+
+
+
+<p>Make sure (of course!) that you still have a virtual host defined for your actual site&rsquo;s domain. It should look something like:</p>
+
+
+
+<pre class="wp-block-code"><code>ServerName adamwulf.me
+ServerAlias www.adamwulf.me
+DocumentRoot /home/internet/public_html/welcome
+ServerAdmin webmaster@adamwulf.me
+UseCanonicalName Off</code></pre>
+
+
+
+<h3 class="wp-block-heading"><a href="#optional-step-5-redirect-from-old-subdomain-to-new-subfolder" aria-hidden="true" class="aal_anchor" id="optional-step-5-redirect-from-old-subdomain-to-new-subfolder"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Optional Step 5: Redirect from old subdomain to new subfolder</h3>
+
+
+
+<p>Good SEO tells you to <a href="http://googlewebmastercentral.blogspot.com/2008/04/best-practices-when-moving-your-site.html">redirect a URL</a> you move to it&rsquo;s new location with a 301 redirect header. To do that, I first setup a subdomain in CPanel that matched the blog&rsquo;s old subdomain location. Then I just edited the .htaccess file for that subdomain to point all incoming traffic to the new URL. The .htaccess for page2.adamwulf.me is now:</p>
+
+
+
+<pre class="wp-block-code"><code>RewriteEngine On
+RewriteBase /
+RewriteRule ^(.*) /notes/$1 [R=301,QSA,L]</code></pre>
+
+
+
+<h3 class="wp-block-heading"><a href="#conclusion" aria-hidden="true" class="aal_anchor" id="conclusion"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Conclusion</h3>
+
+
+
+<p>It turns out resetting WordPress Mu to use subdirectories instead of subdomains isn&rsquo;t all that bad! And I&rsquo;d imagine that moving from subdirectories to subdomains requires near identical steps.</p>
+
+
+
+<p>Hope this helps you out &ndash; it&rsquo;s certainly saved me from a reinstall hell! &#128578;</p>
+                </div><!-- .entry-content -->
+                <footer class="entry-footer">
+                                    </footer><!-- .entry-footer -->
+            </div>
+                
+        
+    </div><!-- end .row-->
+</article><!-- #post-## -->
+<div class="row no-pad"><div class="col-xs-12 col-md-10 col-md-offset-1 no-pad"><div class="read-next"><span>Read this next</span><h2><a href="/2009/04/the-month-of-april/" title="the month of april">the month of april</a></h2></div></div></div><div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 no-pad">
+<div id="comments" class="comments-area">
+
+			<h2 class="comments-title">
+			36 thoughts on &ldquo;<span>Changing WordPress Mu from Subdomains to Subdirectories</span>&rdquo;		</h2><!-- .comments-title -->
+
+		
+		<ol class="comment-list">
+					<li id="comment-4253" class="comment even thread-even depth-1">
+			<article id="div-comment-4253" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo avatar-default" height="32" width="32" decoding="async">						<b class="fn"><a href="http://twitter.com/adamwulf" class="url" rel="ugc external nofollow">adamwulf</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-4253"><time datetime="2009-05-06T21:06:52+00:00">May 6, 2009 at 9:06 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>convert subdomain WordPress Mu install to use sub/directories/ instead: <a href="http://tinyurl.com/ctoomg" rel="nofollow">http://tinyurl.com/ctoomg</a></p>
+<p><i>This comment was originally posted on <a href="http://twitter.com/adamwulf/statuses/1722557193" rel="nofollow">Twitter</a></i></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=4253#respond" data-commentid="4253" data-postid="1673" data-belowelement="div-comment-4253" data-respondelement="respond" data-replyto="Reply to adamwulf" aria-label="Reply to adamwulf">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-4259" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-4259" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo avatar-default" height="32" width="32" decoding="async">						<b class="fn"><a href="http://twitter.com/mlane" class="url" rel="ugc external nofollow">mlane</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-4259"><time datetime="2009-05-07T09:06:02+00:00">May 7, 2009 at 9:06 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Changing WordPress Mu from Subdomains to Subdirectories &ndash; <a href="http://bit.ly/Yrlko" rel="nofollow">http://bit.ly/Yrlko</a></p>
+<p><i>This comment was originally posted on <a href="http://twitter.com/mlane/statuses/1726846216" rel="nofollow">Twitter</a></i></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=4259#respond" data-commentid="4259" data-postid="1673" data-belowelement="div-comment-4259" data-respondelement="respond" data-replyto="Reply to mlane" aria-label="Reply to mlane">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-4262" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://www.codigogeek.com/2009/05/07/cambiar-wordpress-mu-de-subdominios-a-subdirectorios/" class="url" rel="ugc external nofollow">Cambiar Wordpress MU de subdominios a subdirectorios | Codigo Geek</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-4263" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-4263" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo avatar-default" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://twitter.com/DarklgWeb" class="url" rel="ugc external nofollow">DarklgWeb</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-4263"><time datetime="2009-05-07T11:41:22+00:00">May 7, 2009 at 11:41 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Changing WordPress Mu from Subdomains to Subdirectories  <a href="http://minurl.fr/fdw" rel="nofollow">http://minurl.fr/fdw</a></p>
+<p><i>This comment was originally posted on <a href="http://twitter.com/DarklgWeb/statuses/1728104931" rel="nofollow">Twitter</a></i></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=4263#respond" data-commentid="4263" data-postid="1673" data-belowelement="div-comment-4263" data-respondelement="respond" data-replyto="Reply to DarklgWeb" aria-label="Reply to DarklgWeb">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-4268" class="comment even thread-even depth-1">
+			<article id="div-comment-4268" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo avatar-default" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://twitter.com/465media" class="url" rel="ugc external nofollow">465media</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-4268"><time datetime="2009-05-07T13:38:26+00:00">May 7, 2009 at 1:38 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Changing WordPress Mu from Subdomains to Subdirectories  <a href="http://ow.ly/5DAj" rel="nofollow">http://ow.ly/5DAj</a>  #wordpress</p>
+<p><i>This comment was originally posted on <a href="http://twitter.com/465media/statuses/1729150747" rel="nofollow">Twitter</a></i></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=4268#respond" data-commentid="4268" data-postid="1673" data-belowelement="div-comment-4268" data-respondelement="respond" data-replyto="Reply to 465media" aria-label="Reply to 465media">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-4265" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-4265" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/7e36bb7d4575246466454b3cac2866ac72afb727f45c2de5b85b931684e204f8?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/7e36bb7d4575246466454b3cac2866ac72afb727f45c2de5b85b931684e204f8?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://wpmututorials.com/" class="url" rel="ugc external nofollow">Andrea_R</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-4265"><time datetime="2009-05-07T13:45:08+00:00">May 7, 2009 at 1:45 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Yep, that does work if you have only the main blog and maybe 1 or 2 blogs to burn through.</p>
+<p>Now imagine how fun that would be for someone with 300 blogs. &#128578;</p>
+<p>There *IS* a script available for this, but it is unreleased. It will be out there soon-ish though.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=4265#respond" data-commentid="4265" data-postid="1673" data-belowelement="div-comment-4265" data-respondelement="respond" data-replyto="Reply to Andrea_R" aria-label="Reply to Andrea_R">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-4270" class="comment byuser comment-author-admin bypostauthor even thread-even depth-1">
+			<article id="div-comment-4270" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Adam Wulf</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-4270"><time datetime="2009-05-07T14:23:51+00:00">May 7, 2009 at 2:23 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>true enough &#128578; for the i-have-tons-of-blogs people it won&rsquo;t won&rsquo;t be terribly efficient, but it was a painless enough process that i can imagine doing it for a few tens of blogs easily enough.</p>
+<p>for the people who just can&rsquo;t wait, hopefully this&rsquo;ll tide people over till the script is released. &#128578;</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=4270#respond" data-commentid="4270" data-postid="1673" data-belowelement="div-comment-4270" data-respondelement="respond" data-replyto="Reply to Adam Wulf" aria-label="Reply to Adam Wulf">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-4279" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-4279" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo avatar-default" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://twitter.com/ariyo" class="url" rel="ugc external nofollow">ariyo</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-4279"><time datetime="2009-05-07T23:23:29+00:00">May 7, 2009 at 11:23 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Changing WordPress Mu from Subdomains to Subdirectories <a href="http://tr.im/kNzB" rel="nofollow">http://tr.im/kNzB</a></p>
+<p><i>This comment was originally posted on <a href="http://twitter.com/ariyo/statuses/1734151411" rel="nofollow">Twitter</a></i></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=4279#respond" data-commentid="4279" data-postid="1673" data-belowelement="div-comment-4279" data-respondelement="respond" data-replyto="Reply to ariyo" aria-label="Reply to ariyo">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-4284" class="comment even thread-even depth-1">
+			<article id="div-comment-4284" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/9792c9313a04212fa93a32607fb79f8ee19c534bd7494831aa71da88c4ba51f4?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/9792c9313a04212fa93a32607fb79f8ee19c534bd7494831aa71da88c4ba51f4?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://jac2.com/" class="url" rel="ugc external nofollow">JAC2</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-4284"><time datetime="2009-05-08T07:08:58+00:00">May 8, 2009 at 7:08 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>This is EXACTLY what I was looking for the other day.  Thanks! &#128578;</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=4284#respond" data-commentid="4284" data-postid="1673" data-belowelement="div-comment-4284" data-respondelement="respond" data-replyto="Reply to JAC2" aria-label="Reply to JAC2">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-4300" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-4300" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/093c368ca36bd5a261155c239c03d61cda1a0dc928f53162f5f3c8c05ffadfc7?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/093c368ca36bd5a261155c239c03d61cda1a0dc928f53162f5f3c8c05ffadfc7?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://www.blog.webjustnow.com/" class="url" rel="ugc external nofollow">ivan</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-4300"><time datetime="2009-05-09T14:50:46+00:00">May 9, 2009 at 2:50 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>thanks so much!!!<br>
+just had a fuckup with dreamhost, i dont wanna use their PS, so i decided to turn everything away.<br>
+Thank you so much!!!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=4300#respond" data-commentid="4300" data-postid="1673" data-belowelement="div-comment-4300" data-respondelement="respond" data-replyto="Reply to ivan" aria-label="Reply to ivan">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-4334" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://www.buddypresslinks.com/?p=15" class="url" rel="ugc external nofollow">BuddyPress Links #7 &middot; Buddypress Links</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-4611" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-4611" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/df8af3494885e83bdc5ea83c4e7dd92eea98f15ccd49aaf6eafce82c40ba8aad?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/df8af3494885e83bdc5ea83c4e7dd92eea98f15ccd49aaf6eafce82c40ba8aad?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://tvreel.net/" class="url" rel="ugc external nofollow">Inderjeet Singh</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-4611"><time datetime="2009-06-09T04:02:17+00:00">June 9, 2009 at 4:02 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I was looking for this for my fresh Buddypress+Mu install. Hope the plugin for this releases soon</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=4611#respond" data-commentid="4611" data-postid="1673" data-belowelement="div-comment-4611" data-respondelement="respond" data-replyto="Reply to Inderjeet Singh" aria-label="Reply to Inderjeet Singh">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5450" class="comment even thread-even depth-1">
+			<article id="div-comment-5450" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/631090d284d08c84a8a24a64c6b3554776af4b54eac15a5d473c70cac00466c7?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/631090d284d08c84a8a24a64c6b3554776af4b54eac15a5d473c70cac00466c7?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://redding.net/" class="url" rel="ugc external nofollow">Teleflux</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-5450"><time datetime="2009-07-31T12:34:10+00:00">July 31, 2009 at 12:34 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>This was helpful, however, I didn&rsquo;t have to edit the httpd.conf</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=5450#respond" data-commentid="5450" data-postid="1673" data-belowelement="div-comment-5450" data-respondelement="respond" data-replyto="Reply to Teleflux" aria-label="Reply to Teleflux">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5736" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-5736" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/ecd18ad50dc6321312636f90afad3cf86f9c90084b538478bf890e990e474973?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/ecd18ad50dc6321312636f90afad3cf86f9c90084b538478bf890e990e474973?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http:/gregavola.com" class="url" rel="ugc external nofollow">Greg</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-5736"><time datetime="2009-08-20T22:46:18+00:00">August 20, 2009 at 10:46 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>This was very helpful.</p>
+<p>Thanks alot!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=5736#respond" data-commentid="5736" data-postid="1673" data-belowelement="div-comment-5736" data-respondelement="respond" data-replyto="Reply to Greg" aria-label="Reply to Greg">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5906" class="comment even thread-even depth-1">
+			<article id="div-comment-5906" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/a0654e17a8cd97c2674408ad653ecbb39251cebb6b92ee7f53b7240fdf809014?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/a0654e17a8cd97c2674408ad653ecbb39251cebb6b92ee7f53b7240fdf809014?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://indiapoint.net/" class="url" rel="ugc external nofollow">Anup</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-5906"><time datetime="2009-09-07T01:49:04+00:00">September 7, 2009 at 1:49 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Plz tell me whether its possible to have two instances of WPMU installed at the root &ndash; one working with subdirectory structure and the other working in subdomain structure?</p>
+<p>thanks</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=5906#respond" data-commentid="5906" data-postid="1673" data-belowelement="div-comment-5906" data-respondelement="respond" data-replyto="Reply to Anup" aria-label="Reply to Anup">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5907" class="comment byuser comment-author-admin bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-5907" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/24f16ea46f4db8d9b8c6e0c6be5493a2d49242253b1847bbbe55beccecc7c001?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Adam Wulf</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-5907"><time datetime="2009-09-07T02:28:04+00:00">September 7, 2009 at 2:28 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Anup, as far as I know it is not possible to run both subdomains  and subdirectories at the same time. that said, i&rsquo;d post over at <a href="http://mu.wordpress.org/forums/" rel="nofollow ugc">http://mu.wordpress.org/forums/</a> and see if those guys have any ideas. the forums generally have solid advice.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=5907#respond" data-commentid="5907" data-postid="1673" data-belowelement="div-comment-5907" data-respondelement="respond" data-replyto="Reply to Adam Wulf" aria-label="Reply to Adam Wulf">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-5915" class="comment even thread-even depth-1">
+			<article id="div-comment-5915" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/2405af46ff97d4777d843e13c3caf7c142443b4174921f6e0c5cd0d8829e7501?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/2405af46ff97d4777d843e13c3caf7c142443b4174921f6e0c5cd0d8829e7501?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://www.scribeseeker.com/" class="url" rel="ugc external nofollow">Eileen</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-5915"><time datetime="2009-09-07T22:34:48+00:00">September 7, 2009 at 10:34 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thanks so much &ndash; this was exactly what I needed on my new install (I picked subdomains when I shouldn&rsquo;t have!)</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=5915#respond" data-commentid="5915" data-postid="1673" data-belowelement="div-comment-5915" data-respondelement="respond" data-replyto="Reply to Eileen" aria-label="Reply to Eileen">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-6867" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-6867" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/68fcf8574408362cdeff18e1004bf3261658d414ebfc31904a0c9bd1380e17b3?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/68fcf8574408362cdeff18e1004bf3261658d414ebfc31904a0c9bd1380e17b3?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Nik</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-6867"><time datetime="2009-11-18T08:31:44+00:00">November 18, 2009 at 8:31 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thanks, solved my problems.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=6867#respond" data-commentid="6867" data-postid="1673" data-belowelement="div-comment-6867" data-respondelement="respond" data-replyto="Reply to Nik" aria-label="Reply to Nik">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-7097" class="comment even thread-even depth-1">
+			<article id="div-comment-7097" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/08d4584967edf0840eba3e6eaef28ab75710da5757cbd45bc5674492470f15a4?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/08d4584967edf0840eba3e6eaef28ab75710da5757cbd45bc5674492470f15a4?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Jason Bonham</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-7097"><time datetime="2009-11-27T00:39:44+00:00">November 27, 2009 at 12:39 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thankyou,</p>
+<p>very helpful information.  My hosting service took care of the wild card part.  You can always add that to the directions, so newbies like myself are aware of the potential option.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=7097#respond" data-commentid="7097" data-postid="1673" data-belowelement="div-comment-7097" data-respondelement="respond" data-replyto="Reply to Jason Bonham" aria-label="Reply to Jason Bonham">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-7421" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-7421" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/973560381a4abc462f9c53898f25c33929363b11fa2ad328af388d4127a8bb06?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/973560381a4abc462f9c53898f25c33929363b11fa2ad328af388d4127a8bb06?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Ivan</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-7421"><time datetime="2009-12-10T02:27:11+00:00">December 10, 2009 at 2:27 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Would there be any hiccups if I reverse the process from subdirectories to subdomains?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=7421#respond" data-commentid="7421" data-postid="1673" data-belowelement="div-comment-7421" data-respondelement="respond" data-replyto="Reply to Ivan" aria-label="Reply to Ivan">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-7426" class="comment even thread-even depth-1">
+			<article id="div-comment-7426" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/2a08c294d6aec76ef9a0cfd0742fa87c76961a0a695ead77e8f67eea8e0d1a7a?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/2a08c294d6aec76ef9a0cfd0742fa87c76961a0a695ead77e8f67eea8e0d1a7a?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://hammer.dk/" class="url" rel="ugc external nofollow">henrik hammer</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-7426"><time datetime="2009-12-10T04:15:39+00:00">December 10, 2009 at 4:15 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Just a note: it&rsquo;s important to remember the trailing slash &lsquo;/&rsquo; for the new subdirectory, when updating the settings in step2</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=7426#respond" data-commentid="7426" data-postid="1673" data-belowelement="div-comment-7426" data-respondelement="respond" data-replyto="Reply to henrik hammer" aria-label="Reply to henrik hammer">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-8538" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-8538" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/a9ed9dccc7c2e2aeeae56a738797eef7b1b7b269ea86cf7995c5947a01afd1c3?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/a9ed9dccc7c2e2aeeae56a738797eef7b1b7b269ea86cf7995c5947a01afd1c3?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://blogit.jamk.fi/" class="url" rel="ugc external nofollow">Jussi</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-8538"><time datetime="2010-01-27T09:02:33+00:00">January 27, 2010 at 9:02 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thanks! This was just what the doctor ordered &#128521;</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=8538#respond" data-commentid="8538" data-postid="1673" data-belowelement="div-comment-8538" data-respondelement="respond" data-replyto="Reply to Jussi" aria-label="Reply to Jussi">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-8666" class="comment even thread-even depth-1">
+			<article id="div-comment-8666" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/19a1fea1ddf7e594b7972ff93bab519023e56c21fa985a84c0dcce1f3c117176?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/19a1fea1ddf7e594b7972ff93bab519023e56c21fa985a84c0dcce1f3c117176?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://simusonline.com/" class="url" rel="ugc external nofollow">Simeon Mus</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-8666"><time datetime="2010-01-30T06:11:22+00:00">January 30, 2010 at 6:11 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thank you for the article. It will help me very much.<br>
+Andrea says &ldquo;There *IS* a script available for this, but it is unreleased. It will be out there soon-ish though.&rdquo;<br>
+Is it released since then? Where can we find it, please?<br>
+thanks</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=8666#respond" data-commentid="8666" data-postid="1673" data-belowelement="div-comment-8666" data-respondelement="respond" data-replyto="Reply to Simeon Mus" aria-label="Reply to Simeon Mus">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-9595" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-9595" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/3cc03bb79528a24aff698183b248c65e05109a6f54eca3be98207df827cf8c1f?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/3cc03bb79528a24aff698183b248c65e05109a6f54eca3be98207df827cf8c1f?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://www.lethbridgedogs.com/" class="url" rel="ugc external nofollow">Dwayne</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-9595"><time datetime="2010-03-09T12:33:26+00:00">March 9, 2010 at 12:33 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>This worked like a charm &ndash; I set it up with subdomains originally, thinking I&rsquo;d convince godaddy to make it work, but I failed.  I had just one blog to convert, quick and simple.<br>
+thanks</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=9595#respond" data-commentid="9595" data-postid="1673" data-belowelement="div-comment-9595" data-respondelement="respond" data-replyto="Reply to Dwayne" aria-label="Reply to Dwayne">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-9847" class="comment even thread-even depth-1">
+			<article id="div-comment-9847" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/4563557df8b2f587dcea0a0fda155c07d65a077bbb3e126350cd234f620cf33a?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/4563557df8b2f587dcea0a0fda155c07d65a077bbb3e126350cd234f620cf33a?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://geekhang.com/" class="url" rel="ugc external nofollow">Artful Dodger</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-9847"><time datetime="2010-03-19T15:57:31+00:00">March 19, 2010 at 3:57 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hey, thanks very much for this post, worked perfectly without any hiccups, again, thanks a bunch.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=9847#respond" data-commentid="9847" data-postid="1673" data-belowelement="div-comment-9847" data-respondelement="respond" data-replyto="Reply to Artful Dodger" aria-label="Reply to Artful Dodger">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-11550" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-11550" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/c362c8ef3af9795483751a74f8d1a4dab47a994ce4bca8b7695d619c0d4056da?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/c362c8ef3af9795483751a74f8d1a4dab47a994ce4bca8b7695d619c0d4056da?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://bloggista.com/" class="url" rel="ugc external nofollow">bloggista</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-11550"><time datetime="2010-06-18T03:37:17+00:00">June 18, 2010 at 3:37 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>This is exactly what I need. Thanks for this valuable info. I&rsquo;ve been long wanting to switch from subdomains to subdirectory but I was just kinda lazy to do a re-install. will try this one and hope it works. &#128578;</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=11550#respond" data-commentid="11550" data-postid="1673" data-belowelement="div-comment-11550" data-respondelement="respond" data-replyto="Reply to bloggista" aria-label="Reply to bloggista">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-12005" class="comment even thread-even depth-1">
+			<article id="div-comment-12005" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/e4f1b47a43b7e2c2ca0d894cefb9b26d3fb23ea174dc07cc2570280c9f0d9647?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/e4f1b47a43b7e2c2ca0d894cefb9b26d3fb23ea174dc07cc2570280c9f0d9647?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://www.techiechic.net/" class="url" rel="ugc external nofollow">TechieChic</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-12005"><time datetime="2010-07-19T13:19:41+00:00">July 19, 2010 at 1:19 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thank you so much!  I had only just barely installed WordPress MU and had picked the wrong option and realized it as soon as I clicked the install button.  Definitely nice to not have to start all over, since for me it was just a simple change in the wp-config from &ldquo;yes&rdquo; to &ldquo;no&rdquo;!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=12005#respond" data-commentid="12005" data-postid="1673" data-belowelement="div-comment-12005" data-respondelement="respond" data-replyto="Reply to TechieChic" aria-label="Reply to TechieChic">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-15509" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-15509" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/d216d4eb44d8994b3f995c0fd5998739403dff719749a2bca019ae5a3f38862a?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/d216d4eb44d8994b3f995c0fd5998739403dff719749a2bca019ae5a3f38862a?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://bluemandala.com/" class="url" rel="ugc external nofollow">Deryk Wenaus</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-15509"><time datetime="2010-11-09T21:57:32+00:00">November 9, 2010 at 9:57 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>very helpful!! someone should add this to the codex somethere. I&rsquo;m going to add some keywords here that I searched on before I got here, just so other searcher may find this helpful post. SUBDOMAIN_INSTALL MULTISITE WP_ALLOW_MULTISITE DOMAIN_CURRENT_SITE</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=15509#respond" data-commentid="15509" data-postid="1673" data-belowelement="div-comment-15509" data-respondelement="respond" data-replyto="Reply to Deryk Wenaus" aria-label="Reply to Deryk Wenaus">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-16794" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://www.laterna.nl/200912/wordpress-mu-ervaringen.php" class="url" rel="ugc external nofollow">Een jaar ervaring met WordPress MU [Wessel Zweers]</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-19538" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-19538" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/06da84a317c2d0e3e45aaeff97850a7d89c5ab46a76763ad73030b6579a25e96?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/06da84a317c2d0e3e45aaeff97850a7d89c5ab46a76763ad73030b6579a25e96?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://porndom.net/page/2/" class="url" rel="ugc external nofollow">fIlesonic</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-19538"><time datetime="2011-01-29T13:44:38+00:00">January 29, 2011 at 1:44 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>What about using a seperate domain?</p>
+<p>IE: Main site is example.com</p>
+<p>I wanted to host testsite.com, but when I visit the blog and click any links it goes back to test.example.com, is there no way to hide that? Is the only option to install another copy of wordpress?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=19538#respond" data-commentid="19538" data-postid="1673" data-belowelement="div-comment-19538" data-respondelement="respond" data-replyto="Reply to fIlesonic" aria-label="Reply to fIlesonic">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-22900" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://rgvrockcity.com/blog/archives/168" class="url" rel="ugc external nofollow">From subdirectories to subdomains | RGVRockCity.com</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-34685" class="pingback odd alt thread-odd thread-alt depth-1">
+			<div class="comment-body">
+				Pingback: <a href="http://blog.i-mill.de/wordpress/wordpress-blog-netzwerk-auf-subdomain/" class="url" rel="ugc external nofollow">Wordpress Blog Netzwerk auf Subdomain | i-mill</a> 			</div>
+		</li><!-- #comment-## -->
+		<li id="comment-45134" class="comment even thread-even depth-1">
+			<article id="div-comment-45134" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/9c3c09fd76b8eb3c8fc702ac2a5bb580a3bf09a85f6103ca6e2b86626aa1be1b?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/9c3c09fd76b8eb3c8fc702ac2a5bb580a3bf09a85f6103ca6e2b86626aa1be1b?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://www.speakingagent.com/" class="url" rel="ugc external nofollow">Speaking Agent</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-45134"><time datetime="2011-07-19T12:52:28+00:00">July 19, 2011 at 12:52 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>This ALMOST worked for me&hellip; The theme on the new subdirectory site is not loading. </p>
+<p>also, i am unable to login under &ldquo;&hellip;domainname.subdirectory/wp-admin&rdquo;</p>
+<p>any thoughts?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=45134#respond" data-commentid="45134" data-postid="1673" data-belowelement="div-comment-45134" data-respondelement="respond" data-replyto="Reply to Speaking Agent" aria-label="Reply to Speaking Agent">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-95945" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-95945" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/f40e98f321eb8545cde862f273a5025db113f76717870d22f95936dbb9c5460c?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/f40e98f321eb8545cde862f273a5025db113f76717870d22f95936dbb9c5460c?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn"><a href="http://www.coeurmechante.com/" class="url" rel="ugc external nofollow">Coeurmechante</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-95945"><time datetime="2012-01-26T11:36:18+00:00">January 26, 2012 at 11:36 am</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hiya,</p>
+<p>It almost worked for me too&ndash; the theme wasn&rsquo;t loading (the header was looking for domain.com/subdirectory/path/to/theme instead of domain.com/path/to/themes.  Also, I was getting 404 errors on wp-admin pages for my subdirectory blogs.</p>
+<p>For those staggering in, the directions here, plus the change to .htaccess in the link below fixed both problems (had to deactivate/reactivate theme):</p>
+<p><a href="http://journalxtra.com/websiteadvice/wordpress/how-to-force-multi-site-to-use-subdirectories-2427/" rel="nofollow ugc">http://journalxtra.com/websiteadvice/wordpress/how-to-force-multi-site-to-use-subdirectories-2427/</a></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=95945#respond" data-commentid="95945" data-postid="1673" data-belowelement="div-comment-95945" data-respondelement="respond" data-replyto="Reply to Coeurmechante" aria-label="Reply to Coeurmechante">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-300337" class="comment even thread-even depth-1">
+			<article id="div-comment-300337" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/f8833811ced7b2c70cd31f155c9ef9526f30b5022438d100c4ff1335abbadd38?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/f8833811ced7b2c70cd31f155c9ef9526f30b5022438d100c4ff1335abbadd38?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Toz</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-300337"><time datetime="2014-03-15T12:40:17+00:00">March 15, 2014 at 12:40 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thanks!! These instructions together with Coeurmechante&rsquo;s htaccess changes, did it for me as I am changing a subdomain site to a subfolder site. </p>
+<p>I had to make sure to clean out my hosting account&rsquo;s built-in cache, refresh my browser and right now everything is working. Saved me a few days work rebuilding a subdomain site as a subfolder site.</p>
+<p>To be sure, here&rsquo;s that .htaccess setup, courtesy of Coeurmechante: </p>
+<p># BEGIN WordPress<br>
+RewriteEngine On<br>
+RewriteBase /<br>
+RewriteRule ^index\.php$ &ndash; [L]</p>
+<p># uploaded files<br>
+RewriteRule ^([_0-9a-zA-Z-]+/)?files/(.+) wp-includes/ms-files.php?file=$2 [L]</p>
+<p># add a trailing slash to /wp-admin<br>
+RewriteRule ^([_0-9a-zA-Z-]+/)?wp-admin$ $1wp-admin/ [R=301,L]</p>
+<p>RewriteCond %{REQUEST_FILENAME} -f [OR]<br>
+RewriteCond %{REQUEST_FILENAME} -d<br>
+RewriteRule ^ &ndash; [L]<br>
+RewriteRule  ^[_0-9a-zA-Z-]+/(wp-(content|admin|includes).*) $1 [L]<br>
+RewriteRule  ^[_0-9a-zA-Z-]+/(.*\.php)$ $1 [L]<br>
+RewriteRule . index.php [L]<br>
+# END WordPress</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=300337#respond" data-commentid="300337" data-postid="1673" data-belowelement="div-comment-300337" data-respondelement="respond" data-replyto="Reply to Toz" aria-label="Reply to Toz">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		<li id="comment-300340" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-300340" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt="" src="https://secure.gravatar.com/avatar/f8833811ced7b2c70cd31f155c9ef9526f30b5022438d100c4ff1335abbadd38?s=32&amp;d=mm&amp;r=g" srcset="https://secure.gravatar.com/avatar/f8833811ced7b2c70cd31f155c9ef9526f30b5022438d100c4ff1335abbadd38?s=64&amp;d=mm&amp;r=g 2x" class="avatar avatar-32 photo" height="32" width="32" loading="lazy" decoding="async">						<b class="fn">Toz</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#comment-300340"><time datetime="2014-03-15T12:55:48+00:00">March 15, 2014 at 12:55 pm</time></a>					</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Another challenge for me was to move one of the former subdomain sites to show as the main site, in the root folder with no subdirectory. That proved easy as well: </p>
+<p>in /wp-admin/network/sites.php first rename the folder of your current root folder install (for example rename it to: /old/) </p>
+<p>then rename your subfolder install so that it now shows as the root folder /</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel="nofollow" class="comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/?replytocom=300340#respond" data-commentid="300340" data-postid="1673" data-belowelement="div-comment-300340" data-respondelement="respond" data-replyto="Reply to Toz" aria-label="Reply to Toz">Reply</a></div>			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+			<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/2009/05/changing-wordpress-mu-from-subdomains-to-subdirectories/#respond" style="display:none;">Cancel reply</a></small></h3><form action="/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> <span class="required-field-message">Required fields are marked <span class="required">*</span></span></p><p class="comment-form-comment"><label for="comment">Comment <span class="required">*</span></label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required></textarea></p><p style="clear: both;" class="subscribe-to-comments">
+			<input type="checkbox" name="subscribe" id="subscribe" value="subscribe" style="width: auto;">
+			<label for="subscribe">Notify me of followup comments via e-mail</label>
+			</p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" autocomplete="name" required></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" autocomplete="url"></p>
+<p class="comment-form-cookies-consent"><input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes"> <label for="wp-comment-cookies-consent">Save my name, email, and website in this browser for the next time I comment.</label></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment"> <input type="hidden" name="comment_post_ID" value="1673" id="comment_post_ID">
+<input type="hidden" name="comment_parent" id="comment_parent" value="0">
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="00a1816580"></p><p style="display: none !important;" class="akismet-fields-container" data-prefix="ak_"><label>&Delta;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="237"><script>document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form>	</div><!-- #respond -->
+	
+</div><!-- #comments --></div>
+		</main><!-- #main -->
+	</div><!-- #primary -->
+    </div>
+
+    </div>
+
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+
+  <div class="row">
+    <div class="col-xs-12">
+        
+		<div class="site-info">
+            &copy; 2025 <a href="/" rel="home">Adam Wulf</a> &bull; <a href="https://slightlytheme.com/?ref=footer">Slightly Theme</a>		</div><!-- .site-info -->
+
+    </div>
+    </div>
+        
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type="speculationrules">
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"\/*"},{"not":{"href_matches":["\/wp-*.php","\/wp-admin\/*","\/wp-content\/uploads\/*","\/wp-content\/*","\/wp-content\/plugins\/*","\/wp-content\/themes\/slightly\/*","\/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+</script>
+<script type="text/javascript">/* <![CDATA[ */!function(e,n){var r={"selectors":{"block":"pre.EnlighterJSRAW","inline":"code.EnlighterJSRAW"},"options":{"indent":4,"ampersandCleanup":true,"linehover":false,"rawcodeDbclick":false,"textOverflow":"break","linenumbers":true,"theme":"wpcustom","language":"generic","retainCssClasses":false,"collapse":false,"toolbarOuter":"","toolbarTop":"{BTN_RAW}{BTN_COPY}{BTN_WINDOW}{BTN_WEBSITE}","toolbarBottom":""},"resources":["\/wp-content\/plugins\/enlighter\/cache\/enlighterjs.min.css?TMA22bS9bPYA1tn","\/wp-content\/plugins\/enlighter\/resources\/enlighterjs\/enlighterjs.min.js"]},o=document.getElementsByTagName("head")[0],t=n&&(n.error||n.log)||function(){};e.EnlighterJSINIT=function(){!function(e,n){var r=0,l=null;function c(o){l=o,++r==e.length&&(!0,n(l))}e.forEach(function(e){switch(e.match(/\.([a-z]+)(?:[#?].*)?$/)[1]){case"js":var n=document.createElement("script");n.onload=function(){c(null)},n.onerror=c,n.src=e,n.async=!0,o.appendChild(n);break;case"css":var r=document.createElement("link");r.onload=function(){c(null)},r.onerror=c,r.rel="stylesheet",r.type="text/css",r.href=e,r.media="all",o.appendChild(r);break;default:t("Error: invalid file extension",e)}})}(r.resources,function(e){e?t("Error: failed to dynamically load EnlighterJS resources!",e):"undefined"!=typeof EnlighterJS?EnlighterJS.init(r.selectors.block,r.selectors.inline,r.options):t("Error: EnlighterJS resources not loaded yet!")})},(document.querySelector(r.selectors.block)||document.querySelector(r.selectors.inline))&&e.EnlighterJSINIT()}(window,console); /* ]]> */</script><script type="text/javascript" src="/wp-content/themes/slightly/js/navigation.js?ver=20151215" id="slightly-navigation-js"></script>
+<script type="text/javascript" src="/wp-content/themes/slightly/js/skip-link-focus-fix.js?ver=20151215" id="slightly-skip-link-focus-fix-js"></script>
+<script type="text/javascript" src="/wp-includes/js/comment-reply.min.js?ver=6.8.1" id="comment-reply-js" async="async" data-wp-strategy="async"></script>
+<script defer type="text/javascript" src="/wp-content/plugins/akismet/_inc/akismet-frontend.js?ver=1749187471" id="akismet-frontend-js"></script>
+
+</body>
+</html>

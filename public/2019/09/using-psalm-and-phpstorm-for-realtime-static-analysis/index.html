@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Using Psalm and PhpStorm for realtime static analysis &ndash; Adam Wulf</title>
+<meta name="robots" content="max-image-preview:large">
+<style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
+
+
+<link rel="stylesheet" href="/wp-includes/css/dist/block-library/style.min.css" type="text/css" media="all">
+<link rel="stylesheet" href="/wp-content/plugins/add-anchor-links/assets/css/add-anchor-links.css" type="text/css" media="all">
+<link rel="stylesheet" href="/wp-content/themes/slightly/css/flexboxgrid.min.css" type="text/css" media="all">
+<link rel="stylesheet" href="/wp-content/themes/slightly/style.css" type="text/css" media="all">
+<link rel="stylesheet" href="/enlighter/enlighterjs.min.css" type="text/css" media="all">
+<link rel="stylesheet" href="/css/custom.css" type="text/css" media="all">
+
+
+<style>
+ 
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+:root{--wp--preset--aspect-ratio--square: 1;--wp--preset--aspect-ratio--4-3: 4/3;--wp--preset--aspect-ratio--3-4: 3/4;--wp--preset--aspect-ratio--3-2: 3/2;--wp--preset--aspect-ratio--2-3: 2/3;--wp--preset--aspect-ratio--16-9: 16/9;--wp--preset--aspect-ratio--9-16: 9/16;--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}
+:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flex{display: flex;}.is-layout-flex{flex-wrap: wrap;align-items: center;}.is-layout-flex > :is(*, div){margin: 0;}body .is-layout-grid{display: grid;}.is-layout-grid > :is(*, div){margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+:root :where(.wp-block-pullquote){font-size: 1.5em;line-height: 1.6;}
+
+body, button, input, select, textarea, a { 
+    color: ;
+}
+
+.menu-toggle {
+  color: ;
+  background-color: #;
+}
+
+#primary-menu {
+  color: ;
+  background-color: #;
+}
+</style>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-180672-7', 'auto');
+ga('set', 'anonymizeIp', true);
+ga('set', 'forceSSL', true);
+ga('send', 'pageview');
+</script>
+</head>
+
+<body class="wp-singular post-template-default single single-post wp-theme-slightly">
+
+<div id="page" class="site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header" role="banner">
+  <div class="row">
+    <div class="col-xs-12 site-header-col">
+		<div class="site-branding">
+            <p class="site-title"><a href="/" rel="home">Adam Wulf</a></p>
+		</div>
+		<nav id="site-navigation" class="main-navigation" role="navigation">
+            <button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">Menu</button>
+			<div class="menu-navigation-container">
+                <ul id="primary-menu" class="menu">
+                    
+                    <li class="menu-item"><a href="/">Home</a></li>
+                    
+                    <li class="menu-item"><a href="/about/">About</a></li>
+                    
+                    <li class="menu-item"><a href="/projects/">Projects</a></li>
+                    
+                    <li class="menu-item"><a href="/open-source/">Open Source</a></li>
+                    
+                </ul>
+            </div>
+		</nav>
+      </div>
+    </div>
+</header>
+
+	<div id="content" class="site-content">
+        
+<div class="row row--index">
+  <div class="col-xs-12">
+    <div id="primary" class="content-area">
+      <main id="main" class="site-main" role="main">
+        
+        <article id="post-6c3a3315233cd1094590a9b369f17c3f" class="post-6c3a3315233cd1094590a9b369f17c3f post type-post status-publish format-standard hentry">
+          <div class="row no-pad">
+            <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 no-pad">
+              <header class="entry-header">
+                <h1 class="entry-title">Using Psalm and PhpStorm for realtime static analysis</h1>
+                <div class="entry-meta">
+                  <span class="posted-on">
+                    <time class="entry-date published" datetime="2019-09-23T04:53:01Z">
+                      September 23, 2019
+                    </time>
+                  </span>
+                </div>
+              </header>
+              <div class="entry-content">
+                
+<p>Building on the <a href="/2019/08/setting-up-phpstorm-as-a-new-developer/">static analysis of Phan</a>, I’ve also recently started using <a href="https://psalm.dev/">Psalm, a PHP static analyzer</a> from Vimeo’s engineering team. What I particularly love about Psalm is its realtime analysis and integration within PhpStorm. Instead of needing to run a report after any changes, Psalm can highlight issues as they happen with my source code open.</p>
+<div class="wp-block-image"><figure class="aligncenter is-resized"><img alt="" class="wp-image-5258" decoding="async" fetchpriority="high" height="168" sizes="(max-width: 366px) 100vw, 366px" src="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-7.46.22-PM.png" srcset="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-7.46.22-PM.png 896w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-7.46.22-PM-300x139.png 300w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-7.46.22-PM-768x355.png 768w" width="366"/></figure></div>
+<p>While Psalm includes the necessary language server to integrate with PhpStorm, a plugin is needed to make the connection. I’m using the <a href="https://plugins.jetbrains.com/plugin/10209-lsp-support/">LSP Support plugin by Guillaume Tâche</a>. Here’s what I did to get everything setup, and some lessons I learned along the way.</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#getting-set-up" id="getting-set-up"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Getting Set Up</h4>
+<p>First, Install Psalm via composer:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="shell" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">composer require --dev vimeo/psalm</pre>
+<p>Then setup a psalm.xml configuration file. Psalm provides 8 levels of strictness, 1 being the most strict and 3 being the default. I’m using level 4.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="shell" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">./vendor/bin/psalm --init [source_directory=src] [config_level=3]</pre>
+<p>Next, I have a few of my own helper functions, so I added stubs to those functions inside the psalm.xml. I also use New Relic, and JetBrains helpfully provides a repo that contains <a href="https://github.com/JetBrains/phpstorm-stubs">pre-defined stubs for numerous libraries</a>.</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="xml" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">    &lt;stubs&gt;
+        &lt;file name="../phpstorm-stubs/newrelic/newrelic.php"/&gt;
+        &lt;file name="../phpstorm-stubs/funnel-cake/funnel-cake.php"/&gt;
+    &lt;/stubs&gt;</pre>
+<p>At this point Psalm is installed and configured – now let’s get some static analysis goodness from it!</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#using-psalm" id="using-psalm"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Using Psalm</h4>
+<p>To see Psalm’s analysis in your console, you’ll only need to run <code>psalm</code> from the same directory as your <code>psalm.xml</code>. For some reason for me, I was getting corrupt caches (I think from running psalm while the language server is setup, which i’ll explain below), so I run from the command line with:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="shell" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">psalm --no-progress --no-cache</pre>
+<p>I’ve setup an External Tool in PhpStorm to run the above, which will show its output from inside of PhpStorm. I’ve actually setup a short script to better format Psalm’s output. PhpStorm needs absolute file paths, and can then link directly to the issue. Save the following script as <code>run_psalm.sh</code> in the root directory of your project:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="shell" data-enlighter-linenumbers="false" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">psalm --no-progress --no-cache &gt; psalm.out
+
+cat psalm.out | sed G | sed -E 's|(.*) - ([a-zA-Z0-9 _\./\-]+:[[:digit:]]+)|'"$(pwd)"'/\2\
+\1|g' | perl -pi -0 -w -e 's/\n\n/\n/g'
+
+rm psalm.out</pre>
+<p>Then, in PhpStorm, open up External Tools in the Preferences window:</p>
+<div class="wp-block-image"><figure class="aligncenter is-resized"><img alt="" class="wp-image-5267" decoding="async" height="120" sizes="(max-width: 306px) 100vw, 306px" src="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-10.56.58-PM.png" srcset="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-10.56.58-PM.png 504w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-10.56.58-PM-300x118.png 300w" width="306"/><figcaption>Preferences → Tools → External Tools</figcaption></figure></div>
+<p>Then, add a new external tool and fill in the details to run the above script:</p>
+<div class="wp-block-image"><figure class="aligncenter"><img alt="" class="wp-image-5268" decoding="async" height="830" sizes="(max-width: 1024px) 100vw, 1024px" src="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.02.34-PM-1024x830.png" srcset="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.02.34-PM-1024x830.png 1024w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.02.34-PM-300x243.png 300w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.02.34-PM-768x623.png 768w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.02.34-PM.png 1436w" width="1024"/><figcaption>The Output filter will allow PhpStorm to auto-link issues from Psalm’s output.</figcaption></figure></div>
+<p>I’ve also setup an External Tool for Phan, as I’ve described before, so my Tools → External Tools menu shows both Phan and Psalm options now:</p>
+<div class="wp-block-image"><figure class="aligncenter is-resized"><img alt="" class="wp-image-5269" decoding="async" height="179" loading="lazy" sizes="auto, (max-width: 323px) 100vw, 323px" src="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.04.21-PM.png" srcset="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.04.21-PM.png 806w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.04.21-PM-300x167.png 300w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.04.21-PM-768x427.png 768w" width="323"/></figure></div>
+<p>But this is only the first integration – the next one is what’s got me most excited about Psalm – full IDE integration for realtime highlighting of issues.</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#language-server-plugin" id="language-server-plugin"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Language Server Plugin</h4>
+<p>To get realtime analysis, open up PhpStorm’s plugin marketplace and search for “LSP Support” and you’ll find the plugin by gtache.</p>
+<div class="wp-block-image"><figure class="aligncenter is-resized"><a href="https://plugins.jetbrains.com/plugin/10209-lsp-support/" rel="noreferrer noopener" target="_blank"><img alt="" class="wp-image-5271" decoding="async" height="220" loading="lazy" sizes="auto, (max-width: 366px) 100vw, 366px" src="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.07.40-PM.png" srcset="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.07.40-PM.png 770w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.07.40-PM-300x180.png 300w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.07.40-PM-768x461.png 768w" width="366"/></a></figure></div>
+<p>After installing the plugin and restarting PhpStorm, you’ll see a new menu in the Languages &amp; Frameworks section of preference window. Open the Server Definitions section.</p>
+<div class="wp-block-image"><figure class="aligncenter"><img alt="" class="wp-image-5273" decoding="async" height="252" loading="lazy" sizes="auto, (max-width: 300px) 100vw, 300px" src="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.10.49-PM-300x252.png" srcset="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.10.49-PM-300x252.png 300w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.10.49-PM.png 520w" width="300"/><figcaption>Preferences → Languages &amp; Frameworks → Language Server Protocol → Server Definitions</figcaption></figure></div>
+<p>Set the first drop down it <code>Executable</code>, and set the <code>Extension</code> to <code>php</code>. For the <code>path</code>, set it to the path of your <code>php</code> executable. I’m running MAMP, I’ve set my <code>path</code> to <code>/Applications/MAMP/bin/php/php7.3.8/bin/php</code>. Last, set the <code>args</code> to <code>vendor/bin/psalm-language-server</code>.</p>
+<p>Your configuration should look something like this when you’re done:</p>
+<div class="wp-block-image"><figure class="aligncenter"><img alt="" class="wp-image-5274" decoding="async" height="86" loading="lazy" sizes="auto, (max-width: 1024px) 100vw, 1024px" src="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.15.26-PM-1024x86.png" srcset="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.15.26-PM-1024x86.png 1024w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.15.26-PM-300x25.png 300w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.15.26-PM-768x64.png 768w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.15.26-PM.png 1980w" width="1024"/></figure></div>
+<p>Restart PhpStorm, open a php file, and if everything goes well you should see the language server icon show the start up success and see the green status icon in the footer. <img alt="" class="wp-image-5275" decoding="async" height="44" loading="lazy" src="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.16.55-PM.png" style="width: 46px;" width="46"/></p>
+<p>Now you should be seeing live Psalm feedback inside of PhpStorm!</p>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#its-not-perfect" id="its-not-perfect"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>It’s Not Perfect</h4>
+<p>There’s a few odd things I’ve noticed when using the language server, here’s a few:</p>
+<ol class="wp-block-list"><li>It doesn’t seem to start until I’ve edited a file. After opening a file, nothing will highlight until i’ve typed at least 1 character into the editor, but then everything will pop in.</li><li>Sometimes it’s slow. I think it re-analyzes after every keystroke, and I wish the LSP Plugin would be a bit gentler here</li><li>I’ve received occasional crashes of the LSP Support plugin. It’s rare enough that it’s not a huge problem, but is a bit of an inconvenience.</li><li>The plugin overwrites the Quick Documentation mouse click with its own popover. I’ve set option+click to open the Quick Documentation window, but instead it was opening the LSP information.</li></ol>
+<div class="wp-block-image"><figure class="aligncenter is-resized"><img alt="" class="wp-image-5279" decoding="async" height="211" loading="lazy" sizes="auto, (max-width: 440px) 100vw, 440px" src="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.27.12-PM-1024x494.png" srcset="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.27.12-PM-1024x494.png 1024w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.27.12-PM-300x145.png 300w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.27.12-PM-768x370.png 768w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.27.12-PM.png 1054w" width="440"/><figcaption>Here’s the default Quick Documentation that I want….</figcaption></figure></div>
+<div class="wp-block-image"><figure class="aligncenter is-resized"><img alt="" class="wp-image-5280" decoding="async" height="176" loading="lazy" sizes="auto, (max-width: 352px) 100vw, 352px" src="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.28.38-PM.png" srcset="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.28.38-PM.png 696w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.28.38-PM-300x150.png 300w" width="352"/><figcaption>But here’s the Quick Documentation override in the LSP Plugin</figcaption></figure></div>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#customizing-the-lsp-plugin" id="customizing-the-lsp-plugin"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Customizing the LSP Plugin</h4>
+<p>Because of the crashes I ran into, and the fact that I really liked the older Quick Documentation more than the LSP documentation, I decided to try and customize the plugin just a bit to see if I could change that.</p>
+<p>You can find the full source of the LSP Plugin on GitHub: <a href="https://github.com/gtache/intellij-lsp">https://github.com/gtache/intellij-lsp</a>. And I’ve forked the code to remove the Quick Documentation override: <a href="https://github.com/adamwulf/intellij-lsp/tree/feature/remove-quickdoc">https://github.com/adamwulf/intellij-lsp/tree/feature/remove-quickdoc</a>. I’ve also fixed some of the crashes I’ve run into, but not all of them.</p>
+<p>To build from my fork:</p>
+<pre class="EnlighterJSRAW" data-enlighter-group="" data-enlighter-highlight="" data-enlighter-language="shell" data-enlighter-linenumbers="" data-enlighter-lineoffset="" data-enlighter-theme="" data-enlighter-title="">git clone git@github.com:adamwulf/intellij-lsp.git
+git checkout feature/remove-quickdoc
+./gradlew buildPlugin</pre>
+<p>That will generate a <code>build/distributions/LSP Support.zip</code> file that you can install into PhpStorm. To install, open the Plugins section, click the gear, and choose Install From Disk, select the .zip file, and away you go.</p>
+<div class="wp-block-image"><figure class="aligncenter is-resized"><img alt="" class="wp-image-5281" decoding="async" height="106" loading="lazy" sizes="auto, (max-width: 333px) 100vw, 333px" src="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.35.42-PM.png" srcset="/wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.35.42-PM.png 852w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.35.42-PM-300x96.png 300w, /wp-content/uploads/2019/09/Screen-Shot-2019-09-22-at-11.35.42-PM-768x247.png 768w" width="333"/><figcaption>Choose build/distributions/LSP Support.zip to install the custom build.</figcaption></figure></div>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#conclusion" id="conclusion"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Conclusion</h4>
+<p>After learning more about Psalm and its PhpStorm intonations, I now have:</p>
+<ol class="wp-block-list"><li>Realtime analysis for any option files using the LSP Support plugin</li><li>Full project analysis using the External Tools menu option</li><li>A custom LSP plugin for ultimate nerd customization</li></ol>
+<h4 class="wp-block-heading"><a aria-hidden="true" class="aal_anchor" href="#links" id="links"><svg aria-hidden="true" class="aal_svg" height="16" version="1.1" viewbox="0 0 16 16" width="16"><path d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z" fill-rule="evenodd"></path></svg></a>Links</h4>
+<ul class="wp-block-list"><li>Psalm static analyzer: <a href="https://psalm.dev/">https://psalm.dev</a></li><li>PhpStorm: <a href="https://www.jetbrains.com/phpstorm/">https://www.jetbrains.com/phpstorm/</a></li><li>LSP Support PhpStorm plugin: <a href="https://github.com/gtache/intellij-lsp">https://github.com/gtache/intellij-lsp</a></li><li>My fork of the plugin: <a href="https://github.com/adamwulf/intellij-lsp">https://github.com/adamwulf/intellij-lsp</a></li><li>Pre-defined code stubs: <a href="https://github.com/JetBrains/phpstorm-stubs">https://github.com/JetBrains/phpstorm-stubs</a></li></ul>
+              </div>
+              <footer class="entry-footer"></footer>
+            </div>
+          </div>
+        </article>
+        
+      </main>
+    </div>
+  </div>
+</div>
+
+	</div>
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+  <div class="row">
+    <div class="col-xs-12">
+		<div class="site-info">
+            &copy; 2025 <a href="/" rel="home">Adam Wulf</a> &bull; <a href="https://slightlytheme.com/?ref=footer">Slightly Theme</a>
+		</div>
+    </div>
+  </div>
+</footer>
+</div>
+
+
+<script src="/wp-content/themes/slightly/js/navigation.js"></script>
+<script src="/wp-content/themes/slightly/js/skip-link-focus-fix.js"></script>
+<script src="/enlighter/enlighterjs.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    EnlighterJS.init('pre.EnlighterJSRAW', 'code.EnlighterJSRAW', {
+      indent: 4,
+      ampersandCleanup: true,
+      linehover: false,
+      rawcodeDbclick: false,
+      textOverflow: 'break',
+      linenumbers: true,
+      theme: 'wpcustom',
+      language: 'generic',
+      retainCssClasses: false,
+      collapse: false
+    });
+  });
+</script>
+
+</body>
+</html>
