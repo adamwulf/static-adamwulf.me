@@ -130,3 +130,22 @@ img[src*="muse"] {
     float: left !important;
     margin: 0 10px 10px 0 !important;
 }
+
+/* Override Enlightener font size - make it more readable */
+.enlighter-default,
+.enlighter-default .enlighter-text {
+    font-size: 12pt !important;
+}
+
+/* Hide all Enlightener toolbar buttons */
+.enlighter-toolbar {
+    display: none !important;
+}
+
+/* Alternative: inherit from page font size */
+/* 
+.enlighter-default,
+.enlighter-default .enlighter-text {
+    font-size: inherit !important;
+}
+*/

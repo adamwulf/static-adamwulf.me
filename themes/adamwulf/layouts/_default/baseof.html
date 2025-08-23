@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="/wp-content/plugins/add-anchor-links/assets/css/add-anchor-links.css" type="text/css" media="all">
 <link rel="stylesheet" href="/wp-content/themes/slightly/css/flexboxgrid.min.css" type="text/css" media="all">
 <link rel="stylesheet" href="/wp-content/themes/slightly/style.css" type="text/css" media="all">
+<link rel="stylesheet" href="/enlighter/enlighterjs.min.css" type="text/css" media="all">
 <link rel="stylesheet" href="/css/custom.css" type="text/css" media="all">
 
 {{/* WordPress inline styles */}}
@@ -69,6 +70,23 @@ ga('send', 'pageview');
 {{/* WordPress JS files */}}
 <script src="/wp-content/themes/slightly/js/navigation.js"></script>
 <script src="/wp-content/themes/slightly/js/skip-link-focus-fix.js"></script>
+<script src="/enlighter/enlighterjs.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    EnlighterJS.init('pre.EnlighterJSRAW', 'code.EnlighterJSRAW', {
+      indent: 4,
+      ampersandCleanup: true,
+      linehover: false,
+      rawcodeDbclick: false,
+      textOverflow: 'break',
+      linenumbers: true,
+      theme: 'wpcustom',
+      language: 'generic',
+      retainCssClasses: false,
+      collapse: false
+    });
+  });
+</script>
 
 </body>
 </html>
