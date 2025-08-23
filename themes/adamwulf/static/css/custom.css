@@ -103,3 +103,15 @@ a:has(img):after {
     display: none !important;
     content: none !important;
 }
+
+/* Float profile and Muse images to allow text wrapping */
+.profile {
+    float: left !important;
+    margin: 0 10px 10px 0 !important;
+}
+
+/* Muse icon float styling */
+img[src*="muse"] {
+    float: left !important;
+    margin: 0 10px 10px 0 !important;
+}
