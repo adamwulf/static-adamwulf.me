@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} &ndash; {{ .Site.Title }}{{ end }}</title>
 <meta name="robots" content="max-image-preview:large">
+
+{{/* Favicon */}}
+<link rel="icon" type="image/png" sizes="32x32" href="/faviconx64.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/faviconx64.png">
+
 <style>img:is([sizes="auto" i], [sizes^="auto," i]) { contain-intrinsic-size: 3000px 1500px }</style>
 
 {{/* WordPress CSS files */}}
