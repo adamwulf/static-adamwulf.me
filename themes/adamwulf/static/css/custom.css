@@ -163,6 +163,24 @@ img[src*="muse"] {
     background-color: #f5f5f5 !important;
 }
 
+/* Extend navigation to counteract row padding */
+nav.pagination {
+    margin: 0 -30px;
+}
+
+.nav-links {
+    margin: 0 -0.5rem;
+}
+
+/* Style navigation links - bigger and medium weight */
+.nav-links a {
+    font-size: 1.2em !important;
+    font-weight: 500 !important;
+    padding: 8px 16px !important;
+    border: 1pt #454545 solid;
+    border-radius: 4pt;
+}
+
 /* Alternative: inherit from page font size */
 /* 
 .enlighter-default,
