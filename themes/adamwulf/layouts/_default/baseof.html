@@ -4,6 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} &ndash; {{ .Site.Title }}{{ end }}</title>
+
+{{/* Meta Description */}}
+{{ $description := "" }}
+{{ if .Description }}
+  {{ $description = .Description }}
+{{ else if .Summary }}
+  {{ $description = .Summary | plainify | truncate 160 }}
+{{ else if .Site.Params.description }}
+  {{ $description = .Site.Params.description }}
+{{ end }}
+{{ with $description }}
+<meta name="description" content="{{ . }}">
+{{ end }}
+
+{{/* Open Graph / Social Media Meta Tags */}}
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta property="og:site_name" content="{{ .Site.Title }}">
+<meta property="og:url" content="{{ .Permalink }}">
+{{ with $description }}
+<meta property="og:description" content="{{ . }}">
+{{ end }}
+
+{{/* Twitter Card */}}
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+{{ with $description }}
+<meta name="twitter:description" content="{{ . }}">
+{{ end }}
+
 <meta name="robots" content="max-image-preview:large">
 
 {{/* Favicon */}}
