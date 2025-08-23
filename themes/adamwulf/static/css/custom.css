@@ -69,3 +69,37 @@ span a:focus,
 .nav-next a:focus {
     outline: none !important;
 }
+
+/* Remove underlines/borders from links that contain images */
+a img {
+    border: none !important;
+}
+
+a:has(img),
+a:has(img):hover,
+a:has(img):focus,
+a:has(img):active {
+    border-bottom: none !important;
+    text-decoration: none !important;
+    transition: none !important;
+}
+
+a:has(img):after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Also target specific classes that might wrap images */
+.no-underline,
+.no-underline:hover,
+.no-underline:focus,
+.no-underline:active {
+    border-bottom: none !important;
+    text-decoration: none !important;
+    transition: none !important;
+}
+
+.no-underline:after {
+    display: none !important;
+    content: none !important;
+}
