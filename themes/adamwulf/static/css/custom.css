@@ -194,13 +194,13 @@ nav.pagination {
 /* Dark Mode Variables */
 [data-theme="dark"] {
     /* Dark Mode Overrides (Muse-inspired) */
-    --bg-primary: #232526;
-    --bg-secondary: #232526;
-    --text-primary: #D8D3C8;
+    --bg-primary: #262A2B;
+    --bg-secondary: #262A2B;
+    --text-primary: #F7F2E9;
     --text-secondary: rgba(216, 211, 200, 0.8);
     --link-color: #f4eee6;
-    --header-bg: #232526;
-    --border-color: #333333;
+    --header-bg: #262A2B;
+    --border-color: #998E7E;
 }
 
 /* Apply variables ONLY in dark mode */
@@ -248,7 +248,7 @@ code,
     font-size: 1.2em;
     font-weight: 500;
     padding: 2px 8px;
-    border: 1pt #BBBBBB solid;
+    border: 1pt #DDDDDD solid;
     border-radius: 4pt;
     margin-top: 8px;
     min-height: unset;
@@ -268,7 +268,7 @@ code,
 
 [data-theme="dark"] .theme-toggle {
     color: var(--text-primary);
-    border: 1pt #454545 solid;
+    border: 1pt var(--border-color) solid;
 }
 
 .theme-toggle:hover {
@@ -298,7 +298,7 @@ code,
 }
 
 [data-theme="dark"] .entry-meta {
-    color: #c7bdaf;
+    color: #E7DFD6;
 }
 
 [data-theme="dark"] .icon.github {
