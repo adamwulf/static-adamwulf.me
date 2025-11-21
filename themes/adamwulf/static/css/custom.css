@@ -17,11 +17,11 @@
 }
 
 /* Also target anchor links that might be in other containers */
-h1 .aal_anchor, 
-h2 .aal_anchor, 
-h3 .aal_anchor, 
-h4 .aal_anchor, 
-h5 .aal_anchor, 
+h1 .aal_anchor,
+h2 .aal_anchor,
+h3 .aal_anchor,
+h4 .aal_anchor,
+h5 .aal_anchor,
 h6 .aal_anchor {
     border-bottom: none !important;
     text-decoration: none !important;
@@ -107,14 +107,16 @@ a:has(img):after {
 /* Profile paragraph positioning */
 .widget_custom_html .textwidget p:has(.profile) {
     position: relative !important;
-    margin-left: 66px !important; /* 56px width + 10px spacing */
+    margin-left: 66px !important;
+    /* 56px width + 10px spacing */
     min-height: 56px !important;
 }
 
 /* Profile link positioning - position absolutely within the paragraph */
 a:has(.profile) {
     position: absolute !important;
-    left: -66px !important; /* Move into the left margin */
+    left: -66px !important;
+    /* Move into the left margin */
     top: 0 !important;
     display: block !important;
 }
@@ -188,3 +190,103 @@ nav.pagination {
     font-size: inherit !important;
 }
 */
+
+/* Dark Mode Variables */
+[data-theme="dark"] {
+    /* Dark Mode Overrides (Muse-inspired) */
+    --bg-primary: #232526;
+    --bg-secondary: #232526;
+    --text-primary: #D8D3C8;
+    --text-secondary: rgba(216, 211, 200, 0.8);
+    --link-color: #f4eee6;
+    --header-bg: #232526;
+    --border-color: #333333;
+}
+
+/* Apply variables ONLY in dark mode */
+[data-theme="dark"] body {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Transitions removed for instant theme switching */
+/* 
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+*/
+
+/* Add transitions to other elements that change color */
+/*
+.site-header,
+.site-title a,
+.menu-item a,
+.entry-title a,
+.entry-content,
+a,
+pre,
+code,
+.entry-meta,
+.icon.github {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, filter 0.3s ease;
+}
+*/
+
+[data-theme="dark"] .site-header {
+    background-color: var(--header-bg) !important;
+    border-bottom: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] a {
+    color: var(--link-color);
+}
+
+/* Toggle Button Styles */
+.theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    /* Use inherit to match surrounding text in light mode, var in dark mode */
+    color: inherit;
+    transition: transform 0.2s ease;
+}
+
+[data-theme="dark"] .theme-toggle {
+    color: var(--text-primary);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+}
+
+/* Dark mode specific overrides for existing elements */
+[data-theme="dark"] .site-title a,
+[data-theme="dark"] .menu-item a {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .entry-title a {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .entry-content {
+    color: var(--text-primary);
+}
+
+/* Code block styles for dark mode */
+[data-theme="dark"] pre,
+[data-theme="dark"] code {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .entry-meta {
+    color: #c7bdaf;
+}
+
+[data-theme="dark"] .icon.github {
+    filter: invert(1);
+}
