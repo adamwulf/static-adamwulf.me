@@ -1,0 +1,57 @@
+<script>
+  // Dark mode toggle functionality
+  document.addEventListener('DOMContentLoaded', function () {
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.querySelector('.theme-toggle-icon');
+
+    // Sync icon with current theme (set by head-js.html)
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    updateIcon(currentTheme);
+
+    // Toggle theme on button click
+    if (themeToggle) {
+      themeToggle.addEventListener('click', function () {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const systemTheme = systemPrefersDark ? 'dark' : 'light';
+
+        document.documentElement.setAttribute('data-theme', newTheme);
+
+        // If the new theme matches system preference, remove saved theme to follow system
+        if (newTheme === systemTheme) {
+          localStorage.removeItem('theme');
+        } else {
+          localStorage.setItem('theme', newTheme);
+        }
+
+        updateIcon(newTheme);
+      });
+    }
+
+    // Update icon based on theme
+    function updateIcon(theme) {
+      if (themeIcon) {
+        themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+      }
+    }
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+      const newSystemTheme = e.matches ? 'dark' : 'light';
+      const savedTheme = localStorage.getItem('theme');
+
+      if (!savedTheme) {
+        // No saved preference, follow system changes
+        document.documentElement.setAttribute('data-theme', newSystemTheme);
+        updateIcon(newSystemTheme);
+      } else if (savedTheme === newSystemTheme) {
+        // System changed to match saved preference, remove saved theme to follow system
+        localStorage.removeItem('theme');
+        document.documentElement.setAttribute('data-theme', newSystemTheme);
+        updateIcon(newSystemTheme);
+      }
+      // If savedTheme exists and doesn't match system, do nothing (keep user preference)
+    });
+  });
+</script>

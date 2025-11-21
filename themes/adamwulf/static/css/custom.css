@@ -244,17 +244,31 @@ code,
 /* Toggle Button Styles */
 .theme-toggle {
     background: none;
-    border: none;
     cursor: pointer;
-    padding: 0.5rem;
-    font-size: 1.2rem;
+    font-size: 1.2em;
+    font-weight: 500;
+    padding: 4px 10px;
+    border: 1pt #BBBBBB solid;
+    border-radius: 4pt;
+    margin-top: 8px;
+    min-height: unset;
+    letter-spacing: unset;
+    line-height: unset;
     /* Use inherit to match surrounding text in light mode, var in dark mode */
     color: inherit;
     transition: transform 0.2s ease;
 }
 
+.theme-toggle:hover,
+.theme-toggle:focus,
+.theme-toggle:active {
+    background: none;
+}
+
+
 [data-theme="dark"] .theme-toggle {
     color: var(--text-primary);
+    border: 1pt #454545 solid;
 }
 
 .theme-toggle:hover {

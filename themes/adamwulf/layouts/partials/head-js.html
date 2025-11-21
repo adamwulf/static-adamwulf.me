@@ -1,0 +1,15 @@
+<script>
+    (function () {
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        let theme = 'light';
+
+        if (savedTheme) {
+            theme = savedTheme;
+        } else if (systemPrefersDark) {
+            theme = 'dark';
+        }
+
+        document.documentElement.setAttribute('data-theme', theme);
+    })();
+</script>
