@@ -15,6 +15,6 @@ I suspected that the macOS dynamic text size was stored in User Defaults in the 
 
 I did eventually find that macOS saves the system text size in `UIPreferredContentSizeCategoryName`, but unfortunately a sandbox'd Mac app isn't able to read it from the `NSGlobalDomain` defaults suite.
 
-Still! Fun to find out, there's lots of gems in the user defaults, and having a way to spelunk through them felt clunky - until now!
+Still! Fun to find out, there's lots of gems in the user defaults, and having a way to spelunk through them is a fun adventure!
 
 [Download for free (or donation) on Gumroad](https://adamwulf.gumroad.com/l/user-defaults-watcher).
