@@ -37,6 +37,11 @@
 
   <meta name="robots" content="max-image-preview:large">
 
+  {{/* RSS Feeds */}}
+  {{ range .AlternativeOutputFormats -}}
+  {{ printf `<link rel="%s" type="%s" href="%s" title="%s">` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+  {{ end -}}
+
   {{/* Favicon */}}
   <link rel="icon" type="image/png" sizes="16x16" href="/faviconx16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/faviconx32.png">
