@@ -3,6 +3,7 @@ title = "Private MCP to connect Claude to my email"
 date = "2025-09-22T10:27:10+0000"
 slug = "private-mcp-to-connect-claude-to-my-email"
 type = "post"
+draft = true
 +++
 
 I'm continuing my [PikaPod](https://www.pikapods.com/) adventures, and I'm loving it!
