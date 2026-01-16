@@ -13,6 +13,7 @@
   margin: 1.5em 0 0.5em 0;
   font-size: 0.85em;
   color: #666;
+  text-align: right;
 }
 
 [data-theme="dark"] .mermaid-controls {
