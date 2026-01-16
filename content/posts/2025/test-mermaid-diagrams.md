@@ -6,6 +6,8 @@ draft: true
 
 This post demonstrates Mermaid.js diagram support with a toggle between diagram and code views.
 
+{{< toc >}}
+
 ## Simple Flowchart
 
 ```mermaid
