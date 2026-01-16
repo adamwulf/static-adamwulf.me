@@ -1,6 +1,6 @@
 /* Mermaid.js diagram styling */
 .mermaid-wrapper {
-  margin: 1.5em 0;
+  margin: 0 0 1.5em 0;
   position: relative;
   background: #fff;
 }
@@ -10,34 +10,49 @@
 }
 
 .mermaid-controls {
-  position: absolute;
-  top: 0.5em;
-  right: 0.5em;
-  z-index: 10;
+  margin: 1.5em 0 0.5em 0;
+  font-size: 0.85em;
+  color: #666;
+}
+
+[data-theme="dark"] .mermaid-controls {
+  color: #999;
+}
+
+.mermaid-view-label {
+  color: #666;
+}
+
+[data-theme="dark"] .mermaid-view-label {
+  color: #999;
+}
+
+.mermaid-separator {
+  color: #999;
+}
+
+[data-theme="dark"] .mermaid-separator {
+  color: #666;
 }
 
 .mermaid-toggle {
-  background: none;
-  border: none;
-  color: #666;
+  color: #0066cc;
   cursor: pointer;
-  font-size: 0.75em;
   text-decoration: none;
-  padding: 0;
   transition: color 0.2s ease;
 }
 
 [data-theme="dark"] .mermaid-toggle {
-  color: #999;
+  color: #4da6ff;
 }
 
 .mermaid-toggle:hover {
-  color: #333;
+  color: #004080;
   text-decoration: underline;
 }
 
 [data-theme="dark"] .mermaid-toggle:hover {
-  color: #ddd;
+  color: #80c1ff;
 }
 
 .mermaid-diagram {

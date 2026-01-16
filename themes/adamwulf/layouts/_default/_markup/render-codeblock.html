@@ -1,9 +1,11 @@
 {{- $lang := .Type | default "generic" -}}
 {{- if eq $lang "mermaid" -}}
+<div class="mermaid-controls">
+  <span class="mermaid-view-label">diagram</span>
+  <span class="mermaid-separator"> / </span>
+  <a href="#" class="mermaid-toggle" onclick="toggleMermaid(this); return false;">code</a>
+</div>
 <div class="mermaid-wrapper">
-  <div class="mermaid-controls">
-    <a href="#" class="mermaid-toggle" onclick="toggleMermaid(this); return false;">code</a>
-  </div>
   <div class="mermaid-diagram">
     <pre class="mermaid">{{ .Inner }}</pre>
   </div>
