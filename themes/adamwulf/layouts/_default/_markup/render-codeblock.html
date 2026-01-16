@@ -1,2 +1,18 @@
 {{- $lang := .Type | default "generic" -}}
+{{- if eq $lang "mermaid" -}}
+<div class="mermaid-wrapper">
+  <div class="mermaid-controls">
+    <button class="mermaid-toggle" onclick="toggleMermaid(this)" aria-label="Toggle between diagram and code view">
+      <span class="toggle-icon">⇄</span> View Code
+    </button>
+  </div>
+  <div class="mermaid-diagram">
+    <pre class="mermaid">{{ .Inner }}</pre>
+  </div>
+  <div class="mermaid-code" style="display: none;">
+    <pre class="EnlighterJSRAW" data-enlighter-language="text">{{ .Inner }}</pre>
+  </div>
+</div>
+{{- else -}}
 <pre class="EnlighterJSRAW" data-enlighter-language="{{ $lang }}">{{ .Inner }}</pre>
+{{- end -}}
