@@ -2,9 +2,7 @@
 {{- if eq $lang "mermaid" -}}
 <div class="mermaid-wrapper">
   <div class="mermaid-controls">
-    <button class="mermaid-toggle" onclick="toggleMermaid(this)" aria-label="Toggle between diagram and code view">
-      <span class="toggle-icon">⇄</span> View Code
-    </button>
+    <a href="#" class="mermaid-toggle" onclick="toggleMermaid(this); return false;">code</a>
   </div>
   <div class="mermaid-diagram">
     <pre class="mermaid">{{ .Inner }}</pre>

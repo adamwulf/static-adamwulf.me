@@ -492,20 +492,19 @@
     });
   </script>
   <script>
-    function toggleMermaid(button) {
-      const wrapper = button.closest('.mermaid-wrapper');
+    function toggleMermaid(link) {
+      const wrapper = link.closest('.mermaid-wrapper');
       const diagram = wrapper.querySelector('.mermaid-diagram');
       const code = wrapper.querySelector('.mermaid-code');
-      const icon = button.querySelector('.toggle-icon');
 
       if (diagram.style.display === 'none') {
-        diagram.style.display = 'block';
+        diagram.style.display = 'flex';
         code.style.display = 'none';
-        button.innerHTML = '<span class="toggle-icon">⇄</span> View Code';
+        link.textContent = 'code';
       } else {
         diagram.style.display = 'none';
         code.style.display = 'block';
-        button.innerHTML = '<span class="toggle-icon">⇄</span> View Diagram';
+        link.textContent = 'diagram';
       }
     }
   </script>
