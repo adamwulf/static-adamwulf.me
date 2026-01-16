@@ -20,11 +20,11 @@
   color: #999;
 }
 
-.mermaid-view-label {
+.mermaid-option.active {
   color: #666;
 }
 
-[data-theme="dark"] .mermaid-view-label {
+[data-theme="dark"] .mermaid-option.active {
   color: #999;
 }
 
@@ -36,23 +36,23 @@
   color: #666;
 }
 
-.mermaid-toggle-link {
+.mermaid-option:not(.active) {
   color: #0066cc;
   cursor: pointer;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-[data-theme="dark"] .mermaid-toggle-link {
+[data-theme="dark"] .mermaid-option:not(.active) {
   color: #4da6ff;
 }
 
-.mermaid-toggle-link:hover {
+.mermaid-option:not(.active):hover {
   color: #004080;
   text-decoration: underline;
 }
 
-[data-theme="dark"] .mermaid-toggle-link:hover {
+[data-theme="dark"] .mermaid-option:not(.active):hover {
   color: #80c1ff;
 }
 

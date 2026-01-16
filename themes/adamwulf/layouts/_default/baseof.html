@@ -500,35 +500,33 @@
     });
   </script>
   <script>
-    async function toggleMermaid(link) {
-      const controls = link.closest('.mermaid-controls');
+    async function toggleMermaid(clickedOption) {
+      const controls = clickedOption.closest('.mermaid-controls');
       const wrapper = controls.nextElementSibling;
       const diagram = wrapper.querySelector('.mermaid-diagram');
       const code = wrapper.querySelector('.mermaid-code');
-      const toggleLink = controls.querySelector('.mermaid-toggle-link');
-      const viewLabel = controls.querySelector('.mermaid-view-label');
+      const diagramOption = controls.querySelector('.mermaid-diagram-option');
+      const codeOption = controls.querySelector('.mermaid-code-option');
 
-      // Get the target view from the link
-      const targetView = toggleLink.getAttribute('data-view');
+      // Determine which view to show based on which option was clicked
+      const showCode = clickedOption.classList.contains('mermaid-code-option');
 
-      if (targetView === 'code') {
+      if (showCode) {
         // Switch to code view
         diagram.style.display = 'none';
         code.style.display = 'block';
 
-        // Swap the elements: code becomes label, diagram becomes link
-        toggleLink.textContent = 'diagram';
-        toggleLink.setAttribute('data-view', 'diagram');
-        viewLabel.textContent = 'code';
+        // Update active states
+        diagramOption.classList.remove('active');
+        codeOption.classList.add('active');
       } else {
         // Switch to diagram view
         diagram.style.display = 'flex';
         code.style.display = 'none';
 
-        // Swap the elements: diagram becomes label, code becomes link
-        toggleLink.textContent = 'code';
-        toggleLink.setAttribute('data-view', 'code');
-        viewLabel.textContent = 'diagram';
+        // Update active states
+        diagramOption.classList.add('active');
+        codeOption.classList.remove('active');
 
         // Re-render the diagram to ensure proper zoom/fit
         const mermaidElement = diagram.querySelector('.mermaid');
