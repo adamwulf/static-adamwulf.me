@@ -1,0 +1,87 @@
+/* Mermaid.js diagram styling */
+.mermaid-wrapper {
+  margin: 1.5em 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+}
+
+[data-theme="dark"] .mermaid-wrapper {
+  border-color: #444;
+  background: #1a1a1a;
+}
+
+.mermaid-controls {
+  padding: 0.5em 1em;
+  background: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: flex-end;
+}
+
+[data-theme="dark"] .mermaid-controls {
+  background: #2a2a2a;
+  border-bottom-color: #444;
+}
+
+.mermaid-toggle {
+  padding: 0.4em 1em;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+[data-theme="dark"] .mermaid-toggle {
+  background: #333;
+  color: #ddd;
+  border-color: #555;
+}
+
+.mermaid-toggle:hover {
+  background: #f0f0f0;
+  border-color: #999;
+}
+
+[data-theme="dark"] .mermaid-toggle:hover {
+  background: #444;
+  border-color: #666;
+}
+
+.mermaid-toggle .toggle-icon {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.mermaid-diagram {
+  padding: 2em 1em;
+  text-align: center;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mermaid-diagram pre.mermaid {
+  background: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.mermaid-code {
+  padding: 0;
+}
+
+.mermaid-code pre {
+  margin: 0;
+  border-radius: 0;
+}
