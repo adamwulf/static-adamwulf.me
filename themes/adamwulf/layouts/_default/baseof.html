@@ -491,6 +491,13 @@
       startOnLoad: true,
       theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
     });
+
+    // Store original Mermaid text content before rendering
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.mermaid-diagram .mermaid').forEach(function (el) {
+        el.setAttribute('data-original-text', el.textContent);
+      });
+    });
   </script>
   <script>
     async function toggleMermaid(link) {
@@ -498,28 +505,43 @@
       const wrapper = controls.nextElementSibling;
       const diagram = wrapper.querySelector('.mermaid-diagram');
       const code = wrapper.querySelector('.mermaid-code');
-      const label = controls.querySelector('.mermaid-view-label');
+      const toggleLink = controls.querySelector('.mermaid-toggle-link');
+      const viewLabel = controls.querySelector('.mermaid-view-label');
 
-      if (diagram.style.display === 'none') {
+      // Get the target view from the link
+      const targetView = toggleLink.getAttribute('data-view');
+
+      if (targetView === 'code') {
+        // Switch to code view
+        diagram.style.display = 'none';
+        code.style.display = 'block';
+
+        // Swap the elements: code becomes label, diagram becomes link
+        toggleLink.textContent = 'diagram';
+        toggleLink.setAttribute('data-view', 'diagram');
+        viewLabel.textContent = 'code';
+      } else {
+        // Switch to diagram view
         diagram.style.display = 'flex';
         code.style.display = 'none';
-        label.textContent = 'diagram';
-        link.textContent = 'code';
+
+        // Swap the elements: diagram becomes label, code becomes link
+        toggleLink.textContent = 'code';
+        toggleLink.setAttribute('data-view', 'code');
+        viewLabel.textContent = 'diagram';
 
         // Re-render the diagram to ensure proper zoom/fit
         const mermaidElement = diagram.querySelector('.mermaid');
         if (mermaidElement && window.mermaid) {
-          const id = mermaidElement.getAttribute('data-processed');
-          if (id) {
+          const originalText = mermaidElement.getAttribute('data-original-text');
+          if (originalText) {
+            // Restore original text content
+            mermaidElement.textContent = originalText;
             mermaidElement.removeAttribute('data-processed');
+            // Re-render with original text
             await window.mermaid.run({ nodes: [mermaidElement] });
           }
         }
-      } else {
-        diagram.style.display = 'none';
-        code.style.display = 'block';
-        label.textContent = 'code';
-        link.textContent = 'diagram';
       }
     }
   </script>

@@ -35,23 +35,23 @@
   color: #666;
 }
 
-.mermaid-toggle {
+.mermaid-toggle-link {
   color: #0066cc;
   cursor: pointer;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-[data-theme="dark"] .mermaid-toggle {
+[data-theme="dark"] .mermaid-toggle-link {
   color: #4da6ff;
 }
 
-.mermaid-toggle:hover {
+.mermaid-toggle-link:hover {
   color: #004080;
   text-decoration: underline;
 }
 
-[data-theme="dark"] .mermaid-toggle:hover {
+[data-theme="dark"] .mermaid-toggle-link:hover {
   color: #80c1ff;
 }
 
