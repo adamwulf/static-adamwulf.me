@@ -13,6 +13,10 @@ And so, in proper self-nerd-snipe fashion, I thought to myself "surely there's a
 
 `ittybitty` lets you spawn multiple `claude` instances in virtual terminals in `tmux`, and these claude instances can also spawn more claude instances to help them accomplish their task. I wish I'd had it late last year, when I ran parallel Claude Code Web instances to research competitors, write reports, and cite sources. It was slow and painful, and it's the perfect task for parallel AI agents with `ittybitty`.
 
+A look at `ittybitty`'s TUI in action: agent list on top, claude session on left, agent log on right, key commands on the bottom.
+
+![ittybitty in action](/files/2026/ittybitty.png)
+
 {{< toc >}}
 
 ## Quickstart
