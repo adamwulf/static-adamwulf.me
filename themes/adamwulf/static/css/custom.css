@@ -89,6 +89,16 @@ a:has(img):after {
     content: none !important;
 }
 
+.textwidget img.icon {
+    top: 3px;
+    position: relative;
+}
+
+.textwidget img.profile {
+    top: 5px;
+    position: relative;
+}
+
 /* Also target specific classes that might wrap images */
 .no-underline,
 .no-underline:hover,
