@@ -5,25 +5,25 @@ slug = "itty-bitty-ai-agent-orchestrator"
 type = "post"
 +++
 
-I bet you've heard of [Gas Town](https://github.com/steveyegge/gastown), and if you haven't, you're in for an proper adventure. As I read through [Steve's ~~introduction~~ manifesto](https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04), I loved the vision but was overwhelmed by the scale. He's not messing around, Gas Town requires sqlite for holding state, uses [beads](https://github.com/steveyegge/beads) for issue tracking and state management, supports pluggable AI runtimes. Want to wrap your head around it? welcome to the Mayor, rigs, convoys, polecats, crew, hooks, dogs, and so many more metaphors and tv/movie references.
+I bet you've heard of [Gas Town](https://github.com/steveyegge/gastown), and if you haven't, you're in for an proper adventure. As I read through [Steve's ~~introduction~~ manifesto](https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04), and while I loved the vision, the scale was overwhelming. He's not messing around, Gas Town requires sqlite for holding state, uses [beads](https://github.com/steveyegge/beads) for issue tracking and state management, supports pluggable AI runtimes. Want to wrap your head around it? welcome to the Mayor, rigs, convoys, polecats, crew, hooks, dogs, and so many more metaphors and tv/movie references.
 
 In proper self-nerd-snipe fashion, I thought to myself "surely there's an easier way to do multi-agent coordination?!", and [`ittybitty`](https://github.com/adamwulf/ittybitty) was born.
 
 {{< toc >}}
 
-## TLDR
+## Quickstart
 
 Want to just jump in? Clone https://github.com/adamwulf/ittybitty add it to your `$PATH`. Then, from any git repo on your system:
 
 ``` bash
 # start a new agent
-ib new-agent --name hellobot --model haiku "say hello, and then wait for instructions"
+ib new-agent --name hellobot --model opus "say hello, and then wait for instructions"
 
 # show the agent's status
 ib list
 
 # agents can talk to each other
-ib new-agent --name friendbot --model haiku "say hello to hellobot by sending them a message"
+ib new-agent --name friendbot --model opus "say hello to hellobot by sending them a message"
 
 # see their claude session history
 ib look friendbot
@@ -34,17 +34,20 @@ ib watch
 # there's gotta be a better word for this than 'kill'?
 ib kill hellobot
 ib kill friendbot
+
+# read the help to see what's possible
+ib help
 ```
 
 Want more detail? Here we go!
 
-## Purpose
+## My Goals
 
 I use claude code _a lot_. It's always running while I code, either working on a task or helping me debug. I use it as a personal assistant. I use it to run long-running web research tasks. I use it went I'm coding, and when I'm not coding, and everything in-between.
 
 I often want to run multiple instances of `claude` in git worktrees, but don't want to open/close/merge the worktrees myself. I basically want a normal `claude` instance, but one that can spawn and manage many other `claude` instances too. I want 10 agents to _feel_ like 1 agent, which means I need to have easy visibility into what the team is doing.
 
-## What did I want?
+## What were my constraints?
 
 I love projects with constraints, that's where the creativity happens, and I set myself some stringent constraints:
 
@@ -103,346 +106,71 @@ The system should somehow monitor agent status so that agents that are stuck and
 I wanted to build something that anyone could download and start using with zero setup. I don't want to build a monolithic system that takes non-trivial setup time, I wanted something _simple_ that could be immediately useful.
 
 
-## What did I build?
+## What is an Agent?
 
+An agent in `ittybitty` is a full claude code instance running inside of tmux. Here are the steps that ittybitty goes through to launch an agent:
+
+### How are agents created?
+
+1. Before claude is launched, an agent id is generated (or `ib new-agent --name name-here`)
+2. a git worktree is created at `your-repo/.ittybitty/agents/[agent-id]/repo` at a new branch `agent/[agent-id]`.
+3. `.claude/settings.local.json` is written into the worktree with the contents of the main repo's `settings.local.json` (if any), plus any added tools configured for agents in `.ittybitty.json`, plus a few required tools like `Read`, `Write`, `ib`, and `git`
+4. `claude` is launched into a new `tmux` session
+5. `ib look [agent-id]` is used to determine if "do you trust this workspace?" or similar prompts are showing, and then they are automatically accepted by sending key commands to `tmux`
+6. After `claude` has confirmed to be launched and awaiting input, the initial agent's prompt is sent, which includes brief description of how `ittybitty` works, if it is a Manager or Worker, and the user's prompt.
+
+
+### How are tools pre-approved only without YOLO?
+
+`PreToolUse`, `Stop`, and `PermissionRequest` hooks are added to the `.claude/local.settings.json` in the agent's worktree. These are set to the commands `ib hook-check-path [agent-id]`, `ib hook-status [agent-id]`, and `ib hook-permission-denied [agent-id]` respectively. These process the hook input to auto-deny new tool requests, and auto-deny any paths that would move the agent into the main repo's path or another agent's path.
+
+The `Stop` hook is a special case, this is used to either:
+
+1. If the agent output "WAITING" or "I HAVE COMPLETED THE GOAL", then notify the agent's manager (if any) of the new status.
+2. If neither of those phrases were mentioned, then nudge the agent to continue working, and remind it that it must say one of those two messages when it finishes its output or if it needs help from its manager.
+
+
+## How is agent work merged?
+
+Since all agents work in their own worktrees, each agent also has its own git branch. Worktrees exist within your existing local git repository, so no push or fetch is required to see their work. You can `git merge agent/[agent-id]` to merge their work into your current branch.
+
+If you merge using the normal `git merge` flow, then the agent will remain alive and its claude session active. If you want to merge their work and close down the agent at the same time, you can use `ib merge [agent-id]` instead. This will merge their work into your current branch, and will also teardown the tmux and claude session, and will archive the claude and agent logs to `.ittybitty/archive/[datetime]-[agent-id]`.
+
+
+### Can `claude` use `ittybitty`?
+
+Yes! Claude (running as an agent in tmux) can use `ib` commands just like you can. For all `ib` commands, the active agent-id can be inferred based on the current working directory of `ib`. If the `cwd` is in a git worktree in `.ittybitty/agents/`, then that agent id is inferred. This way, agents don't need to remember to 'sign' their messages to each other.
+
+This also let's `ib` react slightly differently to agents than it does to you. Agents are not allowed to use `ib config set` for instance, which, if allowed, would allow agents to increase the max agent limit.
+
+
+### How do agents send messages to each other?
+
+The command `ib send [agent-id] [message]` will send a message to the agent with the specified id. This is done by iterating through tmux sessions to find the agent that matches the [agent-id], and then sending the input message followed by the Enter key. The message is prefixed with "[sent by agent (agent-id)]:" so that its clear to the recieving agent who sent the message.
+
+
+## What's the flow look like?
+
+Below you can see how you and/or your primary claude interface can spawn and interact with `ittybitty` agents.
 
 ``` mermaid
-flowchart LR
-A[You - Human] <-->|claude code| B[Primary Claude]
-B -->|spawns via ib| C[Manager Agent]
-C -->|spawns via ib| D[Worker Agents]
-E[ib watch] -->|new agent 'a' key| C
-A -->|command line| E
+flowchart TD
+
+ComLine("🧑‍💻 You in Claude Code or Terminal")
+Watch(🧑‍💻 You in `$ ib watch`)
+A[🤖 manager]
+B[🤖 worker A…Z]
+D[🐶 watchdog A…Z]
+
+A -->|"$ ib list<br> $ ib tree"| ComLine
+Watch <-->|'a' hotkey| A
+ComLine -->|$ ib new-agent| A
+
+D -->|$ ib send|A
+B <-->|"$ ib look<br>$ grep complete phrase"| D
+
+A -->|$ ib new-agent --worker| B
+
 ```
 
-``` bash
-ib new-agent "testing"
-```
-
-
-Benefits:
-
-Not yolo mode. Permissions auto deny unless approved by you, and you have visibility into denied tools to add later
-
-Worktrees for every agent, no toe stepping
-
-Simple model, easy to understand
-
-Send messages between agents
-
-Send messages to the user running Claude
-
-User Claude has auto visibility into agent status
-
-Nuke option for safety
-
-Command line interface, including interactive status
-
-Agents can move between worktrees, so can’t mess up their cwd
-
-Watchdogs auto notify agents
-
-Minimal requirements to use and run
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Yegge's Priorities for Building Gas Town
-
-## Executive Summary
-
-Gas Town represents a fundamental shift in software development philosophy: building a multi-agent orchestration system that prioritizes **throughput over perfection**, **persistent state over ephemeral memory**, and **autonomous coordination over human micromanagement**. Yegge's vision is to enable development "where the constraint isn't clock time but rather creativity and dollars in Claude tokens."
-
----
-
-## Technical Dependencies
-
-Gas Town requires a specific technology stack to operate effectively:
-
-### Core System Requirements
-
-| Dependency | Version | Purpose |
-|------------|---------|---------|
-| **Go** | 1.23+ | Primary runtime language for Gas Town itself |
-| **Git** | 2.25+ | Required specifically for worktree functionality (core to state persistence) |
-| **SQLite3** | Default system version | Convoy database queries; pre-installed on macOS/Linux |
-| **TMux** | 3.0+ | Recommended for full experience; enables multi-pane agent monitoring |
-
-### Essential AI Runtime
-
-| Dependency | Version | Purpose |
-|------------|---------|---------|
-| **Claude Code CLI** | Latest | Default and primary coding assistant runtime |
-| **Beads (bd)** | 0.44.0+ | **Critical dependency** for task/issue tracking with custom type support |
-
-**Beads** is non-optional — it provides the dual storage system (SQLite + JSONL) that enables persistent work state and Git-tracked task management. Available at: `github.com/steveyegge/beads`
-
-### Optional AI Runtimes
-
-Gas Town supports multiple coding assistant platforms through pluggable runtime configuration:
-
-- **Codex CLI** — Alternative runtime requiring additional config (`~/.codex/config.toml` must include `project_doc_fallback_filenames = ["CLAUDE.md"]`)
-- **Gemini** — Google's coding assistant
-- **Cursor** — AI-powered code editor
-- **Auggie** — Additional runtime option
-- **Amp** — Additional runtime option
-
-**Runtime Limitations**: For runtimes lacking hook support (e.g., Codex), Gas Town deploys a startup fallback sequence after session initialization to handle context recovery and mail injection.
-
-### Infrastructure Requirements
-
-**Git Worktrees**: The architecture fundamentally depends on Git 2.25+ worktree support, as each agent operates in an isolated worktree while sharing the same repository. This enables:
-- Parallel agent work without conflicts
-- Persistent state tied to git branches
-- Recovery from crashes via git-backed hooks
-
-**Filesystem Access**: Agents require read/write permissions to:
-- Local git repository and worktrees
-- `.beads` directory (SQLite + JSONL storage)
-- Hook directories for state persistence
-
-**GitHub API Access**: For autonomous operations:
-- Branch creation and pushing
-- Pull request creation
-- PR merging (if configured)
-
-### Developer Maturity Requirement
-
-**Stage 6-7 Developer**: Not a technical dependency, but Gas Town documentation explicitly states users should be "at least Stage 6, or maybe Stage 6 and very brave" to operate the system. This reflects the operational complexity and risk tolerance required.
-
-### Configuration Files
-
-- `settings/config.json` — Per-rig runtime configuration
-- `~/.codex/config.toml` — Required if using Codex runtime
-- `.beads/` directory — Beads task storage (SQLite + JSONL)
-- TOML formula files — Optional for repeatable workflow definitions
-
----
-
-## Core Design Priorities
-
-### 1. **State Persistence Above All Else**
-
-**Priority**: Solve the fundamental problem that "agents lose context on restart"
-
-**Implementation**:
-- Git-backed hooks serve as persistent storage for agent work
-- Work state survives crashes and restarts
-- Beads integration with dual storage system:
-  - SQLite database for fast structured queries
-  - JSONL file for Git-tracked version control and conflict resolution
-  - 5-second auto-sync debounce between systems
-
-**Philosophy**: "Work persists in git-backed hooks" — treating git worktrees as the source of truth rather than relying on volatile agent sessions.
-
-### 2. **Scaling Through Structured Coordination**
-
-**Priority**: Scale from individual agents to 20-30+ agents without chaos
-
-**Implementation**:
-- Acknowledges that "4-10 agents become chaotic"
-- Structured coordination through **Convoys** (work tracking units that bundle issues)
-- Hierarchical role-based agent structure:
-  - **Mayor** 🎩 - Orchestration leader with full workspace context
-  - **Deacon** - Operations management
-  - **Witness** - Canonical state keeper
-  - **Refiner** - Merge authority
-  - **Polecats** 🦨 - Ephemeral worker agents for specific tasks
-
-**Philosophy**: "Comfortable scaling to 20-30 agents" through structured work units rather than ad-hoc coordination.
-
-### 3. **Self-Directed Agent Autonomy**
-
-**Priority**: Enable agents to coordinate and make decisions without constant human intervention
-
-**Implementation**:
-- Built-in mailboxes, identities, and handoffs between agents
-- Mayor serves as AI coordinator rather than requiring humans to route work
-- Autonomous capabilities:
-  - Creates branches in a disciplined way
-  - Pushes branches to GitHub
-  - Creates pull requests
-  - **Merges PRs autonomously** (noted as surprising in testing)
-- Users "tell the Mayor what you want to accomplish" rather than managing individual agents
-
-**Philosophy**: "Creation and correction at the speed of thought" — agents should self-coordinate to maximize throughput.
-
-### 4. **Parallel Execution at Scale**
-
-**Priority**: Enable multiple agents to work simultaneously on different tasks
-
-**Implementation**:
-- Agent factory model spawning multiple specialized workers
-- Parallel task execution (tested with 4+ agents working concurrently)
-- Activity level described as "too much going on for you to reasonably comprehend"
-- Mayor interface abstracts away complexity, keeping humans "one layer removed from the nitty gritty"
-
-**Philosophy**: Shift development bottleneck from clock time to creative direction and token budget.
-
-### 5. **Throughput Over Quality Gates**
-
-**Priority**: Maximize velocity and accept that some work may need correction
-
-**Implementation**:
-- "Most work gets done; some work gets lost" — accepting imperfection
-- Autonomous PR merging even when tests fail (observed behavior)
-- "Code held lightly" approach among multiple coders
-- Focus on rapid iteration and correction cycles
-
-**Philosophy**: Explicitly prioritizes speed of creation and correction over traditional quality controls. The Mad Max theming acknowledges real risks: "Lots of people will get hurt while we learn how to scale it up."
-
-### 6. **Graceful Degradation and Flexibility**
-
-**Priority**: Support multiple operating modes and infrastructure constraints
-
-**Implementation**:
-- Multiple workflow modes:
-  - **Mayor Workflow** (recommended): Full orchestration with convoy management
-  - **Minimal Mode**: Without tmux, manual runtime management
-  - **Manual Convoy**: Direct control over issue distribution
-  - **Beads Formula**: TOML-defined repeatable processes
-- Pluggable runtime system supporting multiple AI providers:
-  - Claude, Gemini, Codex, Cursor, Auggie, Amp
-  - Per-rig configuration overrides
-  - Per-task runtime selection via `--agent` flags
-
-**Philosophy**: Avoid tight coupling to specific technologies; support evolution and different use cases.
-
-### 7. **Recoverable Work State**
-
-**Priority**: Never lose work due to crashes, disconnections, or agent failures
-
-**Implementation**:
-- All work state stored in Beads ledger
-- Git worktrees as separate checkouts sharing repository
-- Hooks system for persistent agent context
-- Work tracking survives agent restarts and system failures
-
-**Philosophy**: Persistent, recoverable state management is non-negotiable for production multi-agent systems.
-
-### 8. **Process Repeatability**
-
-**Priority**: Enable encoding and reusing successful workflows
-
-**Implementation**:
-- Beads Formula integration for structured, repeatable processes
-- TOML-defined workflows with dependencies
-- Predefined processes become "trackable instances" stored as structured data
-- Formula workflows provide reusable patterns for common tasks
-
-**Philosophy**: Capture and institutionalize successful patterns rather than reinventing approaches each time.
-
----
-
-## Architectural Trade-offs
-
-### Accepted Costs
-
-**Token Budget**: Testing showed ~$100/hour in Claude tokens (10x normal Claude Code expense per time unit)
-- This is an accepted trade-off for parallel execution velocity
-- Cost optimization became a community priority (cheaper inference endpoint PRs)
-
-**Complexity**: The system introduces significant operational complexity
-- Multiple worktrees, persistent state, coordination overhead
-- Requires Stage 6-7 developer maturity to operate effectively
-
-**Trust Boundaries**: Current design assumes agents have filesystem and GitHub permissions
-- Optimistic assumption about "disciplined" branch creation
-- Community identified this as a potential security/control concern
-
-### Design Decisions
-
-**Dual Storage System**: Beads uses both SQLite and JSONL
-- SQLite for fast queries
-- JSONL for Git-friendliness and conflict resolution
-- Community noted this "reaches for Dolt without knowing about it"
-
-**Mad Max Theming**: Intentional framing of risks and experimental nature
-- Some community members felt this obscured rather than clarified architecture
-- Others appreciated the honest acknowledgment of danger
-
-**Human as Bottleneck**: System assumes "human accountability remains the identified bottleneck—not agent capability"
-- Mayor abstraction keeps humans focused on direction, not implementation details
-- Agents handle mechanical execution at machine speed
-
----
-
-## Key Architectural Concepts
-
-| Component | Purpose | Priority Addressed |
-|-----------|---------|-------------------|
-| **Mayor** | AI coordinator with full context | Self-coordination, autonomy |
-| **Convoys** | Work bundling units | Scaling without chaos |
-| **Hooks** | Persistent git-backed storage | State persistence, recovery |
-| **Beads** | Task/issue tracking system | State management, repeatability |
-| **Polecats** | Ephemeral worker agents | Parallel execution, scaling |
-| **Rigs** | Project containers | Multi-project orchestration |
-| **Crew Members** | Personal workspaces | Developer isolation |
-
----
-
-## Development Philosophy Shifts
-
-### From Traditional Development:
-- Single developer → Agent factory
-- Sequential execution → Parallel task distribution
-- Manual coordination → AI orchestration (Mayor)
-- Ephemeral sessions → Persistent work state
-- Quality gates → Throughput + correction cycles
-- Human doing → Human directing
-
-### Yegge's Vision:
-"Development where the constraint isn't clock time but rather creativity and dollars in Claude tokens"
-
-This represents a fundamental reimagining of the software development process, accepting that the transition will be messy ("Lots of people will get hurt") but necessary to unlock agent-scale velocity.
-
----
-
-## Community Observations
-
-**What's Working**:
-- Team structure "has the _team_ side about right"
-- Parallel execution demonstrably faster than sequential
-- State persistence prevents lost work
-
-**Challenges Identified**:
-- Cost per time unit still high (~10x)
-- Trust boundary concerns with autonomous GitHub operations
-- Terminology overlap creates confusion
-- Requires mature developers to operate effectively
-
-**Evolution Path**:
-Community suggested "a version of this with normal names and expanded coordination" as system matures and patterns stabilize.
-
----
-
-## Summary: The Core Bet
-
-Steve Yegge is betting that:
-
-1. **State persistence** solves the biggest blocker to multi-agent systems
-2. **Autonomous coordination** (not human micromanagement) is required for agent-scale velocity
-3. **Throughput-first** approach will prove more valuable than traditional quality gates
-4. **Parallel agent execution** justifies 10x cost increase through radical speedups
-5. **Structured roles** (Mayor, Convoy, etc.) provide the right abstraction layer for human oversight
-6. The industry will learn to handle the risks and complexity as patterns emerge
-
-The system is explicitly positioned as **experimental and dangerous**, acknowledging that "we're figuring out how to scale this up" rather than presenting a mature, safe solution.
-
----
-
-*Sources: [GitHub - steveyegge/gastown](https://github.com/steveyegge/gastown), [Welcome to Gas Town - Hacker News Discussion](https://news.ycombinator.com/item?id=46458936), [A Day in Gas Town - DoltHub Blog](https://www.dolthub.com/blog/2026-01-15-a-day-in-gas-town/)*
+The diagram above shows how control and information flow as you spawn agents. If you use `ib watch`, you'll get realtime updates on the status and claude session of your agents. If you'd prefer to stay in the command line, or to integrate with other tools, you can call `ib new-agent "your prompt"` directly, and then monitor the agent with `ib look`, `ib list`, and `ib tree`. When you're ready to merge, inspect its git state with `ib status`, `ib diff`, and `ib merge-check`, before finally merging its changes with `ib merge`, or discarding its changes with `ib kill`.

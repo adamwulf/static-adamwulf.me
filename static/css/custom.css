@@ -59,8 +59,6 @@
 .mermaid-diagram {
   padding: 2em 1em;
   text-align: center;
-  min-height: 200px;
-  display: flex;
   align-items: center;
   justify-content: center;
   overflow: auto;

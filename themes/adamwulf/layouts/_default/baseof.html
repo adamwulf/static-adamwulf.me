@@ -487,10 +487,14 @@
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
     window.mermaid = mermaid;
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
-    });
+    setTimeout(function() {
+      mermaid.initialize({
+        startOnLoad: true,
+        fontSize: 100,
+        useMaxWidth: true,
+        theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+      });
+    }, 5000)
 
     // Store original Mermaid text content before rendering
     document.addEventListener('DOMContentLoaded', function () {
