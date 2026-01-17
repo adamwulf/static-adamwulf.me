@@ -304,3 +304,121 @@ code,
 [data-theme="dark"] .icon.github {
     filter: invert(1);
 }
+
+/* Mermaid.js diagram styling */
+.mermaid-wrapper {
+  margin: 0 0 1.5em 0;
+  position: relative;
+  background: #fff;
+}
+
+[data-theme="dark"] .mermaid-wrapper {
+  background: #1a1a1a;
+}
+
+.mermaid-controls {
+  margin: 1.5em 0 0.5em 0;
+  font-size: 0.85em;
+  color: #666;
+  text-align: right;
+}
+
+[data-theme="dark"] .mermaid-controls {
+  color: #999;
+}
+
+.mermaid-option.active {
+  color: #666;
+}
+
+[data-theme="dark"] .mermaid-option.active {
+  color: #999;
+}
+
+.mermaid-separator {
+  color: #999;
+}
+
+[data-theme="dark"] .mermaid-separator {
+  color: #666;
+}
+
+.mermaid-option:not(.active) {
+  color: #0066cc;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+[data-theme="dark"] .mermaid-option:not(.active) {
+  color: #4da6ff;
+}
+
+.mermaid-option:not(.active):hover {
+  color: #004080;
+  text-decoration: underline;
+}
+
+[data-theme="dark"] .mermaid-option:not(.active):hover {
+  color: #80c1ff;
+}
+
+.mermaid-diagram {
+  padding: 2em 1em;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+}
+
+.mermaid-diagram pre.mermaid {
+  background: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  max-width: 100%;
+}
+
+.mermaid-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mermaid-code {
+  padding: 0;
+}
+
+.mermaid-code pre {
+  margin: 0;
+  border-radius: 0;
+}
+
+h1 a.aal_anchor, h2 a.aal_anchor, h3 a.aal_anchor  {
+  text-decoration: none;
+  border-bottom: none;
+}
+
+nav#TableOfContents ol {
+  padding: 0;
+  margin: 20 0;
+  line-height: 1.8em;
+}
+
+nav#TableOfContents ol:before {
+  content: "Table of Contents";
+  display: block;
+  font-size: 1.5em;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+  unicode-bidi: isolate;
+}
+
+nav#TableOfContents li {
+  left: -20pt;
+  color: grey;
+  list-style-position: inside;
+}
