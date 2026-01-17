@@ -1,5 +1,5 @@
 +++
-title = "Itty Bitty AI Agent Orchestrator"
+title = "IttyBitty for Multi-agent Claude Code"
 date = "2026-01-16T10:27:10+0000"
 slug = "itty-bitty-ai-agent-orchestrator"
 type = "post"
@@ -11,7 +11,11 @@ And then of course [there's this bit](https://steve-yegge.medium.com/welcome-to-
 
 And so, in proper self-nerd-snipe fashion, I thought to myself "surely there's an easier (and less expensive) way to do multi-agent AI?!", and [`ittybitty`](https://github.com/adamwulf/ittybitty) was born.
 
-`ittybitty` lets you spawn multiple `claude` instances in virtual terminals in `tmux`, and these claude instances can also spawn more claude instances to help them accomplish their task. I wish I'd had it late last year, when I ran parallel Claude Code Web instances to research competitors, write reports, and cite sources. It was slow and painful, and it's the perfect task for parallel AI agents with `ittybitty`.
+## Introducing IttyBitty
+
+`ittybitty` is the easiest way to manage multiple claude code instances. You specify a task, and `ittybitty` spawns a `claude` instance in a virtual terminal in `tmux`, and then this claude instance can also spawn more claude instances to help it accomplish its task. Start as many `claude` agents as you like, and view them and their workers in the `ittybitty` dashboard.
+
+I wish I'd had it late last year, when I ran parallel Claude Code Web instances to research competitors, write reports, and cite sources. It was slow and painful, and it's the perfect task for parallel AI agents with `ittybitty`.
 
 A look at `ittybitty`'s TUI in action: agent list on top, claude session on left, agent log on right, key commands on the bottom.
 
