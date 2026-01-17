@@ -86,3 +86,32 @@
   margin: 0;
   border-radius: 0;
 }
+
+h1 a.aal_anchor, h2 a.aal_anchor, h3 a.aal_anchor  {
+  text-decoration: none;
+  border-bottom: none;
+}
+
+nav#TableOfContents ol {
+  padding: 0;
+  margin: 20 0;
+  line-height: 1.8em;
+}
+
+nav#TableOfContents ol:before {
+  content: "Table of Contents";
+  display: block;
+  font-size: 1.5em;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+  unicode-bidi: isolate;
+}
+
+nav#TableOfContents li {
+  left: -20pt;
+  color: grey;
+  list-style-position: inside;
+}

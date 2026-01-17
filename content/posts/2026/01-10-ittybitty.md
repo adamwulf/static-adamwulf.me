@@ -5,9 +5,13 @@ slug = "itty-bitty-ai-agent-orchestrator"
 type = "post"
 +++
 
-I bet you've heard of [Gas Town](https://github.com/steveyegge/gastown), and if you haven't, you're in for an proper adventure. As I read through [Steve's ~~introduction~~ manifesto](https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04), and while I loved the vision, the scale was overwhelming. He's not messing around, Gas Town requires sqlite for holding state, uses [beads](https://github.com/steveyegge/beads) for issue tracking and state management, supports pluggable AI runtimes. Want to wrap your head around it? welcome to the Mayor, rigs, convoys, polecats, crew, hooks, dogs, and so many more metaphors and tv/movie references.
+If you haven't heard of [Gas Town](https://github.com/steveyegge/gastown), you're in for an proper adventure. I read through [Steve's ~~introduction~~ manifesto](https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04), and while I loved the vision, the scale was overwhelming. Want to wrap your head around it? welcome to the Mayor, rigs, convoys, polecats, crew, hooks, dogs, and so many more metaphors and tv/movie references. He's not messing around, Gas Town requires sqlite for holding state, uses [beads](https://github.com/steveyegge/beads) for issue tracking and state management, supports pluggable AI runtimes.
 
-In proper self-nerd-snipe fashion, I thought to myself "surely there's an easier way to do multi-agent coordination?!", and [`ittybitty`](https://github.com/adamwulf/ittybitty) was born.
+And then of course [there's this bit](https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04#9df3)... "Gas Town is also expensive as hell. You won’t like Gas Town if you ever have to think, even for a moment, about where money comes from."
+
+And so, in proper self-nerd-snipe fashion, I thought to myself "surely there's an easier (and less expensive) way to do multi-agent AI?!", and [`ittybitty`](https://github.com/adamwulf/ittybitty) was born.
+
+`ittybitty` lets you spawn multiple `claude` instances in virtual terminals in `tmux`, and these claude instances can also spawn more claude instances to help them accomplish their task. I wish I'd had it late last year, when I ran parallel Claude Code Web instances to research competitors, write reports, and cite sources. It was slow and painful, and it's the perfect task for parallel AI agents with `ittybitty`.
 
 {{< toc >}}
 
@@ -38,6 +42,8 @@ ib kill friendbot
 # read the help to see what's possible
 ib help
 ```
+
+Agents run per-repository, so if you spawn agents in your website repo, they won't see agents in your product repo, for instance.
 
 Want more detail? Here we go!
 
@@ -106,9 +112,11 @@ The system should somehow monitor agent status so that agents that are stuck and
 I wanted to build something that anyone could download and start using with zero setup. I don't want to build a monolithic system that takes non-trivial setup time, I wanted something _simple_ that could be immediately useful.
 
 
-## What is an Agent?
+## What is an `ittybitty` Agent?
 
-An agent in `ittybitty` is a full claude code instance running inside of tmux. Here are the steps that ittybitty goes through to launch an agent:
+An agent in `ittybitty` is a full claude code instance running inside of tmux. Agents can be either Managers or Workers. The primary difference is that Managers can spawn other agents, including other Managers. Workers cannot spawn other agents.
+
+Here are the steps that ittybitty goes through to launch an agent:
 
 ### How are agents created?
 
@@ -149,7 +157,7 @@ This also let's `ib` react slightly differently to agents than it does to you. A
 The command `ib send [agent-id] [message]` will send a message to the agent with the specified id. This is done by iterating through tmux sessions to find the agent that matches the [agent-id], and then sending the input message followed by the Enter key. The message is prefixed with "[sent by agent (agent-id)]:" so that its clear to the recieving agent who sent the message.
 
 
-## What's the flow look like?
+## What's the workflow look like?
 
 Below you can see how you and/or your primary claude interface can spawn and interact with `ittybitty` agents.
 
