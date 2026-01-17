@@ -13,7 +13,7 @@ And so, in proper self-nerd-snipe fashion, I thought to myself "surely there's a
 
 ## Introducing IttyBitty
 
-`ittybitty` is the easiest way to manage multiple claude code instances. You specify a task, and `ittybitty` spawns a `claude` instance in a virtual terminal in `tmux`, and then this claude instance can also spawn more claude instances to help it accomplish its task. Start as many `claude` agents as you like, and view them and their workers in the `ittybitty` dashboard.
+`ittybitty` ([Github link](https://github.com/adamwulf/ittybitty)) is the easiest way to manage multiple claude code instances. You specify a task, and `ittybitty` spawns a `claude` instance in a virtual terminal in `tmux`, and then this claude instance can also spawn more claude instances to help it accomplish its task. Start as many `claude` agents as you like, and view them and their workers in the `ittybitty` dashboard.
 
 I wish I'd had it late last year, when I ran parallel Claude Code Web instances to research competitors, write reports, and cite sources. It was slow and painful, and it's the perfect task for parallel AI agents with `ittybitty`.
 
