@@ -11,6 +11,10 @@ theme = 'adamwulf'
   posts = '/:year/:month/:slug/'
 
 [markup]
+  [markup.tableOfContents]
+    startLevel = 1
+    endLevel = 3
+    ordered = false
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
