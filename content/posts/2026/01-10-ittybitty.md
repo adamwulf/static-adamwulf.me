@@ -9,7 +9,7 @@ I bet you've heard of [Gas Town](https://github.com/steveyegge/gastown), and if 
 
 In proper self-nerd-snipe fashion, I thought to myself "surely there's an easier way to do multi-agent coordination?!", and [`ittybitty`](https://github.com/adamwulf/ittybitty) was born.
 
-{{ .TableOfContents }}
+{{< toc >}}
 
 ## TLDR
 
@@ -44,7 +44,7 @@ I use claude code _a lot_. It's always running while I code, either working on a
 
 I often want to run multiple instances of `claude` in git worktrees, but don't want to open/close/merge the worktrees myself. I basically want a normal `claude` instance, but one that can spawn and manage many other `claude` instances too. I want 10 agents to _feel_ like 1 agent, which means I need to have easy visibility into what the team is doing.
 
-## What do I want?
+## What did I want?
 
 I love projects with constraints, that's where the creativity happens, and I set myself some stringent constraints:
 
