@@ -7,17 +7,25 @@ type = "page"
 
 ## Current {#current}
 
-**[DrawUI – Fast and Versatile Inking for iOS](https://github.com/adamwulf/DrawUI)**: I'm very interested in low-latency drawing/inking on iOS, and DrawUI is drop in library to support high performance ink. The framework cleanly separates the touch input from the pen-stroke model from the ink rendering itself. This clean separation allows for principled optimizations and customization.
+**[Muse](https://museapp.com/) (since 2020)**: A digital workspace designed for deep thinking and creative ideation. Muse enables you to organize thoughts across nested boards—canvases within canvases—supporting mixed content including text, sketches, images, videos, and files on a distraction-free canvas. Available for Mac and iPad with local-first data and instant sync.
+
+**[MathDown](https://mathdown.app/) (2026)**: A Markdown editor for Mac, iPad, and iPhone that supports LaTeX alongside CommonMark. Its standout capability is live evaluation of mathematical expressions—variables and functions update as you type without requiring compilation.
+
+**[IttyBitty](/2026/01/itty-bitty-ai-agent-orchestrator/) (2026)**: A lightweight command-line tool that enables you to spawn and manage multiple Claude Code instances working in parallel on the same project. Each agent runs in its own git worktree with its own isolated Claude session, and agents can create subordinate workers, communicate with each other, and have their work merged back into the main repository. [Source code on GitHub](https://github.com/adamwulf/ittybitty).
+
+**[UserDefaultsWatcher](/2025/11/watching-system-user-defaults/) (2025)**: A macOS utility that displays and monitors system user defaults in real-time. Filter by suite, type, or query, and sort by various parameters including last modified time.
+
+**[Books for Robots](/2021/03/books-for-robots/) (2021)**: We humans are very analog creatures, but we surround ourselves with digital tools. I wonder what the robot equivalent of that is? If we're analog creatures using digital tools to consume analog information, then robots could be digital creatures using an analog tools to consume digital information. [First in the series](/2021/03/books-for-robots/). [Second in the series](/2023/01/the-complete-digits-of-pi-abridged/).
 
 **[Prison Entrepreneurship Program](https://www.pep.org/) (since 2017)**: I volunteer my time with this phenomenal program that helps inmates learn how to start their own business when they're released from prison. The results are amazing – Baylor University did a study and found a dramatic reduction in recidivism and an increase in employment from this program. Learn more and volunteer at [pep.org](https://www.pep.org/).
 
 **[AskMeEvery](http://www.askmeevery.com/) (since 2014)**: AskMeEvery will automatically email you any question you setup for simple and personal daily accountability. It's extremely easy and effective way to encourage new habits and break bad ones.
 
-**[Books for Robots](/2021/03/books-for-robots/)**: We humans are very analog creatures, but we surround ourselves with digital tools. I wonder what the robot equivalent of that is? If we're analog creatures using digital tools to consume analog information, then robots could be digital creatures using an analog tools to consume digital information. [First in the series](/2021/03/books-for-robots/). [Second in the series](/2023/01/the-complete-digits-of-pi-abridged/).
-
 **[Open Source](/open-source/)**: Much of the code from these projects is available on my GitHub profile, including [Loose Leaf](https://github.com/adamwulf/loose-leaf) iPad note app, [PerformanceBezier](https://github.com/adamwulf/PerformanceBezier), which dramatically speeds up common bezier operations in iOS, and [ClippingBezier](https://github.com/adamwulf/ClippingBezier), which allows for complex operations on UIBezierPaths.
 
 ## Previous {#previous}
+
+**[DrawUI – Fast and Versatile Inking for iOS](https://github.com/adamwulf/DrawUI) (2020)**: I'm very interested in low-latency drawing/inking on iOS, and DrawUI is drop in library to support high performance ink. The framework cleanly separates the touch input from the pen-stroke model from the ink rendering itself. This clean separation allows for principled optimizations and customization.
 
 **[Funnel Analytics](https://www.funnelanalytics.net/) (2019)**: Marketing automation and business intelligence web app that combines data from all of your data sources – GA, Mixpanel, a spreadsheet, etc – and let's you combine that data into a single datastream, and then get realtime updates as it changes and even automate your systems from these data streams.
 
@@ -33,7 +41,7 @@ type = "page"
 
 **[Spare Parts](http://www.sparepartsapp.com/) (2015)**: Spare Parts is an open source 2D physics game that was developed 100% on live stream over the course of two weeks. Every line of code was [written on stream](https://www.youtube.com/playlist?list=PLaNBCHKDClckpg6AdAqR9lBlyK2bvHqm6), and the full [source code is available](https://github.com/adamwulf/spare-parts-app).
 
-**[PageCollectionView](https://github.com/adamwulf/PageCollectionView)**: A modernized [Loose Leaf](https://getlooseleaf.com/) layout for an arbitrary number of documents with arbitrary number and shape of pages. Provides a `UICollectionView`, controller, and associated layouts to transition smoothly between documents, grid, and page views. Performance and layout flexibility are prioritized.
+**[PageCollectionView](https://github.com/adamwulf/PageCollectionView) (2020)**: A modernized [Loose Leaf](https://getlooseleaf.com/) layout for an arbitrary number of documents with arbitrary number and shape of pages. Provides a `UICollectionView`, controller, and associated layouts to transition smoothly between documents, grid, and page views. Performance and layout flexibility are prioritized.
 
 **[Jotbook.net](https://www.jotbook.net/) (2012-2014)**: Jotbook is a simple way to create and collaborate on bulleted lists in your browser. Easily edit and share lists together.
 
