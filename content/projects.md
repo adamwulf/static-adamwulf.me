@@ -5,25 +5,28 @@ slug = "projects"
 type = "page"
 +++
 
-## Current {#current}
+## Volunteering
+
+**[Prison Entrepreneurship Program](https://www.pep.org/) (since 2017)**: I volunteer my time with this phenomenal program that helps inmates learn how to start their own business when they're released from prison. The results are amazing – Baylor University did a study and found a dramatic reduction in recidivism and an increase in employment from this program. Learn more and volunteer at [pep.org](https://www.pep.org/).
+
+## Apps
 
 **[Muse](https://museapp.com/) (since 2020)**: A digital workspace designed for deep thinking and creative ideation. Muse enables you to organize thoughts across nested boards—canvases within canvases—supporting mixed content including text, sketches, images, videos, and files on a distraction-free canvas. Available for Mac and iPad with local-first data and instant sync.
 
 **[MathDown](https://mathdown.app/) (2026)**: A Markdown editor for Mac, iPad, and iPhone that supports LaTeX alongside CommonMark. Its standout capability is live evaluation of mathematical expressions—variables and functions update as you type without requiring compilation.
 
-**[IttyBitty](/2026/01/itty-bitty-ai-agent-orchestrator/) (2026)**: A lightweight command-line tool that enables you to spawn and manage multiple Claude Code instances working in parallel on the same project. Each agent runs in its own git worktree with its own isolated Claude session, and agents can create subordinate workers, communicate with each other, and have their work merged back into the main repository. [Source code on GitHub](https://github.com/adamwulf/ittybitty).
-
 **[UserDefaultsWatcher](/2025/11/watching-system-user-defaults/) (2025)**: A macOS utility that displays and monitors system user defaults in real-time. Filter by suite, type, or query, and sort by various parameters including last modified time.
+**[AskMeEvery](http://www.askmeevery.com/) (since 2014)**: AskMeEvery will automatically email you any question you setup for simple and personal daily accountability. It's extremely easy and effective way to encourage new habits and break bad ones.
+
+## Tools and More
+
+**[IttyBitty](/2026/01/itty-bitty-ai-agent-orchestrator/) (2026)**: A lightweight command-line tool that enables you to spawn and manage multiple Claude Code instances working in parallel on the same project. Each agent runs in its own git worktree with its own isolated Claude session, and agents can create subordinate workers, communicate with each other, and have their work merged back into the main repository. [Source code on GitHub](https://github.com/adamwulf/ittybitty).
 
 **[Books for Robots](/2021/03/books-for-robots/) (2021)**: We humans are very analog creatures, but we surround ourselves with digital tools. I wonder what the robot equivalent of that is? If we're analog creatures using digital tools to consume analog information, then robots could be digital creatures using an analog tools to consume digital information. [First in the series](/2021/03/books-for-robots/). [Second in the series](/2023/01/the-complete-digits-of-pi-abridged/).
 
-**[Prison Entrepreneurship Program](https://www.pep.org/) (since 2017)**: I volunteer my time with this phenomenal program that helps inmates learn how to start their own business when they're released from prison. The results are amazing – Baylor University did a study and found a dramatic reduction in recidivism and an increase in employment from this program. Learn more and volunteer at [pep.org](https://www.pep.org/).
-
-**[AskMeEvery](http://www.askmeevery.com/) (since 2014)**: AskMeEvery will automatically email you any question you setup for simple and personal daily accountability. It's extremely easy and effective way to encourage new habits and break bad ones.
-
 **[Open Source](/open-source/)**: Much of the code from these projects is available on my GitHub profile, including [Loose Leaf](https://github.com/adamwulf/loose-leaf) iPad note app, [PerformanceBezier](https://github.com/adamwulf/PerformanceBezier), which dramatically speeds up common bezier operations in iOS, and [ClippingBezier](https://github.com/adamwulf/ClippingBezier), which allows for complex operations on UIBezierPaths.
 
-## Previous {#previous}
+## Previous
 
 **[DrawUI – Fast and Versatile Inking for iOS](https://github.com/adamwulf/DrawUI) (2020)**: I'm very interested in low-latency drawing/inking on iOS, and DrawUI is drop in library to support high performance ink. The framework cleanly separates the touch input from the pen-stroke model from the ink rendering itself. This clean separation allows for principled optimizations and customization.
 
@@ -53,9 +56,9 @@ type = "page"
 
 **[Aurora Calendar](https://github.com/adamwulf/aurora) (2003-2004)**: Aurora Calendar was the precursor to Jotlet. Built by myself and Buck Wilson when we were in college, it pre-dated Google Calendar by a few years, boasted calendar sharing, custom fields, task delegation, and more. The original site is [archived here](http://totheinter.net/aurora/), and a demo instance is [archived here](http://aurora-demo.totheinter.net/os/), and the source code is [available on Github](https://github.com/adamwulf/aurora).
 
-## History and Awards {#history-and-awards}
+## History and Awards
 
-#### 2019 {#2019}
+#### 2019
 
 [Adam Wulf Goes to Prison](https://csweb.rice.edu/news/adam-wulf-goes-prison)
 
@@ -63,33 +66,33 @@ type = "page"
 >
 > — <https://csweb.rice.edu/news/adam-wulf-goes-prison>
 
-#### 2016 {#2016}
+#### 2016
 
 Mentored in I-Corps NSF program with [Arovia](http://arovia.com/).
 
 1. Mentored in both regional and national I-Corps program.
 
-#### 2014-2015 {#2014-2015}
+#### 2014-2015
 
 Launched [Loose Leaf](https://getlooseleaf.com/), the open-source gesture-driven notes app for iPad:
 
 1. Over [100k downloads in 1 weekend](/2015/03/18/100k-downloads-1-weekend/).
 2. Press mentions in CNN, Wired, Slashdot.
 
-#### 2012 {#2012}
+#### 2012
 
 As Tech Director at [Visere](http://visere.com/) and lead developer on the [Unstuck app](http://unstuck.com/):
 
 1. won the [Webby Award Winner *and* People's Voice Winner](http://www.webbyawards.com/webbys/current.php?media_id=127#127_Lifestyle_(Tablet_&_All_Other_Devices))
 2. won the [Appy Award](http://www.mediapost.com/appyawards/winners/?event=2012)
 
-#### 2009 {#2009}
+#### 2009
 
 Launched *Here, File File!* in the fall of 2009:
 
 1. won the [App Star Awards](http://bit.ly/hff-appstar) with [our preview video](https://www.youtube.com/watch?v=iDXnYMoQB_c&list=UUXcP7BtiQsmqw3vhNvcEgJQ)
 2. featured on an [Apple Commercial](https://bit.ly/hff-apple) in March 2010
 
-#### 2008 {#2008}
+#### 2008
 
 My first startup [Jotlet.net](https://www.jotlet.net/) was acquired by [Jive Software](http://www.jivesoftware.com/).
