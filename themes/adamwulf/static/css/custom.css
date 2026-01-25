@@ -251,6 +251,15 @@ code,
     color: var(--link-color);
 }
 
+[data-theme="dark"] p:not(.site-title) a:hover,
+[data-theme="dark"] span a:hover,
+[data-theme="dark"] .nav-previous a:hover,
+[data-theme="dark"] .nav-next a:hover,
+[data-theme="dark"] .entry-content a:hover {
+    border-bottom: 2px solid var(--text-primary);
+    color: var(--text-primary);
+}
+
 /* Toggle Button Styles */
 .theme-toggle {
     background: none;
